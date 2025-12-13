@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FragMC</title>
+  <style>
+    :root {
+      --bg: #0e0e11;
+      --card: #17171c;
+      --muted: #9aa0a6;
+      --text: #e8eaed;
+      --accent: #5865f2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #222;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    nav a:hover {
+      color: var(--text);
+    }
+
+    nav .active {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 80px 24px 60px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(88, 101, 242, 0.1) 0%, transparent 100%);
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin: 0 0 20px;
+      background: linear-gradient(135deg, var(--accent), #7289da);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      border: none;
+      font-size: 1.1rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(88, 101, 242, 0.4);
+    }
+
+    .expandable-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+    }
+
+    .expandable-content.open {
+      max-height: 3000px;
+      opacity: 1;
+      margin-bottom: 40px;
+    }
+
+    .section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    .section h3 {
+      font-size: 1.4rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      color: var(--text);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1px solid #222;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    .card ul, .card ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .card li {
+      margin-bottom: 8px;
+    }
+
+    .server-info {
+      background: #0b0b0e;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      margin: 16px 0;
+      border: 1px solid #222;
+    }
+
+    .server-info div {
+      margin: 8px 0;
+    }
+
+    .server-info strong {
+      color: var(--accent);
+    }
+
+    .warning {
+      background: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #ffc107;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      color: var(--text);
+    }
+
+    .note {
+      background: rgba(88, 101, 242, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      color: var(--text);
+    }
+
+    code {
+      background: #0b0b0e;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: #7dd3fc;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <strong style="font-size:1.3rem;">FragMC</strong>
+  </div>
+  <nav>
+    <span class="active">Home</span>
+    <a href="maps">Maps</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>FragMC</h1>
+  <p>Welcome to the official website for FragMC! A new type of parkour in Minecraft involving ice.</p>
+</div>
+
+<div class="container">
+  <div class="button-group">
+    <a href="maps" class="btn">
+      Explore the Maps
+    </a>
+    <button class="btn" onclick="toggleSection('join-server')">
+      Join the Server
+    </button>
+    <button class="btn" onclick="toggleSection('create-map')">
+      How to Create a Map
+    </button>
+  </div>
+
+  <div id="join-server" class="expandable-content">
+    <div class="section">
+      <h2>Joining the Server on Java</h2>
+      <div class="card">
+        <p>To join the server on Java, it is recommended you download the <a href="https://modrinth.com/modpack/fragmcmodpack" style="color: var(--accent); text-decoration: none;">modpack</a> which has all the right settings and all the tools needed for creating maps as well.</p>
+        
+        <p style="margin-top: 20px;">If you don't want to download the modpack, the server info is:</p>
+        
+        <div class="server-info">
+          <div><strong>Name:</strong> FragMC</div>
+          <div><strong>IP:</strong> [COMING SOON]</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Joining the Server on Bedrock</h2>
+      <p style="color: var(--muted);">To join the server on Bedrock, there are 2 methods:</p>
+
+      <h3>Method 1: [UNTESTED] GeyserConnect</h3>
+      <div class="card">
+        <div class="warning">
+          <strong>⚠️ WARNING:</strong> There is no GUARANTEE that this will work. Try at your own risk. As well as this, we don't take any responsibility if anything happens with anything about this. GeyserConnect is COMPLETELY external.
+        </div>
+        
+        <ol style="padding-left: 20px; color: var(--muted);">
+          <li>Add BCMain/BCMain1/BCMain2 as a friend on Bedrock</li>
+          <li>Join them when you can</li>
+          <li>Add a server</li>
+          <li>IP: <code>us.geyserconnect.net</code> PORT: <code>19132</code></li>
+          <li>Join GeyserConnect</li>
+          <li>Follow the instructions on screen then join the Java Server</li>
+        </ol>
+      </div>
+
+      <h3>Method 2: Join our Geyser Instance</h3>
+      <div class="card">
+        <div class="note">
+          <strong>NOTE:</strong> At the time of updating this guide, this is UNSUPPORTED due to Geyser not supporting 1.21.11
+        </div>
+        
+        <ol style="padding-left: 20px; color: var(--muted);">
+          <li>Add BCMain/BCMain1/BCMain2 as a friend on Bedrock</li>
+          <li>Join them when you can</li>
+          <li>Add a server</li>
+          <li>IP: <code>[COMING SOON]</code> PORT: <code>[COMING SOON]</code></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div id="create-map" class="expandable-content">
+    <div class="section">
+      <h2>How to Create a Map</h2>
+      
+      <div class="card">
+        <h3 style="margin-top: 0;">Prerequisites</h3>
+        <p>Before you start creating maps, make sure you have:</p>
+        <ul>
+          <li>The <a href="https://modrinth.com/modpack/fragmcmodpack" style="color: var(--accent); text-decoration: none;">FragMC modpack</a> installed (includes WorldEdit and other required tools)</li>
+          <li>Basic understanding of Minecraft building</li>
+          <li>WorldEdit knowledge (recommended but not required)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top: 0;">Step 1: Make your map</h3>
+        <p>Please note your map must follow the following rules: </p>
+        <ul>
+            <li>You must have Black concrete for the floors (so that the player gets automatically killed when they fall)</li>
+            <li>It must have A start and a finish point</li>
+            <li>All armour stands must be on an iron block</li>
+            <li>It should utilise all* main mechanics</li>
+            <li>Emerald blocks have to be used for checkpoints</li>
+            <li>Gold blocks have to be used for the start</li>
+            <li>There must be At least a one-block wide rim outside emerald or gold blocks</li>
+            <li>Glass blocks must be for the roof (unless you are having your own lighting)</li>
+            <li>There must be A clear way for the finish to be detected (eg. a ring you have to go through or a pressure plate/block you have to stand on)</li>
+        </ul>
+        <p>Warning: It will take longer for your map to be approved if you have command blocks. Command blocks MUST NOT interfere with any other part of FragMC and must only be local to the map (meaning you cannot do /execute as @a unless it is only in the proximity of your map.)</p><br><p>* Unless there is a reason or if your map is centered around one singular mechanic. Note: All 3 are better and more challenging.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top: 0;">Step 2: Build Your Map</h3>
+        <p>Create your map in a single player world or on a creative server. Make sure to:</p>
+        <ul>
+          <li>Use ice blocks for parkour sections</li>
+          <li>Test all jumps thoroughly</li>
+          <li>Add clear start and end points</li>
+          <li>Include checkpoints if needed</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top: 0;">Step 3: Select Your Map Area</h3>
+        <p>Use WorldEdit to select the area of your map:</p>
+        <ol>
+          <li>Hold a wooden axe (WorldEdit's default selection tool)</li>
+          <li>Left-click one corner of your map to set position 1</li>
+          <li>Right-click the opposite corner to set position 2</li>
+          <li>Make sure your selection includes all parts of your map</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top: 0;">Step 4: Save as WorldEdit Schematic</h3>
+        <p>Once your map is selected, save it as a schematic:</p>
+        <ol>
+          <li>Type the command: <code>//copy</code> to copy your selection</li>
+          <li>Type: <code>//schem save [your-map-name]</code> (replace [your-map-name] with your desired filename)</li>
+          <li>Your schematic will be saved to the WorldEdit schematics folder</li>
+        </ol>
+        
+        <div class="note" style="margin-top: 16px;">
+          <strong>NOTE:</strong> The schematic file will be saved in <code>.minecraft/config/worldedit/schematics/</code> with a <code>.schem</code> extension
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top: 0;">Step 5: Submit Your Map</h3>
+        <p>After saving your schematic:</p>
+        <ul>
+          <li>Test your map thoroughly one more time</li>
+          <li>Take screenshots of what you want displayed on your map's page and optionally record a video to send with your map submission</li>
+          <li>Submit your <code>.schem</code> file along with the following info to <code>#map-submissions</code> on the discord: </li>
+          <ul>
+            <li>The name you would like as the author of the map</li>
+            <li>The name of the map</li>
+            <li>Screenshots/Videos of your map</li>
+            <li>The description of your map</li>
+          </ul>
+          <li>Include information about difficulty, estimated completion time, and any special mechanics</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top: 0;">Tips for Great Maps</h3>
+        <ul>
+          <li>Keep the difficulty consistent throughout the map</li>
+          <li>Use varied ice parkour techniques to keep it interesting</li>
+          <li>Add visual landmarks to help players navigate</li>
+          <li>Test with friends to ensure all jumps are possible</li>
+          <li>Don't make jumps too precise - allow some margin for error</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const allSections = document.querySelectorAll('.expandable-content');
+    
+    // Close all other sections
+    allSections.forEach(s => {
+      if (s.id !== sectionId && s.classList.contains('open')) {
+        s.classList.remove('open');
+      }
+    });
+    
+    // Toggle the clicked section
+    section.classList.toggle('open');
+    
+    // Smooth scroll to the section if it's being opened
+    if (section.classList.contains('open')) {
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+  }
+</script>
+
+</body>
+</html>
