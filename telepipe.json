@@ -1,0 +1,14 @@
+{
+  "tutorial": {
+    "x": -13,
+    "y": -52,
+    "z": 13,
+    "pitch": -88,
+    "yaw": 0,
+    "world": "Building/Testing",
+    "images": "",
+    "name": "",
+    "description": "",
+    "author": ""
+  }
+}

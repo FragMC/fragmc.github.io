@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minecraft Maps</title>
+  <style>
+    :root {
+      --bg: #0e0e11;
+      --card: #17171c;
+      --muted: #9aa0a6;
+      --text: #e8eaed;
+      --accent: #5865f2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #222;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    input[type="search"] {
+      background: var(--card);
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text);
+      width: 260px;
+    }
+
+    .grid {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .thumb {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      aspect-ratio: 1 / 1;
+      background: #000;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 12px;
+    }
+
+    .card-body h3 {
+      margin: 8px 0 4px;
+      font-size: 1rem;
+    }
+
+    .author {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .author svg {
+      width: 14px;
+      height: 14px;
+      fill: #777;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-content {
+      background: var(--card);
+      border-radius: 18px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .carousel {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+    }
+
+    .carousel img {
+      height: 320px;
+      border-radius: 14px;
+      scroll-snap-align: start;
+    }
+
+    .modal h2 { margin-top: 16px; }
+
+    .modal p { color: var(--muted); }
+
+    pre {
+      background: #0b0b0e;
+      border-radius: 12px;
+      padding: 14px;
+      overflow-x: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    button.copy {
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <strong style="font-size:1.3rem;">ExampleSite</strong>
+  </div>
+  <nav style="display:flex;gap:18px;font-size:0.95rem;">
+    <span onclick="">Home</span>
+    <span style="font-weight:600;">Maps</span>
+  </nav>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <button class="close" onclick="closeModal()">×</button>
+    <div class="carousel" id="carousel"></div>
+    <h2 id="modal-name"></h2>
+    <p id="modal-desc"></p>
+    <div class="author" id="modal-author"></div>
+    <p id="modal-coords" style="margin-top:8px;"></p>
+
+    <h3>Teleport Command</h3>
+    <p>Paste this command into Minecraft on the server to go to the map.</p>
+    <pre><code id="command"></code><button class="copy" onclick="copyCmd()">Copy</button></pre>
+  </div>
+</div>
+
+<script>
+function gotoUrl(url){
+    window.location = url;
+}
+// Fetch JSON from URL
+const MAPS_URL = "https://fragmc.github.io/telepipe.json"; // <-- change this
+let mapData = {};
+const grid = document.getElementById('grid');
+const search = document.getElementById('search');
+let currentMapId = null;
+
+fetch(MAPS_URL)
+  .then(res => res.json())
+  .then(data => {
+    mapData = data;
+    render();
+  })
+  .catch(err => {
+    console.error('Failed to load map data:', err);
+  });
+
+function render() {
+  grid.innerHTML = '';
+  Object.entries(mapData).forEach(([id, map]) => {
+    if (map.name.toLowerCase().includes(search.value.toLowerCase())) {
+      const images = map.images.split(',').filter(Boolean);
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.onclick = () => openModal(id);
+
+      const thumb = document.createElement('div');
+      thumb.className = 'thumb';
+      for (let i = 0; i < 6; i++) {
+        const img = document.createElement('img');
+        img.src = images[0] || 'https://placehold.co/300x300';
+        thumb.appendChild(img);
+      }
+
+      card.innerHTML = '';
+      card.appendChild(thumb);
+
+      const body = document.createElement('div');
+      body.className = 'card-body';
+      body.innerHTML = `
+        <h3>${map.name}</h3>
+        <div class="author">
+          <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></svg>
+          ${map.author}
+        </div>
+      `;
+
+      card.appendChild(body);
+      grid.appendChild(card);
+    }
+  });
+}
+
+function openModal(id) {
+  currentMapId = id;
+  const map = mapData[id];
+  document.getElementById('modal-name').textContent = map.name;
+  document.getElementById('modal-desc').textContent = map.description;
+  document.getElementById('modal-author').innerHTML = `
+    <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></svg>
+    ${map.author}
+  `;
+
+  document.getElementById('modal-coords').textContent = `Coordinates: X ${map.x}, Y ${map.y}, Z ${map.z}`;
+
+  const carousel = document.getElementById('carousel');
+  carousel.innerHTML = '';
+  map.images.split(',').forEach(src => {
+    const img = document.createElement('img');
+    img.src = src;
+    carousel.appendChild(img);
+  });
+
+  document.getElementById('command').textContent = `/map ${id}`;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+function copyCmd() {
+  navigator.clipboard.writeText(`/map ${currentMapId}`);
+}
+
+search.addEventListener('input', render);
+render();
+</script>
+
+</body>
+</html>
