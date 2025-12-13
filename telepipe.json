@@ -6,9 +6,9 @@
     "pitch": -88,
     "yaw": 0,
     "world": "Building/Testing",
-    "images": "",
-    "name": "",
-    "description": "",
-    "author": ""
+    "images": "https://fragmc.github.io/assets/images/tutorial/1.png,https://fragmc.github.io/assets/images/tutorial/2.png,https://fragmc.github.io/assets/images/tutorial/3.png",
+    "name": "Tutorial",
+    "description": "Tuorial",
+    "author": "Tutorial"
   }
 }
