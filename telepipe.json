@@ -8,7 +8,19 @@
     "world": "Building/Testing",
     "images": "https://fragmc.github.io/assets/images/tutorial/1.png,https://fragmc.github.io/assets/images/tutorial/2.png,https://fragmc.github.io/assets/images/tutorial/3.png",
     "name": "Tutorial",
-    "description": "Tuorial",
-    "author": "Tutorial"
+    "description": "The default Tutorial map for FragMC",
+    "author": "FragMC"
+  },
+  "lobby": {
+    "x": 91,
+    "y": 111,
+    "z": 52,
+    "pitch": -0.9,
+    "yaw": 9.1,
+    "world": "world",
+    "images":"https://fragmc.github.io/assets/images/lobby/1.png,https://fragmc.github.io/assets/images/lobby/2.png",
+    "name": "Lobby",
+    "description": "The lobby for FragMC. This is not a map that you can play. This is only a lobby. It is on the maps browser since the maps browser automatically links teleports in-game.",
+    "author": "FragMC"
   }
 }
