@@ -22,5 +22,17 @@
     "name": "Lobby",
     "description": "The lobby for FragMC. This is not a map that you can play. This is only a lobby. It is on the maps browser since the maps browser automatically links teleports in-game.",
     "author": "FragMC"
+  },
+  "alloy": {
+    "x": -14,
+    "y": -54,
+    "z": 79,
+    "pitch": -87.4,
+    "yaw": 13.2,
+    "world": "Building/Testing",
+    "images":"https://fragmc.github.io/assets/images/lobby/1.png,https://fragmc.github.io/assets/images/lobby/2.png",
+    "name": "Alloy",
+    "description": "BEING BUILT",
+    "author": "FragMC"
   }
 }
