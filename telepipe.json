@@ -39,5 +39,18 @@
     "description": "BEING BUILT",
     "author": "FragMC",
     "difficulty": 3
+  },
+  "macegauntlet": {
+    "x": -99.500,
+    "y": -51,
+    "z": 85,
+    "pitch": 92,
+    "yaw": -0.5,
+    "world": "Building/Testing",
+    "images": "https://placehold.co/1920x1080,https://placehold.co/1920x1080,https://placehold.co/1920x1080",
+    "name": "Mace Gauntlet",
+    "description": "BEING BUILT",
+    "auther": "FragMC",
+    "difficulty": 5
   }
 }
