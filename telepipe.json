@@ -9,7 +9,10 @@
     "images": "https://fragmc.github.io/assets/images/tutorial/1.png,https://fragmc.github.io/assets/images/tutorial/2.png,https://fragmc.github.io/assets/images/tutorial/3.png",
     "name": "Tutorial",
     "description": "The default Tutorial map for FragMC",
-    "author": "FragMC"
+    "author": "FragMC",
+    "difficulty": 1,
+    "verified": 1,
+    "verified-no-cp": 1
   },
   "lobby": {
     "x": 91,
@@ -21,7 +24,8 @@
     "images":"https://fragmc.github.io/assets/images/lobby/1.png,https://fragmc.github.io/assets/images/lobby/2.png",
     "name": "Lobby",
     "description": "The lobby for FragMC. This is not a map that you can play. This is only a lobby. It is on the maps browser since the maps browser automatically links teleports in-game.",
-    "author": "FragMC"
+    "author": "FragMC",
+    "difficulty": 0
   },
   "alloy": {
     "x": -14,
@@ -30,9 +34,10 @@
     "pitch": -87.4,
     "yaw": 13.2,
     "world": "Building/Testing",
-    "images":"https://fragmc.github.io/assets/images/lobby/1.png,https://fragmc.github.io/assets/images/lobby/2.png",
+    "images":"https://fragmc.github.io/assets/images/alloy/1.png,https://fragmc.github.io/assets/images/alloy/2.png,https://fragmc.github.io/assets/images/alloy/3.png",
     "name": "Alloy",
     "description": "BEING BUILT",
-    "author": "FragMC"
+    "author": "FragMC",
+    "difficulty": 3
   }
 }

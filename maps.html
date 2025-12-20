@@ -73,6 +73,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
 
     .card-body {
@@ -96,6 +97,56 @@
       width: 14px;
       height: 14px;
       fill: #777;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(88, 101, 242, 0.15);
+      color: #7289da;
+      border: 1px solid rgba(88, 101, 242, 0.3);
+    }
+
+    .badge.verified {
+      background: rgba(67, 181, 129, 0.15);
+      color: #43b581;
+      border: 1px solid rgba(67, 181, 129, 0.3);
+    }
+
+    .badge.verified-no-cp {
+      background: rgba(250, 166, 26, 0.15);
+      color: #faa61a;
+      border: 1px solid rgba(250, 166, 26, 0.3);
+    }
+
+    .badge.difficulty {
+      background: rgba(153, 170, 181, 0.15);
+      color: #99aab5;
+      border: 1px solid rgba(153, 170, 181, 0.3);
+    }
+
+    .badge.diff-1 { background: rgba(67, 181, 129, 0.15); color: #43b581; border-color: rgba(67, 181, 129, 0.3); }
+    .badge.diff-2 { background: rgba(88, 101, 242, 0.15); color: #7289da; border-color: rgba(88, 101, 242, 0.3); }
+    .badge.diff-3 { background: rgba(250, 166, 26, 0.15); color: #faa61a; border-color: rgba(250, 166, 26, 0.3); }
+    .badge.diff-4 { background: rgba(237, 66, 69, 0.15); color: #ed4245; border-color: rgba(237, 66, 69, 0.3); }
+    .badge.diff-5 { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border-color: rgba(139, 92, 246, 0.3); }
+
+    .badge svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
     }
 
     /* Modal */
@@ -125,7 +176,6 @@
 
     .carousel-wrapper {
       position: relative;
-      margin-bottom: 20px;
       overflow: hidden;
       border-radius: 14px;
       background: #000;
@@ -137,11 +187,7 @@
     }
 
     .carousel img {
-      min-width: 100%;
       width: 100%;
-      height: 400px;
-      object-fit: contain;
-      flex-shrink: 0;
     }
 
     .carousel-btn {
@@ -183,6 +229,7 @@
     .carousel-indicators {
       display: flex;
       justify-content: center;
+      position: relative;
       gap: 8px;
       margin-top: 12px;
     }
@@ -257,7 +304,7 @@
   <nav style="display:flex;gap:18px;font-size:0.95rem;">
     <a href="/" style="color:var(--muted);cursor:pointer;text-decoration:none;">Home</a>
     <span style="font-weight:600;">Maps</span>
-    <a href="about">About</a>
+    <a href="about" style="color:var(--muted);cursor:pointer;text-decoration:none;">About</a>
   </nav>
 </header>
 
@@ -271,12 +318,13 @@
       <div class="carousel" id="carousel"></div>
       <button class="carousel-btn prev" id="prevBtn" onclick="prevImage()">‹</button>
       <button class="carousel-btn next" id="nextBtn" onclick="nextImage()">›</button>
-      <div class="carousel-indicators" id="indicators"></div>
     </div>
+    <div class="carousel-indicators" id="indicators"></div>
 
     <h2 id="modal-name"></h2>
     <p id="modal-desc"></p>
     <div class="author" id="modal-author"></div>
+    <div class="badges" id="modal-badges"></div>
     <p id="modal-coords" style="margin-top:8px;"></p>
 
     <h3>Teleport Command</h3>
@@ -335,12 +383,54 @@ function render() {
           <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></svg>
           ${map.author}
         </div>
+        ${generateBadges(map)}
       `;
 
       card.appendChild(body);
       grid.appendChild(card);
     }
   });
+}
+
+function generateBadges(map) {
+  let badges = '<div class="badges">';
+  
+  // Check if verified exists in the map object
+  if ('verified' in map) {
+    badges += `
+      <span class="badge verified">
+        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Verified
+      </span>
+    `;
+  }
+  
+  // Check if verified-no-cp exists in the map object
+  if ('verified-no-cp' in map) {
+    badges += `
+      <span class="badge verified-no-cp">
+        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Verified NCP
+      </span>
+    `;
+  }
+  
+  // Check if difficulty exists
+  // Check if difficulty exists (including 0)
+  if (map.difficulty !== undefined && map.difficulty !== null) {
+    const diffLabels = {
+      0: 'None',
+      1: 'Beginner',
+      2: 'Casual',
+      3: 'Intermediate',
+      4: 'Pro',
+      5: 'God'
+    };
+    badges += `<span class="badge difficulty diff-${map.difficulty}">${diffLabels[map.difficulty] ?? 'Unknown'}</span>`;
+  }
+  
+  badges += '</div>';
+  return badges;
 }
 
 function openModal(id) {
@@ -354,6 +444,8 @@ function openModal(id) {
     <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></svg>
     ${map.author}
   `;
+
+  document.getElementById('modal-badges').innerHTML = generateBadges(map).replace('<div class="badges">', '').replace('</div>', '');
 
   document.getElementById('modal-coords').textContent = `Coordinates: X ${map.x}, Y ${map.y}, Z ${map.z}`;
 
