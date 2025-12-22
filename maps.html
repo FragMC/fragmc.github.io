@@ -470,7 +470,7 @@ function openModal(id) {
   const map = mapData[id];
   
   document.getElementById('modal-name').textContent = map.name;
-  document.getElementById('modal-desc').textContent = map.description;
+  document.getElementById('modal-desc').innerHTML = map.description;
   document.getElementById('modal-author').innerHTML = `
     <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></svg>
     ${map.author}
