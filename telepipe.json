@@ -48,9 +48,9 @@
     "yaw": -0.5,
     "world": "Building/Testing",
     "images": "https://placehold.co/1920x1080,https://placehold.co/1920x1080,https://placehold.co/1920x1080",
-    "name": "Mace Gauntlet",
+    "name": "Unholy Gauntlet",
     "description": "BEING BUILT",
-    "auther": "FragMC",
+    "author": "FragMC",
     "difficulty": 5
   }
 }
