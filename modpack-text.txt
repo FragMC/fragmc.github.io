@@ -1,8 +1,1 @@
-Hi User! This is FragMC!\nteeee
-
-Testtest
-## v1.0.0
-- Example text
-- Example text
-
-This is a test
+Hi User! This is FragMC!\n## v1.0.0\n- Example text\n- Example text\n\nThis is a test
