@@ -52,6 +52,7 @@
     "description": "The Unholy Gauntlet is an official FragMC map built by one of our best builders: Ninja.<br><br>It is one of the hardest maps on the server, as of writing this description, incorperating all of the mechanics and amazing scenery. As well as this, it has multiple parts of deception involved with it and is by far one of the current best maps on FragMC.<br><br>Along with all this, it has an amazing story line.. But thats for you to figure out..",
     "author": "FragMC",
     "difficulty": 5,
-    "verified": 1
+    "verified": 1,
+    "verified-no-cp": 1
   }
 }
