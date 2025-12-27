@@ -1,1 +1,0 @@
-ERROR: FragMC is currently NOT released to the public. This modpack can be used for building maps before FragMC's release but you cannot join the server yet.
