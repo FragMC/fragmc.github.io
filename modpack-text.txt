@@ -1,0 +1,1 @@
+FragMC Release Notes\nMP - Modpack | SV - Server | OT - Other\n\n## v1.0.0 (MP)\n- Fix UI scaling bugs\n- Upgrade UI to look better\n
