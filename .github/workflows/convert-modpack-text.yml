@@ -1,0 +1,33 @@
+name: Convert modpack text
+
+on:
+  push:
+    paths:
+      - modpack-text-md.md
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Convert md to txt (replace line gaps with \n)
+        run: |
+          # Replace empty lines with literal \n
+          awk '
+          /^[[:space:]]*$/ {
+            print "\\n"
+            next
+          }
+          { print }
+          ' modpack-text-md.md > modpack-text.txt
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add modpack-text.txt
+          git commit -m "Auto-convert modpack-text-md.md to modpack-text.txt" || exit 0
+          git push

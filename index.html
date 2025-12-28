@@ -413,8 +413,35 @@
             <li>Glass blocks must be for the roof (unless you are having your own lighting)</li>
             <li>There must be A clear way for the finish to be detected (eg. a ring you have to go through or a pressure plate/block you have to stand on)</li>
             <li>Use mangrove pressure plates for special things (eg. Custom commands)- OPTIONAL</li>
+            <li>Structures cannot be used because this must be able to fit into 1 file</li>
+            <li>All maps must program in their own end point- the command for this must be: <code>mvtp lobby --unsafe</code> PLEASE NOTE: This must be ran as the player through /execute or /sudo. If you didn't put this in, say it in the notes of your submission</li>
+            <li>You MUST NOT use LOTS of entities in your map. Aswell, any entities that aren't spawned by a command block will not be transfered.</li>
         </ul>
-        <p>Warning: It will take longer for your map to be approved if you have command blocks. Command blocks MUST NOT interfere with any other part of FragMC and must only be local to the map (meaning you cannot do /execute as @a unless it is only in the proximity of your map.)</p><br><p>* Unless there is a reason or if your map is centered around one singular mechanic. Note: All 3 are better and more challenging.</p>
+        <br>
+        <p>Aswell as this, on FragMC we have some automatic systems in place. These are: </p>
+        <ul>
+          <li>When a player has the <code>Elytra</code> tag, they have an Elytra</li>
+          <li>Spears, wind charges and maces are NOT droppable</li>
+          <li>All breakable items are automatically repaired</li>
+          <li>Spears have Lunge 3 and Unbreaking 3</li>
+          <li>Maces have Wind Burst 1 and Unbreaking 3</li>
+          <li>When you are teleported to your checkpoint, your Elytra gets removed</li>
+          <li>When you touch black concrete, you get teleported to your checkpoint</li>
+          <li>Gold AND emerald blocks mark checkpoints</li>
+          <li>Commands must be optimised (eg. If you have a /execute if command that runs every tick, put the resulting action in a conditional chain command block above the /execute if one) - RECOMMENDED, but optional- our team will optimise all command blocks anyways</li>
+          <li>You can use the command <code>/execute as @a at @s positioned LOOP-CENTER-X LOOP-CENTER-Y LOOP-CENTER-Z if entity @s[distance=..LOOP-SIZE] run</code> COMMAND to make a command happen when a player goes through a loop</li>
+          <li>Armor stands on iron blocks can't die if hit in survival</li>
+          <li>Players don't take fall damage</li>
+          <li>Players don't take fire damage</li>
+          <li>Mob griefing is off</li>
+          <li>Griefing is off</li>
+          <li>Fire tick (fire spreading/burning) is off</li>
+          <div class="warning">
+            <strong>WARNING: </strong>Players do NOT get teleported to ther checkpoints on death. They only get teleported with /cp go (or /cp tp)
+          </div>
+        </ul>
+        <div class="note">
+          <p><strong>NOTE: </strong>It will take longer for your map to be approved if you have command blocks. Command blocks MUST NOT interfere with any other part of FragMC and must only be local to the map (meaning you cannot do /execute as @a unless it is only in the proximity of your map.)</p></div><br><p>* Unless there is a reason or if your map is centered around one singular mechanic. Note: All 3 are better and more challenging.</p>
       </div>
 
       <div class="card">
