@@ -50,7 +50,7 @@ jobs:
             "embeds": [
               {
                 "title": "New FragMC Update! <:logo:1455193210463715538>",
-                "description": "**Changed file:** [View File <:stabby:1455193341099507772>]($FILE_URL)\n\n```diff\n$DIFF\n```",
+                "description": "**Changed file:** [View File <:stabby:1455193341099507772>]($FILE_URL)\n\n```diff\n$DIFF\n```"\n\<@&1457055408522002585>,
                 "color": 5814783,
                 "footer": {
                   "text": "Commit: ${{ github.sha }}"
