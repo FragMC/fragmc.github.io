@@ -1,5 +1,8 @@
 FragMC News
 
+## Discord Update (Pt. 2 - Bug Fixes)
+- Added diff to updates
+
 ## Discord update
 - Added roadmap
 - Added updates channel (shows this file)
