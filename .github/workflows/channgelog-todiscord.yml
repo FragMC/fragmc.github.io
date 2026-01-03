@@ -18,13 +18,20 @@ jobs:
       - name: Get diff for file
         id: diff
         run: |
-          FILE="modpack-text-md.md"   # ← SAME FILE PATH
-          DIFF=$(git diff HEAD^ HEAD -- "$FILE" | sed -n '/^[+-]/p' | sed 's/"/\\"/g')
-
+          FILE="modpack-text-md.md"
+      
+          DIFF=$(git diff \
+            ${{ github.event.before }} \
+            ${{ github.sha }} \
+            -- "$FILE" \
+            | sed -n '/^[+-]/p' \
+            | sed 's/"/\\"/g'
+          )
+      
           if [ -z "$DIFF" ]; then
             DIFF="(No line-level changes detected)"
           fi
-
+      
           echo "diff<<EOF" >> $GITHUB_OUTPUT
           echo "$DIFF" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
