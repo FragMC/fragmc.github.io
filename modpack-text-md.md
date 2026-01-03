@@ -1,5 +1,9 @@
 FragMC News
 
+## Discord update
+- Added roadmap
+- Added updates channel (shows this file)
+
 ## Server Update - Bug fixes & Admin tools
 - Admins can now see if anyone changes blocks
 - Griefing is now fixed
