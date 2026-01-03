@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - modpack-text-md.md   # ← CHANGE THIS
+  workflow_dispatch:
 
 jobs:
   notify:
