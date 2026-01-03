@@ -1,5 +1,9 @@
 FragMC News
 
+## Discord server status
+- Added webhook for server status on discord
+- Will implement chat forwarding and a proper status later on
+
 ## Discord update (Pt. 2)
 - Added different pings for different types of messages (eg. Announcements)
 - Added different pings for different continents
