@@ -18,7 +18,7 @@ jobs:
       - name: Get diff for file
         id: diff
         run: |
-          FILE="path/to/your/file.txt"   # ← SAME FILE PATH
+          FILE="modpack-text-md.md"   # ← SAME FILE PATH
           DIFF=$(git diff HEAD^ HEAD -- "$FILE" | sed -n '/^[+-]/p' | sed 's/"/\\"/g')
 
           if [ -z "$DIFF" ]; then
@@ -42,7 +42,7 @@ jobs:
             "embeds": [
               {
                 "title": "New FragMC Update! <:logo:1455193210463715538>",
-                "description": "**Changed file <:stabby:1455193341099507772>:** [View File]($FILE_URL)\n\n```diff\n$DIFF\n```",
+                "description": "**Changed file:** [View File <:stabby:1455193341099507772>]($FILE_URL)\n\n```diff\n$DIFF\n```",
                 "color": 5814783,
                 "footer": {
                   "text": "Commit: ${{ github.sha }}"
