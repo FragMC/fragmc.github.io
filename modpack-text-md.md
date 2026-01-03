@@ -1,12 +1,8 @@
 FragMC News
 
-## Discord Update (Pt. 2 - Bug Fixes)
-- Fixed diff in updates (hopefully)
-
 ## Discord update
 - Added roadmap
 - Added updates channel (shows this file)
-- Added diff in updates
 
 ## Server Update - Bug fixes & Admin tools
 - Admins can now see if anyone changes blocks
