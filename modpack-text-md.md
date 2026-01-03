@@ -5,6 +5,7 @@ FragMC News
 - Added different pings for different continents
 - Updated onboarding
 - Added ping for updates
+- Added diff to updates
 
 ## Discord update
 - Added roadmap
