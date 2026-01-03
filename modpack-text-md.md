@@ -1,5 +1,11 @@
 FragMC News
 
+## Discord update (Pt. 2)
+- Added different pings for different types of messages (eg. Announcements)
+- Added different pings for different continents
+- Updated onboarding
+- Added ping for updates
+
 ## Discord update
 - Added roadmap
 - Added updates channel (shows this file)
