@@ -1,0 +1,55 @@
+name: Notify Discord on File Change
+
+on:
+  push:
+    paths:
+      - modpack-text-md.md   # ← CHANGE THIS
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get diff for file
+        id: diff
+        run: |
+          FILE="path/to/your/file.txt"   # ← SAME FILE PATH
+          DIFF=$(git diff HEAD^ HEAD -- "$FILE" | sed -n '/^[+-]/p' | sed 's/"/\\"/g')
+
+          if [ -z "$DIFF" ]; then
+            DIFF="(No line-level changes detected)"
+          fi
+
+          echo "diff<<EOF" >> $GITHUB_OUTPUT
+          echo "$DIFF" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Send Discord embed
+        env:
+          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DIFF: ${{ steps.diff.outputs.diff }}
+        run: |
+          FILE_URL="https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/modpack-text-md.md"
+          COMMIT_URL="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+
+          curl -H "Content-Type: application/json" -X POST "$WEBHOOK" -d @- <<EOF
+          {
+            "embeds": [
+              {
+                "title": "New FragMC Update! <:logo:1455193210463715538>",
+                "description": "**Changed file <:stabby:1455193341099507772>:** [View File]($FILE_URL)\n\n```diff\n$DIFF\n```",
+                "color": 5814783,
+                "footer": {
+                  "text": "Commit: ${{ github.sha }}"
+                },
+                "url": "$COMMIT_URL",
+                "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+              }
+            ]
+          }
+          EOF
