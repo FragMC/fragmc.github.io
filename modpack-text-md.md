@@ -1,7 +1,7 @@
 FragMC News
 
 ## Discord Update (Pt. 2 - Bug Fixes)
-- Added diff to updates
+- Fixed diff in updates
 
 ## Discord update
 - Added roadmap
