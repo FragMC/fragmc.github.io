@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Get diff for file
         id: diff
@@ -50,7 +50,7 @@ jobs:
             "embeds": [
               {
                 "title": "New FragMC Update! <:logo:1455193210463715538>",
-                "description": "**Changed file:** [View File <:stabby:1455193341099507772>]($FILE_URL)\n\n```diff\n$DIFF\n```"\n\<@&1457055408522002585>,
+                "description": "**Changed file:** [View File <:stabby:1455193341099507772>]($FILE_URL)\n\n```diff\n$DIFF\n```\n<@&1457055408522002585>",
                 "color": 5814783,
                 "footer": {
                   "text": "Commit: ${{ github.sha }}"
