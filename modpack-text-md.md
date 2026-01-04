@@ -1,5 +1,9 @@
 FragMC News
 
+## Discord server status (Pt. 2)
+- Upgraded to better status messages
+- Changed to message embeds
+
 ## Discord server status
 - Added webhook for server status on discord
 - Will implement chat forwarding and a proper status later on
