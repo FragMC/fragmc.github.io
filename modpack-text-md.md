@@ -1,5 +1,12 @@
 FragMC News
 
+## Server update - Paper Stable release & All plugins fixed
+- Fixed chat warning popup on Java
+- Fixed server crashing
+- Added NPCs
+- Fixed NPCs
+- Updated to the latest stable paper release
+
 ## Discord server status (Pt. 2)
 - Upgraded to better status messages
 - Changed to message embeds
