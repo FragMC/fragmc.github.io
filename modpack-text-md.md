@@ -1,5 +1,9 @@
 FragMC News
 
+## Server update - Changed Kill blocks and Moderation
+- Added Staff Moderation plugin
+- Made barriers act like black concrete
+
 ## Server update - Paper Stable release & All plugins fixed
 - Fixed chat warning popup on Java
 - Fixed server crashing
