@@ -1,5 +1,9 @@
 FragMC News
 
+## Map system update - IcedSpear
+- Changed from Telepipe to [IcedSpear](https://github.com/FragMC/IcedSpear)
+- Changed from Worldedit to FAWE
+
 ## Server update - Changed Kill blocks and Moderation
 - Added Staff Moderation plugin
 - Made barriers act like black concrete
