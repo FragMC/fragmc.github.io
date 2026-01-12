@@ -1,5 +1,11 @@
 FragMC News
 
+## IcedSpear Update
+- Added leaderboards for maps
+- Fixed some bugs
+- Made start scanning faster
+- Implemented timer
+
 ## Map system update - IcedSpear
 - Changed from Telepipe to [IcedSpear](https://github.com/FragMC/IcedSpear)
 - Changed from Worldedit to FAWE
