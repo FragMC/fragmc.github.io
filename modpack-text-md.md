@@ -1,5 +1,16 @@
 FragMC News
 
+## Map browser update
+- Re-worked ranks
+  - 0: None
+  - 1: Beginner
+  - 2: Casual
+  - 3: Intermediate
+  - 4: Advanced
+  - 5: Voyager
+  - 6: God
+- Changed Unholy Gauntlet rank: 5 -> 4
+
 ## IcedSpear Update
 - Added leaderboards for maps
 - Fixed some bugs
