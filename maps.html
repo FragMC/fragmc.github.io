@@ -1,9 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maps | FragMC</title>
+  <script src="https://authmark.github.io/Handler/latest.js" defer></script>
+  <link rel="stylesheet" href="assets/css/main.css">
   <style>
     footer {
       position: fixed;
@@ -326,6 +329,226 @@
       background: rgba(0,0,0,0.8);
     }
   </style>
+  <style>
+    /* Account Menu */
+    .account-menu {
+      position: relative;
+    }
+
+    .account-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .account-btn:hover {
+      background: #2a2a30;
+    }
+
+    .logout-btn.cancel {
+      gap: 8px;
+      background:#17171b;
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .logout-btn.cancel:hover {
+      background: #2a2a30;
+    }
+
+    .account-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: var(--card);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 8px;
+      width: 220px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .account-dropdown.open {
+      display: flex;
+    }
+
+    /* Authmark Buttons Styling */
+    .authmark-btn,
+    [id^="authmark-ctrl_"] > button,
+    [id^="authmark-ctrl_"] > a,
+    [id^="authmark-ctrl_"] > div {
+      display: flex !important;
+      align-items: center;
+      justify-content: flex-start !important; /* List alignment */
+      width: 100% !important;
+      padding: 10px 12px !important;
+      border-radius: 6px !important;
+      cursor: pointer;
+      border: none !important;
+      font-weight: 500 !important;
+      font-size: 0.95rem !important;
+      transition: all 0.2s ease;
+      color: var(--text) !important;
+      background: transparent !important; /* Integrate into list */
+      text-decoration: none !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      font-family: inherit !important;
+    }
+    
+    /* Hover state */
+    .authmark-btn:hover,
+    [id^="authmark-ctrl_"] > button:hover,
+    [id^="authmark-ctrl_"] > a:hover,
+    [id^="authmark-ctrl_"] > div:hover { 
+      background: rgba(255, 255, 255, 0.08) !important;
+      opacity: 1 !important;
+    }
+
+    /* Disabled state */
+    .authmark-btn:disabled,
+    [id^="authmark-ctrl_"] > button:disabled,
+    [id^="authmark-ctrl_"] > a:disabled,
+    [id^="authmark-ctrl_"] > div:disabled {
+      opacity: 0.3 !important;
+      cursor: not-allowed !important;
+      background: transparent !important;
+      pointer-events: none;
+    }
+
+    /* Login Modal Specifics */
+    .login-modal-content {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 32px;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .login-modal-content h2 {
+      margin: 0 0 8px;
+      font-size: 1.5rem;
+    }
+
+    .login-modal-content p {
+      color: var(--muted);
+      margin: 0 0 24px;
+      font-size: 0.95rem;
+    }
+
+    /* Authmark Buttons in Modal - Restore solid colors and larger size */
+    .login-modal-content [id^="authmark-ctrl_"] > button,
+    .login-modal-content [id^="authmark-ctrl_"] > a,
+    .login-modal-content [id^="authmark-ctrl_"] > div {
+      background: #2a2a30 !important; /* Default fallback */
+      justify-content: center !important; /* Center text/icon */
+      padding: 12px 20px !important;
+      font-size: 1rem !important;
+      border: 1px solid rgba(255,255,255,0.05) !important;
+      position: relative;
+      transition: transform 0.2s, background 0.2s !important;
+    }
+
+    .login-modal-content [id^="authmark-ctrl_"] > *:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    /* Icons for Providers via ::before */
+    .login-modal-content [id^="authmark-ctrl_"] > *::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 24px;
+      margin-right: 12px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* Provider Specific Styles & Icons */
+    .login-modal-content #authmark-ctrl_login_google > * { 
+      background: #4285F4 !important; 
+      color: white !important;
+    }
+    .login-modal-content #authmark-ctrl_login_google > *::before {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="%23FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="%23FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="%234CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="%231976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>');
+      background-color: white; /* Contrast for the icon */
+      border-radius: 50%;
+    }
+
+    .login-modal-content #authmark-ctrl_login_github > * { 
+      background: #24292e !important; 
+    }
+    .login-modal-content #authmark-ctrl_login_github > *::before {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>');
+    }
+
+    .login-modal-content #authmark-ctrl_login_microsoft > * { 
+      background: #0078D4 !important; 
+    }
+    .login-modal-content #authmark-ctrl_login_microsoft > *::before {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23"><path fill="white" d="M0 0h11v11H0zM12 0h11v11H12zM0 12h11v11H0zM12 12h11v11H12z"/></svg>');
+    }
+
+    .login-modal-content #authmark-ctrl_login_discord > * { 
+      background: #5865F2 !important; 
+    }
+    .login-modal-content #authmark-ctrl_login_discord > *::before {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"><path fill="white" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.42,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.28,105.28,0,0,0,126.6,80.22c2.91-27.61-9.9-52.15-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>');
+    }
+
+    /* Logout Modal Actions */
+    .logout-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    
+    .logout-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: opacity 0.2s;
+      font-family: inherit;
+    }
+    
+    .logout-btn.confirm {
+      background: #ed4245;
+      color: white;
+    }
+    .logout-btn:hover {
+      opacity: 0.9;
+    }
+  </style>
 </head>
 <body>
 
@@ -338,7 +561,44 @@
     <span style="font-weight:600;">Maps</span>
     <a href="about" style="color:var(--muted);cursor:pointer;text-decoration:none;">About</a>
   </nav>
+  <div class="account-menu">
+    <button class="account-btn" onclick="toggleAccountDropdown()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+      Account
+    </button>
+    <div class="account-dropdown" id="account-dropdown">
+      <div id="account-main-menu" style="display: flex; flex-direction: column; gap: 4px;">
+        <button id="custom-login-btn" class="authmark-btn" onclick="openLoginModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+          Login
+        </button>
+        <button id="custom-logout-btn" class="authmark-btn" onclick="handleLogout()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Logout
+        </button>
+        <button id="btn-party-manager" class="authmark-btn" onclick="openPartyModal()" style="display:none; border-top: 1px solid #333 !important; padding-top: 12px !important; margin-top: 4px !important;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Social Menu
+        </button>
+        <button id="btn-admin-menu" class="authmark-btn" onclick="openAdminModal()" style="display:none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          Admin Menu
+        </button>
+        <button id="btn-link-account" class="authmark-btn" onclick="openLinkModal()" style="display:none; border-top: 1px solid #333 !important; padding-top: 12px !important; margin-top: 4px !important;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Link Minecraft
+        </button>
+      </div>
+
+      <!-- Hidden logout control for programmatic access -->
+      <div id="authmark-ctrl_logout" style="display:none;"></div>
+    </div>
+  </div>
 </header>
+
+<div style="margin: 20px 0 0; padding: 0 24px;">
+  <input type="search" id="search" placeholder="Search maps..." style="width: 100%; max-width: 400px;">
+</div>
 
 <div class="grid" id="grid"></div>
 
@@ -362,6 +622,222 @@
     <h3>Teleport Command</h3>
     <p>Paste this command into Minecraft on the server to go to the map.</p>
     <pre><code id="command"></code><button class="copy" onclick="copyCmd()">Copy</button></pre>
+
+    <!-- Server Actions -->
+    <div id="server-actions" style="margin-top: 24px; border-top: 1px solid #333; padding-top: 20px; display: none;">
+      <h3>Play on Server</h3>
+      <div id="server-status-msg" style="margin-bottom: 12px; font-size: 0.9rem;"></div>
+      
+      <div id="server-controls" style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button id="btn-join-public" class="btn" style="padding: 10px 20px; font-size: 0.95rem;" onclick="executeMapCommand('public')">
+          Join Public Lobby
+        </button>
+        <button id="btn-create-private" class="btn secondary" style="padding: 10px 20px; font-size: 0.95rem;" onclick="executeMapCommand('private')">
+          Create Private Lobby
+        </button>
+        <button id="btn-party-warp" class="btn secondary" style="padding: 10px 20px; font-size: 0.95rem;" onclick="executeMapCommand('party')">
+          Warp Party
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="link-modal" onclick="closeLinkModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeLinkModal()">×</button>
+    <h2>Link Account</h2>
+    <p>Enter the code from the Minecraft server to link your account.</p>
+    <input type="text" id="link-code" placeholder="Enter code (e.g. 123456)" style="width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: white; border-radius: 6px; margin-bottom: 16px; font-size: 1rem; text-align: center;">
+    <button class="btn" style="width: 100%; justify-content: center;" onclick="submitLinkCode()">Link Account</button>
+    <p id="link-msg" style="margin-top: 12px; font-size: 0.9rem; color: var(--accent); display: none;"></p>
+  </div>
+</div>
+
+<div class="modal" id="login-modal" onclick="closeLoginModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeLoginModal()">×</button>
+    <h2>Sign In</h2>
+    <p>Select a provider to continue</p>
+    
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div id="authmark-ctrl_login_microsoft"></div>
+      <div id="authmark-ctrl_login_discord"></div>
+      <div id="authmark-ctrl_login_google"></div>
+      <div id="authmark-ctrl_login_github"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="logout-modal" onclick="closeLogoutModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeLogoutModal()">×</button>
+    <h2>Log Out</h2>
+    <p>Are you sure you want to log out?</p>
+    
+    <div class="logout-actions">
+      <button class="logout-btn cancel" onclick="closeLogoutModal()">Cancel</button>
+      <button class="logout-btn confirm" onclick="confirmLogout()">Yes</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="party-modal" onclick="closePartyModalOnBackdrop(event)">
+  <div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()">
+    <button class="close" onclick="closePartyModal()">×</button>
+    
+    <div style="display:flex; gap:15px; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
+        <button id="tab-btn-party" onclick="switchSocialTab('party')" style="background:none; border:none; color:white; font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid var(--accent);">Party</button>
+        <button id="tab-btn-friends" onclick="switchSocialTab('friends')" style="background:none; border:none; color:var(--muted); font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid transparent;">Friends</button>
+    </div>
+
+    <!-- PARTY TAB -->
+    <div id="tab-party">
+        <p style="margin-bottom: 24px;">Manage your party or join one.</p>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            <!-- Create Party -->
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Create Party</h3>
+                <button class="btn" onclick="executePartyCommand('create')" style="width:100%">Create New Party</button>
+            </div>
+
+            <!-- Join Party -->
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Join Party</h3>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="party-join-code" placeholder="Code" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn" onclick="executePartyCommand('join')">Join</button>
+                </div>
+            </div>
+
+            <!-- Manage Party -->
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Current Party Controls</h3>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <button class="btn secondary" onclick="executePartyCommand('list')">List Members</button>
+                    <button class="btn danger" onclick="executePartyCommand('leave')">Leave Party</button>
+                </div>
+                
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <input type="text" id="party-kick-player" placeholder="Player to Kick" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn secondary" onclick="executePartyCommand('kick')">Kick</button>
+                </div>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="party-section" style="border-top: 1px solid #333; padding-top: 20px; margin-top: 10px;">
+                 <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Game Controls</h3>
+                 <button class="btn danger" onclick="executeMapCommand('leave')" style="width:100%">Leave Current Map</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FRIENDS TAB -->
+    <div id="tab-friends" style="display:none;">
+        <p style="margin-bottom: 24px;">Manage your friends list.</p>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Add Friend</h3>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="friend-add-name" placeholder="Player Name" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn" onclick="executeFriendCommand('add')">Add</button>
+                </div>
+            </div>
+
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Manage Friends</h3>
+                <button class="btn secondary" onclick="executeFriendCommand('list')" style="width:100%; margin-bottom:10px;">List Friends (in Chat)</button>
+                
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="friend-remove-name" placeholder="Player to Remove" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn danger" onclick="executeFriendCommand('remove')">Remove</button>
+                </div>
+            </div>
+             
+             <div class="party-section" style="border-top: 1px solid #333; padding-top: 20px; margin-top: 10px;">
+                 <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Requests</h3>
+                 <button class="btn secondary" onclick="executeFriendCommand('requests')" style="width:100%">List Incoming Requests</button>
+            </div>
+
+        </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal" id="admin-modal" onclick="closeAdminModalOnBackdrop(event)">
+  <div class="modal-content" style="max-width: 600px;" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeAdminModal()">×</button>
+    <h2 style="border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px;">Admin Menu</h2>
+    
+    <div style="display:flex; flex-direction:column; gap:20px;">
+        
+        <!-- Gamemode Selector -->
+        <div class="party-section">
+            <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Gamemode</h3>
+            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
+                <button class="btn secondary" onclick="executeAdminCommand('gamemode creative')" title="Creative Mode" style="display:flex; flex-direction:column; align-items:center; padding:10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:5px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                    <span style="font-size:0.8rem;">Creative</span>
+                </button>
+                <button class="btn secondary" onclick="executeAdminCommand('gamemode survival')" title="Survival Mode" style="display:flex; flex-direction:column; align-items:center; padding:10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:5px;"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21l2-2"/></svg>
+                    <span style="font-size:0.8rem;">Survival</span>
+                </button>
+                <button class="btn secondary" onclick="executeAdminCommand('gamemode adventure')" title="Adventure Mode" style="display:flex; flex-direction:column; align-items:center; padding:10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:5px;"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                    <span style="font-size:0.8rem;">Adventure</span>
+                </button>
+                <button class="btn secondary" onclick="executeAdminCommand('gamemode spectator')" title="Spectator Mode" style="display:flex; flex-direction:column; align-items:center; padding:10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:5px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span style="font-size:0.8rem;">Spectator</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Teleport & Tools -->
+        <div class="party-section">
+            <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Tools & Teleport</h3>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+                <button class="btn" onclick="executeAdminCommand('mvtp Building/Testing')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:text-bottom;"><path d="M3 21h18M5 21V7l8-4 8 4v14M8 21v-2a2 2 0 0 1 4 0v2"/></svg>
+                    Go to Building World
+                </button>
+                 <button class="btn secondary" onclick="executeAdminCommand('heal')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:text-bottom;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    Heal / Feed
+                </button>
+            </div>
+            
+            <!-- Invsee -->
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <input type="text" id="admin-invsee-player" placeholder="Player Name" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                <button class="btn secondary" onclick="executeAdminCommand('invsee')">Invsee</button>
+            </div>
+
+            <!-- Custom Command -->
+             <div style="display:flex; gap:10px;">
+                <input type="text" id="admin-custom-cmd" placeholder="Custom Command (without /)" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                <button class="btn secondary" onclick="executeAdminCommand('custom')">Run</button>
+            </div>
+        </div>
+
+        <!-- Utility Commands -->
+         <div class="party-section">
+            <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Quick Actions</h3>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('day')">Day</button>
+                <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('night')">Night</button>
+                <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('sun')">Clear Weather</button>
+                <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('fly')">Toggle Fly</button>
+                <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('god')">God Mode</button>
+                 <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('workbench')">Workbench</button>
+                 <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('enderchest')">Ender Chest</button>
+            </div>
+        </div>
+
+    </div>
   </div>
 </div>
 
@@ -513,6 +989,7 @@ function openModal(id) {
   updateCarousel();
   document.getElementById('command').textContent = `/map ${id}`;
   document.getElementById('modal').classList.add('open');
+  checkWebLinkStatus();
 }
 
 function updateCarousel() {
@@ -568,6 +1045,139 @@ function closeModalOnBackdrop(event) {
   }
 }
 
+function toggleAccountDropdown() {
+  const dropdown = document.getElementById('account-dropdown');
+  const isOpen = dropdown.classList.toggle('open');
+  
+  if (isOpen) {
+    checkLoginState();
+    checkWebLinkStatus();
+  }
+}
+
+function openPartyModal() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('party-modal').classList.add('open');
+}
+
+function closePartyModal() {
+  document.getElementById('party-modal').classList.remove('open');
+}
+
+function closePartyModalOnBackdrop(event) {
+  if (event.target.id === 'party-modal') {
+    closePartyModal();
+  }
+}
+
+function checkLoginState() {
+  // Check for ACCID via helper (cookie or localStorage)
+  let accid = getAccid();
+  let isLoggedIn = !!accid;
+  
+  // Fallback: Check if AuthMark has injected the logout button (DOM check)
+  // This is necessary if the cookie is HttpOnly or not accessible
+  if (!isLoggedIn) {
+    const logoutContainer = document.getElementById('authmark-ctrl_logout');
+    // If AuthMark has injected a button/link into the hidden logout container, we are logged in
+    if (logoutContainer && logoutContainer.children.length > 0) {
+      isLoggedIn = true;
+    }
+  }
+  
+  const loginBtn = document.getElementById('custom-login-btn');
+  const logoutBtn = document.getElementById('custom-logout-btn');
+  
+  if (isLoggedIn) {
+    loginBtn.disabled = true;
+    loginBtn.title = "You are already logged in";
+    logoutBtn.disabled = false;
+    logoutBtn.title = "";
+    
+    // Enable Party Manager button
+    const partyBtn = document.getElementById('btn-party-manager');
+    if (partyBtn) {
+        partyBtn.style.display = 'flex';
+    }
+  } else {
+    loginBtn.disabled = false;
+    loginBtn.title = "";
+    logoutBtn.disabled = true;
+    logoutBtn.title = "You are not logged in";
+    
+    // Disable/Hide Party Manager button
+    const partyBtn = document.getElementById('btn-party-manager');
+    if (partyBtn) {
+        partyBtn.style.display = 'none';
+    }
+  }
+}
+
+function openLoginModal() {
+  document.getElementById('account-dropdown').classList.remove('open'); // Close menu
+  document.getElementById('login-modal').classList.add('open');
+}
+
+function closeLoginModal() {
+  document.getElementById('login-modal').classList.remove('open');
+}
+
+function closeLoginModalOnBackdrop(event) {
+  if (event.target.id === 'login-modal') {
+    closeLoginModal();
+  }
+}
+
+function handleLogout() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('logout-modal').classList.add('open');
+}
+
+function closeLogoutModal() {
+  document.getElementById('logout-modal').classList.remove('open');
+}
+
+function closeLogoutModalOnBackdrop(event) {
+  if (event.target.id === 'logout-modal') {
+    closeLogoutModal();
+  }
+}
+
+function confirmLogout() {
+  // Trigger the actual Authmark logout button
+  const authmarkLogoutContainer = document.getElementById('authmark-ctrl_logout');
+  // Look for any clickable element inside the container
+  let logoutBtn = authmarkLogoutContainer.querySelector('button, a, div[onclick], input[type="button"]');
+  
+  // Fallback: try the first element if specific selector fails
+  if (!logoutBtn && authmarkLogoutContainer.firstElementChild) {
+    logoutBtn = authmarkLogoutContainer.firstElementChild;
+  }
+  
+  if (logoutBtn) {
+    logoutBtn.click();
+    // Close modal immediately
+    closeLogoutModal();
+    // Refresh page after logout to update UI
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+  } else {
+    console.error("Authmark logout button not found");
+    alert("Could not trigger logout. Please try again.");
+    closeLogoutModal();
+  }
+}
+
+// Close dropdown when clicking outside
+window.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('account-dropdown');
+  const btn = document.querySelector('.account-btn');
+  if (dropdown && dropdown.classList.contains('open') && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+    dropdown.classList.remove('open');
+  }
+});
+
 function copyCmd() {
   navigator.clipboard.writeText(`/map ${currentMapId}`);
 }
@@ -576,8 +1186,1001 @@ if (search) {
   search.addEventListener('input', render);
 }
 render();
-</script>
 
+// --- WebLink API Integration ---
+const WEBLINK_API_URL = "http://joinfragmc.duckdns.org:25531/webhook"; // REPLACE with your server IP
+// WARNING: Storing secrets on the client-side is insecure. 
+// This secret allows signing requests as an admin. Anyone who views the source code can find it.
+// Only use this for local testing or if you understand the risks.
+const HMAC_SECRET = "weblink_fa6b02f1e7a7e28a63cdd54c332894442765859f5bc21bb387b3d431e8432106"; 
+
+// Helper: Get Cookie (Robust)
+function getCookie(name) {
+  // Split cookie string and find the named cookie
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
+
+// Helper: Get ACCID (Cookie -> LocalStorage)
+function getAccid() {
+  // Try lowercase 'accid' first (as seen in logs), then uppercase 'ACCID'
+  let id = getCookie('accid') || getCookie('ACCID');
+  
+  if (!id) {
+    id = localStorage.getItem('accid') || localStorage.getItem('ACCID');
+  }
+  
+  return id;
+}
+
+function openAdminModal() {
+  const modal = document.getElementById('admin-modal');
+  if (modal) {
+      modal.classList.add('open');
+      checkPlayerOnline(); // Refresh online status when opening admin menu
+  }
+}
+
+function closeAdminModal() {
+  const modal = document.getElementById('admin-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function closeAdminModalOnBackdrop(e) {
+  if (e.target.id === 'admin-modal') closeAdminModal();
+}
+
+async function executeAdminCommand(cmdType) {
+    if (!webLinkState.linked || !webLinkState.uuid) {
+        alert("Please link your Minecraft account first.");
+        return;
+    }
+
+    if (!webLinkState.online) {
+        alert("You must be online on the server to use this.");
+        return;
+    }
+
+    const accid = getAccid();
+    if (!accid) {
+        alert("Authentication error. Please relogin.");
+        return;
+    }
+
+    let command = "";
+    
+    // Determine command based on type
+    if (cmdType.startsWith('gamemode')) {
+        command = cmdType;
+    } else if (cmdType.startsWith('mvtp')) {
+        command = cmdType;
+    } else if (cmdType === 'heal') {
+        command = 'heal'; // Staff++ or Essentials
+    } else if (cmdType === 'invsee') {
+        const player = document.getElementById('admin-invsee-player').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `invsee ${player}`;
+    } else if (cmdType === 'custom') {
+        const custom = document.getElementById('admin-custom-cmd').value;
+        if (!custom) { alert("Please enter a command."); return; }
+        command = custom;
+    } else if (cmdType === 'day') {
+        command = 'time set day';
+    } else if (cmdType === 'night') {
+        command = 'time set night';
+    } else if (cmdType === 'sun') {
+        command = 'weather clear';
+    } else if (cmdType === 'fly') {
+        command = 'fly';
+    } else if (cmdType === 'god') {
+        command = 'god';
+    } else if (cmdType === 'workbench') {
+        command = 'workbench';
+    } else if (cmdType === 'enderchest') {
+        command = 'enderchest';
+    } else {
+        console.error("Unknown admin command:", cmdType);
+        return;
+    }
+
+    try {
+        const hashedAccid = await sha256(accid);
+        
+        // Step 1: Get Command Token (Standard)
+        const tokenRes = await fetch(`${WEBLINK_API_URL}/get-command-token`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ uuid: webLinkState.uuid })
+        });
+        
+        if (!tokenRes.ok) throw new Error("Failed to get command token");
+        const tokenData = await tokenRes.json();
+        if (!tokenData.success || !tokenData.token) throw new Error(tokenData.message || "Failed to get token");
+        
+        // Step 2: Execute Command (Signed for Admin)
+        const nonce = crypto.randomUUID();
+        const payload = { 
+            uuid: webLinkState.uuid, 
+            accid: hashedAccid,
+            command: command,
+            nonce: nonce
+        };
+        const body = JSON.stringify(payload);
+        
+        // Sign the execution request
+        const signatureHash = await hmacSha256(HMAC_SECRET, body);
+        const signature = "sha256=" + signatureHash;
+
+        const execRes = await fetch(`${WEBLINK_API_URL}/execute-command`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-Command-Token': tokenData.token,
+                'X-Signature': signature
+            },
+            body: body
+        });
+        
+        const execData = await execRes.json();
+        if (execData.success) {
+            console.log(`Command executed: /${command}`);
+        } else {
+            alert(`Error: ${execData.message}`);
+        }
+        
+    } catch (err) {
+        console.error("Command execution failed:", err);
+        alert("Failed to execute command. Check console for details.");
+    }
+}
+
+// Helper: SHA-256 Hash
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Helper: HMAC SHA-256
+async function hmacSha256(key, message) {
+  const enc = new TextEncoder();
+  const keyData = enc.encode(key);
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw", keyData, { name: "HMAC", hash: "SHA-256" },
+    false, ["sign"]
+  );
+  const signature = await crypto.subtle.sign("HMAC", cryptoKey, enc.encode(message));
+  const hashArray = Array.from(new Uint8Array(signature));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// State
+let webLinkState = {
+  linked: false,
+  online: false,
+  uuid: null,
+  username: null,
+  accounts: []
+};
+
+// Functions
+function updateAccountUI() {
+  const btn = document.querySelector('.account-btn');
+  const dropdownMenu = document.getElementById('account-main-menu');
+  
+  // Update Button
+  if (webLinkState.linked && webLinkState.username) {
+      // Find current account object to get online status
+      const currentAcc = webLinkState.accounts ? webLinkState.accounts.find(a => a.uuid === webLinkState.uuid) : null;
+      const isOnline = currentAcc ? currentAcc.online : webLinkState.online;
+
+      btn.innerHTML = `
+          <div style="position: relative; width: 20px; height: 20px;">
+              <img src="https://mc-heads.net/avatar/${webLinkState.uuid}/20" style="border-radius: 50%; width: 100%; height: 100%;">
+              <div style="position: absolute; bottom: -2px; right: -2px; width: 8px; height: 8px; background: ${isOnline ? '#43b581' : '#747f8d'}; border-radius: 50%; border: 2px solid var(--card);" title="${isOnline ? 'Online' : 'Offline'}"></div>
+          </div>
+          ${webLinkState.username}
+      `;
+  } else {
+      btn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+          Account
+      `;
+  }
+
+  // Update Dropdown Switcher
+  let switcher = document.getElementById('account-switcher');
+  if (!switcher) {
+      switcher = document.createElement('div');
+      switcher.id = 'account-switcher';
+      switcher.style.borderBottom = '1px solid #333';
+      switcher.style.paddingBottom = '8px';
+      switcher.style.marginBottom = '8px';
+      switcher.style.display = 'none';
+      
+      if (dropdownMenu && dropdownMenu.parentNode) {
+          dropdownMenu.parentNode.insertBefore(switcher, dropdownMenu);
+      }
+  }
+
+  // Clear existing content to avoid duplicates if called multiple times
+  switcher.innerHTML = '';
+  
+  // Admin Check Logic (Updated to use static button)
+  const adminBtn = document.getElementById('btn-admin-menu');
+  if (adminBtn) {
+       // Pre-check Admin Access on render (silent)
+       (async () => {
+           const isAdmin = await checkAdminAccess(true); // Silent check
+           if (isAdmin) {
+               adminBtn.style.display = 'flex';
+               // Add separator style to match other buttons if needed
+               adminBtn.style.borderTop = '1px solid #333';
+               adminBtn.style.paddingTop = '12px';
+               adminBtn.style.marginTop = '4px';
+           } else {
+               adminBtn.style.display = 'none';
+           }
+       })();
+  }
+  
+   if (webLinkState.linked && webLinkState.accounts && webLinkState.accounts.length > 0) {
+      switcher.style.display = 'flex';
+      switcher.style.flexDirection = 'column';
+      switcher.style.gap = '4px';
+      switcher.innerHTML = '<div style="font-size:0.75rem; color:var(--muted); padding:0 4px 4px;">Switch Account</div>';
+      
+      webLinkState.accounts.forEach(acc => {
+          const isCurrent = acc.uuid === webLinkState.uuid;
+          const item = document.createElement('div');
+          item.className = 'authmark-btn';
+          item.style.justifyContent = 'flex-start';
+          item.style.padding = '6px 8px';
+          item.style.fontSize = '0.9rem';
+          
+          if (isCurrent) {
+              item.style.background = 'rgba(255, 255, 255, 0.1)';
+              item.style.cursor = 'default';
+              item.style.pointerEvents = 'none';
+          } else {
+              item.style.cursor = 'pointer';
+              item.onclick = (e) => {
+                  e.stopPropagation();
+                  switchAccount(acc.uuid);
+              };
+          }
+          
+          item.innerHTML = `
+              <div style="position: relative; margin-right: 8px; width: 16px; height: 16px;">
+                  <img src="https://mc-heads.net/avatar/${acc.uuid}/16" style="border-radius: 50%; width: 100%; height: 100%;">
+                  <div style="position: absolute; bottom: -2px; right: -2px; width: 8px; height: 8px; background: ${acc.online ? '#43b581' : '#747f8d'}; border-radius: 50%; border: 2px solid var(--card);" title="${acc.online ? 'Online' : 'Offline'}"></div>
+              </div>
+              ${acc.username}
+              ${isCurrent ? '<span style="margin-left:auto; font-size:0.8rem; color:#43b581;">●</span>' : ''}
+          `;
+          switcher.appendChild(item);
+      });
+      
+      // Add "Link Another Account" button
+      const linkBtn = document.createElement('div');
+      linkBtn.className = 'authmark-btn';
+      linkBtn.style.justifyContent = 'flex-start';
+      linkBtn.style.padding = '6px 8px';
+      linkBtn.style.fontSize = '0.9rem';
+      linkBtn.style.color = 'var(--muted)';
+      linkBtn.style.marginTop = '4px';
+      linkBtn.style.borderTop = '1px solid #333';
+      linkBtn.style.cursor = 'pointer';
+      
+      linkBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M12 5v14M5 12h14"/></svg>
+        Link Another Account
+      `;
+      
+      linkBtn.onclick = (e) => {
+          e.stopPropagation();
+          // Close the dropdown first
+          document.getElementById('account-main-menu').classList.remove('open');
+          openLinkModal();
+      };
+      
+      switcher.appendChild(linkBtn);
+      
+      // Debug log
+      console.log(`[AccountSwitcher] Updated with ${webLinkState.accounts.length} accounts.`);
+  } else {
+      switcher.style.display = 'none';
+  }
+}
+
+async function checkAdminAccess(silent = false) {
+   if (!webLinkState.linked || !webLinkState.uuid) return false;
+   
+   const accid = getAccid();
+   if (!accid) return false;
+   
+   try {
+        const nonce = crypto.randomUUID();
+        const hashedAccid = await sha256(accid);
+        const payload = {
+            uuid: webLinkState.uuid,
+            accid: hashedAccid,
+            nonce: nonce
+        };
+        const body = JSON.stringify(payload);
+        
+        // Generate HMAC signature
+        const signatureHash = await hmacSha256(HMAC_SECRET, body);
+        const signature = "sha256=" + signatureHash;
+
+        const response = await fetch(`${WEBLINK_API_URL}/check-admin`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-Signature': signature
+            },
+            body: body
+        });
+       
+       if (response.ok) {
+           const data = await response.json();
+           if (data.success && data.admin) {
+               if (!silent) alert(`Admin Access Granted!\nWelcome, ${data.username || webLinkState.username}`);
+               return true;
+           } else {
+               if (!silent) alert("Access Denied: You do not have permission to access the Admin Menu.");
+               return false;
+           }
+       } else {
+           if (!silent) {
+                const errData = await response.json();
+                alert(`Error: ${errData.message || 'Failed to check permissions'}`);
+           }
+           return false;
+       }
+   } catch (err) {
+        if (!silent) {
+            console.error("Admin check failed:", err);
+            alert("Failed to connect to server for admin check.");
+        } else {
+            console.warn("Admin check failed (silent):", err);
+        }
+        return false;
+    }
+ }
+
+async function updateAllAccountsOnlineStatus() {
+  if (!webLinkState.linked || !webLinkState.accounts || webLinkState.accounts.length === 0) return;
+  
+  const accid = getAccid();
+  if (!accid) return;
+  
+  try {
+      const hashedAccid = await sha256(accid);
+      
+      // Check each account
+      await Promise.all(webLinkState.accounts.map(async (acc) => {
+          try {
+              const response = await fetch(`${WEBLINK_API_URL}/check-online`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ uuid: acc.uuid, accid: hashedAccid })
+              });
+              
+              if (response.ok) {
+                  const data = await response.json();
+                  if (data.success && data.online) {
+                      acc.online = true;
+                  } else {
+                      acc.online = false;
+                  }
+                  
+                  // Sync main state if this is the current account
+                  if (acc.uuid === webLinkState.uuid) {
+                      webLinkState.online = acc.online;
+                  }
+              }
+          } catch (e) {
+              console.warn(`Failed to check online status for ${acc.username}`, e);
+          }
+      }));
+      
+      // Re-render UI to show dots
+      updateAccountUI();
+      
+  } catch (err) {
+      console.error("Error updating account statuses:", err);
+  }
+}
+
+function switchAccount(uuid) {
+  const account = webLinkState.accounts.find(a => a.uuid === uuid);
+  if (account) {
+      webLinkState.uuid = account.uuid;
+      webLinkState.username = account.username;
+      updateAccountUI();
+      
+      // Re-check online status for the new account if modal is open
+      if (document.getElementById('modal').classList.contains('open')) {
+          checkPlayerOnline();
+      }
+  }
+}
+
+// --- Account Info Resolution (Floodgate & Public APIs) ---
+
+function isFloodgateId(uuid) {
+    // Floodgate UUIDs start with 00000000-0000-0000- (first 64 bits are zero)
+    return uuid.startsWith('00000000-0000-0000-');
+}
+
+async function resolveAccountInfo(uuid, currentUsername) {
+    // If it's a Floodgate UUID
+    if (isFloodgateId(uuid)) {
+        try {
+            // Extract XUID from the last 64 bits (last 16 hex chars)
+            const clean = uuid.replace(/-/g, '');
+            const xuidHex = clean.substring(16);
+            // Convert hex to decimal string for the API
+            const xuid = BigInt('0x' + xuidHex).toString();
+            
+            // Fetch Gamertag from Geyser API
+            const res = await fetch(`https://api.geysermc.org/v2/xbox/gamertag/${xuid}`);
+            if (res.ok) {
+                const data = await res.json();
+                // Check if already has dot, if not add it
+                let name = data.gamertag;
+                if (!name.startsWith('.')) name = '.' + name;
+                return { username: name, isFloodgate: true };
+            }
+        } catch (e) {
+            console.warn('[Resolve] Failed to fetch Floodgate info:', e);
+            // Even if fetch fails, ensure it has a dot if we know it's Floodgate
+            if (currentUsername && !currentUsername.startsWith('.')) {
+                return { username: '.' + currentUsername, isFloodgate: true };
+            }
+        }
+    } else {
+        // Java Account - Fetch from Ashcon (Mojang wrapper)
+        try {
+            const res = await fetch(`https://api.ashcon.app/mojang/v2/user/${uuid}`);
+            if (res.ok) {
+                const data = await res.json();
+                return { username: data.username, isFloodgate: false };
+            }
+        } catch (e) {
+            console.warn('[Resolve] Failed to fetch Java info:', e);
+        }
+    }
+    
+    // Return null if no update needed or failed
+    return null;
+}
+
+function openLinkModal() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('link-modal').classList.add('open');
+  document.getElementById('link-msg').style.display = 'none';
+  document.getElementById('link-code').value = '';
+}
+
+function closeLinkModal() {
+  document.getElementById('link-modal').classList.remove('open');
+}
+
+function closeLinkModalOnBackdrop(event) {
+  if (event.target.id === 'link-modal') {
+    closeLinkModal();
+  }
+}
+
+async function submitLinkCode() {
+  const code = document.getElementById('link-code').value.trim();
+  const accid = getAccid();
+  const msgEl = document.getElementById('link-msg');
+
+  if (!code) {
+    msgEl.textContent = "Please enter a code.";
+    msgEl.style.display = 'block';
+    return;
+  }
+  if (!accid) {
+    msgEl.textContent = "Error: Could not retrieve Account ID. Check console for details. Please try logging out and back in.";
+    msgEl.style.display = 'block';
+    console.error("Link Account Failed: Missing ACCID. Cookies:", document.cookie);
+    return;
+  }
+
+  msgEl.textContent = "Verifying...";
+  msgEl.style.display = 'block';
+  msgEl.style.color = 'var(--accent)';
+
+  try {
+    const response = await fetch(`${WEBLINK_API_URL}/verify-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code, accid: accid }) // Send RAW accid
+    });
+    
+    if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.message || "Invalid or expired code");
+    }
+
+    const data = await response.json();
+
+    if (data.success) {
+      msgEl.style.color = '#43b581';
+      msgEl.textContent = "Account linked successfully!";
+      setTimeout(() => {
+        closeLinkModal();
+        checkWebLinkStatus(); // Refresh status
+      }, 1500);
+    } else {
+      throw new Error(data.message || "Invalid code");
+    }
+  } catch (err) {
+    msgEl.style.color = '#ed4245';
+    msgEl.textContent = err.message || "Failed to link account.";
+  }
+}
+
+async function checkWebLinkStatus() {
+  const accid = getAccid();
+  const linkBtn = document.getElementById('btn-link-account');
+  const serverActions = document.getElementById('server-actions');
+  const statusMsg = document.getElementById('server-status-msg');
+  
+  if (!accid) {
+    if (linkBtn) linkBtn.style.display = 'none';
+    
+    // Instead of hiding, show disabled with message
+    if (serverActions && document.getElementById('modal').classList.contains('open')) {
+        serverActions.style.display = 'block';
+        statusMsg.innerHTML = `<span style="color:#ed4245">●</span> Not logged in. <a href="#" onclick="closeModal(); openLoginModal(); return false;" style="color:var(--accent)">Log in</a> to play.`;
+        document.getElementById('btn-join-public').disabled = true;
+        document.getElementById('btn-create-private').disabled = true;
+        document.getElementById('btn-join-public').style.opacity = '0.5';
+        document.getElementById('btn-create-private').style.opacity = '0.5';
+    }
+    
+    webLinkState.linked = false;
+    return;
+  }
+
+  try {
+    const hashedAccid = await sha256(accid);
+    const requestBody = JSON.stringify({ accid: hashedAccid });
+    console.log("[WebLink] check-link request:", requestBody);
+
+    const response = await fetch(`${WEBLINK_API_URL}/check-link`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: requestBody
+    });
+    
+    if (!response.ok) throw new Error("API Error");
+    
+    const data = await response.json();
+    console.log("[WebLink] check-link response:", data);
+    
+    if (data.success && data.linked) {
+      webLinkState.linked = true;
+      webLinkState.uuid = data.uuid;
+      webLinkState.username = data.username;
+      
+      // Helper: Manage Local Storage for Accounts (Client-side aggregation)
+      const storageKey = `weblink_accounts_${accid}`;
+      let localAccounts = [];
+      try {
+          localAccounts = JSON.parse(localStorage.getItem(storageKey) || '[]');
+          if (!Array.isArray(localAccounts)) localAccounts = [];
+      } catch(e) { localAccounts = []; }
+
+      // Handle accounts list logic
+      if (data.accounts && Array.isArray(data.accounts)) {
+          // Server provided list - authoritative
+          webLinkState.accounts = data.accounts;
+      } else {
+          console.warn('[WebLink] Server did not return accounts list, merging with local storage.');
+          // Merge current account into local list
+          const existingIdx = localAccounts.findIndex(a => a.uuid === data.uuid);
+          if (existingIdx > -1) {
+              localAccounts[existingIdx].username = data.username; // Update username
+          } else {
+              localAccounts.push({ uuid: data.uuid, username: data.username });
+          }
+          webLinkState.accounts = localAccounts;
+      }
+      
+      // Sync back to storage (always keep storage up to date with known accounts)
+      // We merge the authoritative list (or our constructed one) into storage
+      // to ensure we don't lose accounts if the server list is partial in future
+      const finalMap = new Map();
+      localAccounts.forEach(a => finalMap.set(a.uuid, a)); // Old local
+      webLinkState.accounts.forEach(a => finalMap.set(a.uuid, a)); // New authoritative/current
+      
+      const uniqueAccounts = Array.from(finalMap.values());
+      localStorage.setItem(storageKey, JSON.stringify(uniqueAccounts.map(a => ({uuid: a.uuid, username: a.username}))));
+      webLinkState.accounts = uniqueAccounts;
+
+      // Resolve usernames (API fetch & Floodgate support)
+      await Promise.all(webLinkState.accounts.map(async (acc) => {
+          const resolved = await resolveAccountInfo(acc.uuid, acc.username);
+          if (resolved) {
+              acc.username = resolved.username;
+              // We could also update the main state if this is the current user
+              if (acc.uuid === webLinkState.uuid) {
+                  webLinkState.username = resolved.username;
+              }
+          }
+      }));
+      
+      updateAccountUI();
+      
+      // Update online status for all accounts
+      updateAllAccountsOnlineStatus();
+      
+      if (linkBtn) linkBtn.style.display = 'none';
+      
+      // Check Online Status if modal is open
+      if (document.getElementById('modal').classList.contains('open')) {
+          checkPlayerOnline();
+      }
+    } else {
+      webLinkState.linked = false;
+      updateAccountUI();
+      if (linkBtn) linkBtn.style.display = 'flex';
+      
+      // Update server actions to show Link prompt if inside modal
+      if (serverActions && document.getElementById('modal').classList.contains('open')) {
+          serverActions.style.display = 'block';
+          statusMsg.innerHTML = `<span style="color:#ed4245">●</span> Account not linked. <a href="#" onclick="openLinkModal(); return false;" style="color:var(--accent)">Link Account</a>`;
+          document.getElementById('btn-join-public').disabled = true;
+          document.getElementById('btn-create-private').disabled = true;
+          document.getElementById('btn-join-public').style.opacity = '0.5';
+          document.getElementById('btn-create-private').style.opacity = '0.5';
+      }
+    }
+  } catch (err) {
+    console.log("WebLink API check failed:", err);
+    webLinkState.linked = false;
+    updateAccountUI();
+    if (linkBtn) linkBtn.style.display = 'flex';
+  }
+}
+
+async function checkPlayerOnline() {
+  if (!webLinkState.linked || !webLinkState.uuid) return;
+  
+  const accid = getAccid();
+  if (!accid) return;
+
+  const serverActions = document.getElementById('server-actions');
+  const statusMsg = document.getElementById('server-status-msg');
+  const btnJoin = document.getElementById('btn-join-public');
+  const btnCreate = document.getElementById('btn-create-private');
+
+  try {
+    const hashedAccid = await sha256(accid);
+    const response = await fetch(`${WEBLINK_API_URL}/check-online`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid, accid: hashedAccid })
+    });
+    
+    if (!response.ok) throw new Error("API Error");
+
+    const data = await response.json();
+    
+    if (serverActions) serverActions.style.display = 'block';
+
+    if (data.success && data.online) {
+      webLinkState.online = true;
+      if (statusMsg) {
+         statusMsg.innerHTML = `<span style="color:#43b581">●</span> Online as <strong>${data.username}</strong>`;
+      }
+      btnJoin.disabled = false;
+      btnCreate.disabled = false;
+      btnJoin.style.opacity = '1';
+      btnCreate.style.opacity = '1';
+      btnJoin.style.cursor = 'pointer';
+      btnCreate.style.cursor = 'pointer';
+    } else {
+      webLinkState.online = false;
+      if (statusMsg) {
+         statusMsg.innerHTML = `<span style="color:#ed4245">●</span> Offline (Join server to play)`;
+      }
+      btnJoin.disabled = true;
+      btnCreate.disabled = true;
+      btnJoin.style.opacity = '0.5';
+      btnCreate.style.opacity = '0.5';
+      btnJoin.style.cursor = 'not-allowed';
+      btnCreate.style.cursor = 'not-allowed';
+    }
+  } catch (err) {
+    console.error(err);
+    if (statusMsg) statusMsg.textContent = "Server status unavailable";
+  }
+}
+
+async function executeMapCommand(type) {
+  if (!webLinkState.online) {
+    alert("You must be online on the server to use this.");
+    return;
+  }
+  
+  const accid = getAccid();
+  if (!accid) return;
+  
+  let cmd = "";
+  const mapId = currentMapId;
+  if (type === 'public') {
+    cmd = `map public ${mapId}`;
+  } else if (type === 'private') {
+    cmd = `map private ${mapId}`;
+  } else if (type === 'party') {
+    cmd = `party map ${mapId}`;
+  } else if (type === 'leave') {
+    cmd = `map leave`;
+  }
+  
+  if (!cmd) return;
+  
+  let btn;
+  if (type === 'public') btn = document.getElementById('btn-join-public');
+  else if (type === 'private') btn = document.getElementById('btn-create-private');
+  else if (type === 'party') btn = document.getElementById('btn-party-warp');
+  else if (type === 'leave') btn = document.querySelector('button[onclick="executeMapCommand(\'leave\')"]');
+  
+  const originalText = btn.textContent;
+  btn.textContent = "Sending...";
+  btn.disabled = true;
+
+  try {
+    const tokenRes = await fetch(`${WEBLINK_API_URL}/get-command-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid })
+    });
+    const tokenData = await tokenRes.json();
+    
+    if (!tokenData.success || !tokenData.token) {
+      throw new Error("Failed to get command token");
+    }
+    
+    const hashedAccid = await sha256(accid);
+    const execRes = await fetch(`${WEBLINK_API_URL}/execute-command`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-Command-Token': tokenData.token
+      },
+      body: JSON.stringify({ 
+        uuid: webLinkState.uuid, 
+        accid: hashedAccid,
+        command: cmd
+      })
+    });
+    
+    if (execRes.ok) {
+      btn.textContent = "Sent!";
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 2000);
+    } else {
+      const errData = await execRes.json();
+      throw new Error(errData.message || "Command failed");
+    }
+  } catch (err) {
+    alert(`Error: ${err.message}`);
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+function switchSocialTab(tab) {
+  const partyTab = document.getElementById('tab-party');
+  const friendsTab = document.getElementById('tab-friends');
+  const partyBtn = document.getElementById('tab-btn-party');
+  const friendsBtn = document.getElementById('tab-btn-friends');
+  
+  if (tab === 'party') {
+    partyTab.style.display = 'block';
+    friendsTab.style.display = 'none';
+    partyBtn.style.color = 'white';
+    partyBtn.style.borderBottomColor = 'var(--accent)';
+    friendsBtn.style.color = 'var(--muted)';
+    friendsBtn.style.borderBottomColor = 'transparent';
+  } else {
+    partyTab.style.display = 'none';
+    friendsTab.style.display = 'block';
+    partyBtn.style.color = 'var(--muted)';
+    partyBtn.style.borderBottomColor = 'transparent';
+    friendsBtn.style.color = 'white';
+    friendsBtn.style.borderBottomColor = 'var(--accent)';
+  }
+}
+
+async function executeFriendCommand(type) {
+  if (!webLinkState.online) {
+    alert("You must be online on the server to use this.");
+    return;
+  }
+  
+  const accid = getAccid();
+  if (!accid) return;
+  
+  let cmd = "";
+  let btn = null;
+  
+  if (type === 'add') {
+      const player = document.getElementById('friend-add-name').value.trim();
+      if (!player) { alert("Please enter a player name"); return; }
+      cmd = `friend add ${player}`;
+      btn = document.querySelector('button[onclick="executeFriendCommand(\'add\')"]');
+  } else if (type === 'remove') {
+      const player = document.getElementById('friend-remove-name').value.trim();
+      if (!player) { alert("Please enter a player name"); return; }
+      cmd = `friend remove ${player}`;
+      btn = document.querySelector('button[onclick="executeFriendCommand(\'remove\')"]');
+  } else if (type === 'list') {
+      cmd = "friend list";
+      btn = document.querySelector('button[onclick="executeFriendCommand(\'list\')"]');
+  } else if (type === 'requests') {
+      cmd = "friend requests";
+      btn = document.querySelector('button[onclick="executeFriendCommand(\'requests\')"]');
+  }
+  
+  if (!cmd || !btn) return;
+  
+  const originalText = btn.textContent;
+  btn.textContent = "...";
+  btn.disabled = true;
+
+  try {
+    const tokenRes = await fetch(`${WEBLINK_API_URL}/get-command-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid })
+    });
+    const tokenData = await tokenRes.json();
+    
+    if (!tokenData.success || !tokenData.token) {
+      throw new Error("Failed to get command token");
+    }
+    
+    const hashedAccid = await sha256(accid);
+    const execRes = await fetch(`${WEBLINK_API_URL}/execute-command`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-Command-Token': tokenData.token
+      },
+      body: JSON.stringify({ 
+        uuid: webLinkState.uuid, 
+        accid: hashedAccid,
+        command: cmd
+      })
+    });
+    
+    if (execRes.ok) {
+      btn.textContent = "✓";
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        if (type === 'add') document.getElementById('friend-add-name').value = '';
+        if (type === 'remove') document.getElementById('friend-remove-name').value = '';
+      }, 1500);
+    } else {
+      const errData = await execRes.json();
+      throw new Error(errData.message || "Command failed");
+    }
+  } catch (err) {
+    alert(`Error: ${err.message}`);
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+async function executePartyCommand(type) {
+  if (!webLinkState.online) {
+    alert("You must be online on the server to use this.");
+    return;
+  }
+  
+  const accid = getAccid();
+  if (!accid) return;
+  
+  let cmd = "";
+  let btn = null;
+  
+  if (type === 'create') {
+      cmd = "party create";
+      btn = document.querySelector('button[onclick="executePartyCommand(\'create\')"]');
+  } else if (type === 'join') {
+      const code = document.getElementById('party-join-code').value.trim();
+      if (!code) { alert("Please enter a code"); return; }
+      cmd = `party join ${code}`;
+      btn = document.querySelector('button[onclick="executePartyCommand(\'join\')"]');
+  } else if (type === 'leave') {
+      cmd = "party leave";
+      btn = document.querySelector('button[onclick="executePartyCommand(\'leave\')"]');
+  } else if (type === 'list') {
+      cmd = "party list";
+      btn = document.querySelector('button[onclick="executePartyCommand(\'list\')"]');
+  } else if (type === 'kick') {
+      const player = document.getElementById('party-kick-player').value.trim();
+      if (!player) { alert("Please enter a player name"); return; }
+      cmd = `party kick ${player}`;
+      btn = document.querySelector('button[onclick="executePartyCommand(\'kick\')"]');
+  }
+  
+  if (!cmd || !btn) return;
+  
+  const originalText = btn.textContent;
+  btn.textContent = "...";
+  btn.disabled = true;
+
+  try {
+    const tokenRes = await fetch(`${WEBLINK_API_URL}/get-command-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid })
+    });
+    const tokenData = await tokenRes.json();
+    
+    if (!tokenData.success || !tokenData.token) {
+      throw new Error("Failed to get command token");
+    }
+    
+    const hashedAccid = await sha256(accid);
+    const execRes = await fetch(`${WEBLINK_API_URL}/execute-command`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-Command-Token': tokenData.token
+      },
+      body: JSON.stringify({ 
+        uuid: webLinkState.uuid, 
+        accid: hashedAccid,
+        command: cmd
+      })
+    });
+    
+    if (execRes.ok) {
+      btn.textContent = "✓";
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        // Clear inputs on success
+        if (type === 'join') document.getElementById('party-join-code').value = '';
+        if (type === 'kick') document.getElementById('party-kick-player').value = '';
+      }, 1500);
+    } else {
+      const errData = await execRes.json();
+      throw new Error(errData.message || "Command failed");
+    }
+  } catch (err) {
+    alert(`Error: ${err.message}`);
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+</script>
+<script>
+  // AuthMark Script Initialization
+  window.addEventListener('DOMContentLoaded', () => {
+    AuthMark.init(); // auto-detects divs and handles ACCID cookie
+    checkWebLinkStatus();
+  });
+</script>
 <footer>
   © 2025–Present <strong>FragMC</strong>. All rights reserved.
   <span>

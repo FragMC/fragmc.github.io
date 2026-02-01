@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FragMC</title>
+  <link rel="stylesheet" href="assets/css/main.css">
   <style>
     :root {
       --bg: #0e0e11;
@@ -182,7 +183,7 @@
     }
 
     .expandable-content.open {
-      max-height: 3000px;
+      max-height: 50000px;
       opacity: 1;
       margin-bottom: 40px;
     }
@@ -200,7 +201,7 @@
       color: var(--text);
     }
 
-    .card {
+    .info-card {
       background: var(--card);
       border-radius: 16px;
       padding: 24px;
@@ -208,18 +209,18 @@
       border: 1px solid #222;
     }
 
-    .card p {
+    .info-card p {
       margin: 0 0 12px;
       color: var(--muted);
     }
 
-    .card ul, .card ol {
+    .info-card ul, .info-card ol {
       margin: 0;
       padding-left: 20px;
       color: var(--muted);
     }
 
-    .card li {
+    .info-card li {
       margin-bottom: 8px;
     }
 
@@ -274,11 +275,32 @@
   <div style="display:flex;align-items:center;gap:24px;">
     <strong style="font-size:1.3rem;">FragMC</strong>
   </div>
-  <nav>
-    <span class="active">Home</span>
-    <a href="maps">Maps</a>
-    <a href="about">About</a>
+  <nav style="display:flex;gap:18px;font-size:0.95rem;">
+    <span style="font-weight:600;">Home</span>
+    <a href="maps" style="color:var(--muted);cursor:pointer;text-decoration:none;">Maps</a>
+    <a href="about" style="color:var(--muted);cursor:pointer;text-decoration:none;">About</a>
   </nav>
+  <div class="account-menu">
+    <button class="account-btn" onclick="toggleAccountDropdown()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+      Account
+    </button>
+    <div class="account-dropdown" id="account-dropdown">
+      <div id="account-main-menu" style="display: flex; flex-direction: column; gap: 4px;">
+        <button id="custom-login-btn" class="authmark-btn" onclick="openLoginModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+          Login
+        </button>
+        <button id="custom-logout-btn" class="authmark-btn" onclick="handleLogout()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Logout
+        </button>
+      </div>
+
+      <!-- Hidden logout control for programmatic access -->
+      <div id="authmark-ctrl_logout" style="display:none;"></div>
+    </div>
+  </div>
 </header>
 
 <div class="hero">
@@ -315,7 +337,7 @@
   <div id="join-server" class="expandable-content">
     <div class="section">
       <h2>Joining the Server on Java</h2>
-      <div class="card">
+      <div class="info-card">
         <p>To join the server on Java, it is recommended you download the <a href="https://modrinth.com/modpack/fragmcmodpack" style="color: var(--accent); text-decoration: none;">modpack</a> which has all the right settings and all the tools needed for creating maps as well.</p>
         
         <p style="margin-top: 20px;">If you don't want to download the modpack, the server info is:</p>
@@ -332,7 +354,7 @@
       <p style="color: var(--muted);">To join the server on Bedrock, there are 2 methods:</p>
 
       <h3>Method 1: [UNTESTED] GeyserConnect</h3>
-      <div class="card">
+      <div class="info-card">
         <div class="warning">
           <strong>⚠️ WARNING:</strong> There is no GUARANTEE that this will work. Try at your own risk. As well as this, we don't take any responsibility if anything happens with anything about this. GeyserConnect is COMPLETELY external.
         </div>
@@ -351,9 +373,9 @@
       </div>
 
       <h3>Method 2: Join our Geyser Instance</h3>
-      <div class="card">
+      <div class="info-card">
         <div class="note">
-          <strong>NOTE:</strong> Some bedrock-spespific spear, mace etc. mechanics will not work.
+          <strong>NOTE:</strong> Some bedrock-spespific spear, mace etc. mechanics will not work and instead default to Java mechanics instead.
         </div>
         
         <ol style="padding-left: 20px; color: var(--muted);">
@@ -369,9 +391,9 @@
         </ol>
       </div>
       <h3>Method 3: Friend JoinFragMC</h3>
-      <div class="card">
+      <div class="info-card">
         <div class="note">
-          <strong>NOTE:</strong> Some bedrock-spespific spear, mace etc. mechanics will not work and this method will not always work.
+          <strong>NOTE:</strong> Some bedrock-spespific spear, mace etc. mechanics will not work and instead default to Java mechanics instead. Aswell, this method will not always work.
         </div>
         
         <ol style="padding-left: 20px; color: var(--muted);">
@@ -389,7 +411,7 @@
     <div class="section">
       <h2>How to Create a Map</h2>
       
-      <div class="card">
+      <div class="info-card">
         <h3 style="margin-top: 0;">Prerequisites</h3>
         <p>Before you start creating maps, make sure you have:</p>
         <ul>
@@ -399,13 +421,13 @@
         </ul>
       </div>
 
-      <div class="card">
+      <div class="info-card">
         <h3 style="margin-top: 0;">Step 1: Make your map</h3>
         <p>Please note your map must follow the following rules: </p>
         <ul>
-            <li>You must have Black concrete for the floors (so that the player gets automatically killed when they fall)</li>
+            <li>No extra resource packs/plugins/datapacks must be required for your map</li>
             <li>It must have A start and a finish point</li>
-            <li>All armour stands must be on an iron block</li>
+            <li>All armour stands must be on an iron block so they can't be killed in survival</li>
             <li>It should utilise all* main mechanics</li>
             <li>Emerald blocks have to be used for checkpoints</li>
             <li>Gold blocks have to be used for the start</li>
@@ -414,12 +436,13 @@
             <li>There must be A clear way for the finish to be detected (eg. a ring you have to go through or a pressure plate/block you have to stand on)</li>
             <li>Use mangrove pressure plates for special things (eg. Custom commands)- OPTIONAL</li>
             <li>Structures cannot be used because this must be able to fit into 1 file</li>
-            <li>All maps must program in their own end point- the command for this must be: <code>mvtp lobby --unsafe</code> PLEASE NOTE: This must be ran as the player through /execute or /sudo. If you didn't put this in, say it in the notes of your submission</li>
-            <li>You MUST NOT use LOTS of entities in your map. Aswell, any entities that aren't spawned by a command block will not be transfered.</li>
+            <li>A diamond block MUST be used for the end point</li>
+            <li>You MUST NOT use LOTS of entities in your map.</li>
         </ul>
         <br>
         <p>Aswell as this, on FragMC we have some automatic systems in place. These are: </p>
         <ul>
+          <li>Players getting teleported to their checkpoint when they stand on black concrete or a barrier block</li>
           <li>When a player has the <code>Elytra</code> tag, they have an Elytra</li>
           <li>Spears, wind charges and maces are NOT droppable</li>
           <li>All breakable items are automatically repaired</li>
@@ -428,6 +451,10 @@
           <li>When you are teleported to your checkpoint, your Elytra gets removed</li>
           <li>When you touch black concrete, you get teleported to your checkpoint</li>
           <li>Gold AND emerald blocks mark checkpoints</li>
+          <li>Diamond blocks finish the map</li>
+          <li>All players are automatically in adventure mode</li>
+          <li>Gold blocks start a timer and diamond blocks end it</li>
+          <li>There is a leaderboard for each map</li>
           <li>Commands must be optimised (eg. If you have a /execute if command that runs every tick, put the resulting action in a conditional chain command block above the /execute if one) - RECOMMENDED, but optional- our team will optimise all command blocks anyways</li>
           <li>You can use the command <code>/execute as @a at @s positioned LOOP-CENTER-X LOOP-CENTER-Y LOOP-CENTER-Z if entity @s[distance=..LOOP-SIZE] run</code> COMMAND to make a command happen when a player goes through a loop</li>
           <li>Armor stands on iron blocks can't die if hit in survival</li>
@@ -444,18 +471,18 @@
           <p><strong>NOTE: </strong>It will take longer for your map to be approved if you have command blocks. Command blocks MUST NOT interfere with any other part of FragMC and must only be local to the map (meaning you cannot do /execute as @a unless it is only in the proximity of your map.)</p></div><br><p>* Unless there is a reason or if your map is centered around one singular mechanic. Note: All 3 are better and more challenging.</p>
       </div>
 
-      <div class="card">
+      <div class="info-card">
         <h3 style="margin-top: 0;">Step 2: Build Your Map</h3>
         <p>Create your map in a single player world or on a creative server. Make sure to:</p>
         <ul>
-          <li>Use ice blocks for parkour sections</li>
+          <li>Use ice blocks for chains</li>
           <li>Test all jumps thoroughly</li>
           <li>Add clear start and end points</li>
           <li>Include checkpoints if needed</li>
         </ul>
       </div>
 
-      <div class="card">
+      <div class="info-card">
         <h3 style="margin-top: 0;">Step 3: Select Your Map Area</h3>
         <p>Use WorldEdit to select the area of your map:</p>
         <ol>
@@ -466,22 +493,25 @@
         </ol>
       </div>
 
-      <div class="card">
+      <div class="info-card">
         <h3 style="margin-top: 0;">Step 4: Save as WorldEdit Schematic</h3>
         <p>Once your map is selected, save it as a schematic:</p>
         <ol>
-          <li>Type the command: <code>//copy</code> to copy your selection</li>
-          <li>Type: <code>//schem save [your-map-name]</code> (replace [your-map-name] with your desired filename)</li>
+          <li>Type the command: <code>//copy -e</code> to copy your selection</li>
+          <li>Type: <code>//schem save -f [your-map-name]</code> (replace [your-map-name] with your desired filename)</li>
           <li>Your schematic will be saved to the WorldEdit schematics folder</li>
         </ol>
         
         <div class="note" style="margin-top: 16px;">
-          <strong>NOTE:</strong> The schematic file will be saved in <code>.minecraft/config/worldedit/schematics/</code> with a <code>.schem</code> extension
+          <strong>NOTE:</strong> The schematic file will be saved in <code>%AppData%/FragMCModpack/config/worldedit/schematics/</code> (NOTE: FragMC Modpack might not be the name of your instance in files. To check this, in the modrinth launcher press the &#8942; icon then press open folder) with a <code>.schem</code> extension
         </div>
       </div>
 
-      <div class="card">
+      <div class="info-card">
         <h3 style="margin-top: 0;">Step 5: Submit Your Map</h3>
+        <div class="note" style="margin-top: 16px;">
+          <strong>NOTE:</strong> Admins will have to review your map for this because of the Moderation of maps.
+        </div>
         <p>After saving your schematic:</p>
         <ul>
           <li>Test your map thoroughly one more time</li>
@@ -497,7 +527,7 @@
         </ul>
       </div>
 
-      <div class="card">
+      <div class="info-card">
         <h3 style="margin-top: 0;">Tips for Great Maps</h3>
         <ul>
           <li>Keep the difficulty consistent throughout the map</li>
@@ -621,5 +651,139 @@
   })();
 </script>
 
+<div class="modal" id="login-modal" onclick="closeLoginModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeLoginModal()">×</button>
+    <h2>Sign In</h2>
+    <p>Select a provider to continue</p>
+    
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div id="authmark-ctrl_login_microsoft"></div>
+      <div id="authmark-ctrl_login_discord"></div>
+      <div id="authmark-ctrl_login_google"></div>
+      <div id="authmark-ctrl_login_github"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="logout-modal" onclick="closeLogoutModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeLogoutModal()">×</button>
+    <h2>Log Out</h2>
+    <p>Are you sure you want to log out?</p>
+    
+    <div class="logout-actions">
+      <button class="logout-btn cancel" onclick="closeLogoutModal()">Cancel</button>
+      <button class="logout-btn confirm" onclick="confirmLogout()">Yes</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://authmark.github.io/Handler/latest.js" defer></script>
+<script>
+  // AuthMark Script Initialization
+  window.addEventListener('DOMContentLoaded', () => {
+    AuthMark.init(); // auto-detects divs and handles ACCID cookie
+    setTimeout(checkLoginState, 500); 
+  });
+
+function toggleAccountDropdown() {
+  const dropdown = document.getElementById('account-dropdown');
+  const isOpen = dropdown.classList.toggle('open');
+  
+  if (isOpen) {
+    checkLoginState();
+  }
+}
+
+function checkLoginState() {
+  // Check for ACCID cookie
+  let isLoggedIn = document.cookie.split('; ').some(row => row.startsWith('ACCID='));
+  
+  // Fallback: Check if AuthMark has injected the logout button (DOM check)
+  if (!isLoggedIn) {
+    const logoutContainer = document.getElementById('authmark-ctrl_logout');
+    if (logoutContainer && logoutContainer.children.length > 0) {
+      isLoggedIn = true;
+    }
+  }
+  
+  const loginBtn = document.getElementById('custom-login-btn');
+  const logoutBtn = document.getElementById('custom-logout-btn');
+  
+  if (isLoggedIn) {
+    loginBtn.disabled = true;
+    loginBtn.title = "You are already logged in";
+    logoutBtn.disabled = false;
+    logoutBtn.title = "";
+  } else {
+    loginBtn.disabled = false;
+    loginBtn.title = "";
+    logoutBtn.disabled = true;
+    logoutBtn.title = "You are not logged in";
+  }
+}
+
+function openLoginModal() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('login-modal').classList.add('open');
+}
+
+function closeLoginModal() {
+  document.getElementById('login-modal').classList.remove('open');
+}
+
+function closeLoginModalOnBackdrop(event) {
+  if (event.target.id === 'login-modal') {
+    closeLoginModal();
+  }
+}
+
+function handleLogout() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('logout-modal').classList.add('open');
+}
+
+function closeLogoutModal() {
+  document.getElementById('logout-modal').classList.remove('open');
+}
+
+function closeLogoutModalOnBackdrop(event) {
+  if (event.target.id === 'logout-modal') {
+    closeLogoutModal();
+  }
+}
+
+function confirmLogout() {
+  const authmarkLogoutContainer = document.getElementById('authmark-ctrl_logout');
+  let logoutBtn = authmarkLogoutContainer.querySelector('button, a, div[onclick], input[type="button"]');
+  
+  if (!logoutBtn && authmarkLogoutContainer.firstElementChild) {
+    logoutBtn = authmarkLogoutContainer.firstElementChild;
+  }
+  
+  if (logoutBtn) {
+    logoutBtn.click();
+    closeLogoutModal();
+    // Refresh page after logout to update UI
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+  } else {
+    console.error("Authmark logout button not found");
+    alert("Could not trigger logout. Please try again.");
+    closeLogoutModal();
+  }
+}
+
+// Close dropdown when clicking outside
+window.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('account-dropdown');
+  const btn = document.querySelector('.account-btn');
+  if (dropdown && dropdown.classList.contains('open') && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+    dropdown.classList.remove('open');
+  }
+});
+</script>
 </body>
 </html>
