@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -397,7 +396,7 @@
     [id^="authmark-ctrl_"] > div {
       display: flex !important;
       align-items: center;
-      justify-content: flex-start !important; /* List alignment */
+      justify-content: flex-start !important;
       width: 100% !important;
       padding: 10px 12px !important;
       border-radius: 6px !important;
@@ -407,14 +406,13 @@
       font-size: 0.95rem !important;
       transition: all 0.2s ease;
       color: var(--text) !important;
-      background: transparent !important; /* Integrate into list */
+      background: transparent !important;
       text-decoration: none !important;
       margin: 0 !important;
       box-shadow: none !important;
       font-family: inherit !important;
     }
     
-    /* Hover state */
     .authmark-btn:hover,
     [id^="authmark-ctrl_"] > button:hover,
     [id^="authmark-ctrl_"] > a:hover,
@@ -423,7 +421,6 @@
       opacity: 1 !important;
     }
 
-    /* Disabled state */
     .authmark-btn:disabled,
     [id^="authmark-ctrl_"] > button:disabled,
     [id^="authmark-ctrl_"] > a:disabled,
@@ -434,7 +431,6 @@
       pointer-events: none;
     }
 
-    /* Login Modal Specifics */
     .login-modal-content {
       background: var(--card);
       border-radius: 18px;
@@ -460,12 +456,11 @@
       font-size: 0.95rem;
     }
 
-    /* Authmark Buttons in Modal - Restore solid colors and larger size */
     .login-modal-content [id^="authmark-ctrl_"] > button,
     .login-modal-content [id^="authmark-ctrl_"] > a,
     .login-modal-content [id^="authmark-ctrl_"] > div {
-      background: #2a2a30 !important; /* Default fallback */
-      justify-content: center !important; /* Center text/icon */
+      background: #2a2a30 !important;
+      justify-content: center !important;
       padding: 12px 20px !important;
       font-size: 1rem !important;
       border: 1px solid rgba(255,255,255,0.05) !important;
@@ -478,7 +473,6 @@
       filter: brightness(1.1);
     }
 
-    /* Icons for Providers via ::before */
     .login-modal-content [id^="authmark-ctrl_"] > *::before {
       content: '';
       display: block;
@@ -490,14 +484,13 @@
       background-position: center;
     }
 
-    /* Provider Specific Styles & Icons */
     .login-modal-content #authmark-ctrl_login_google > * { 
       background: #4285F4 !important; 
       color: white !important;
     }
     .login-modal-content #authmark-ctrl_login_google > *::before {
       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="%23FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="%23FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="%234CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="%231976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>');
-      background-color: white; /* Contrast for the icon */
+      background-color: white;
       border-radius: 50%;
     }
 
@@ -522,7 +515,6 @@
       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"><path fill="white" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.42,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.28,105.28,0,0,0,126.6,80.22c2.91-27.61-9.9-52.15-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>');
     }
 
-    /* Logout Modal Actions */
     .logout-actions {
       display: flex;
       gap: 12px;
@@ -590,7 +582,6 @@
         </button>
       </div>
 
-      <!-- Hidden logout control for programmatic access -->
       <div id="authmark-ctrl_logout" style="display:none;"></div>
     </div>
   </div>
@@ -623,7 +614,6 @@
     <p>Paste this command into Minecraft on the server to go to the map.</p>
     <pre><code id="command"></code><button class="copy" onclick="copyCmd()">Copy</button></pre>
 
-    <!-- Server Actions -->
     <div id="server-actions" style="margin-top: 24px; border-top: 1px solid #333; padding-top: 20px; display: none;">
       <h3>Play on Server</h3>
       <div id="server-status-msg" style="margin-bottom: 12px; font-size: 0.9rem;"></div>
@@ -691,17 +681,14 @@
         <button id="tab-btn-friends" onclick="switchSocialTab('friends')" style="background:none; border:none; color:var(--muted); font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid transparent;">Friends</button>
     </div>
 
-    <!-- PARTY TAB -->
     <div id="tab-party">
         <p style="margin-bottom: 24px;">Manage your party or join one.</p>
         <div style="display:flex; flex-direction:column; gap:20px;">
-            <!-- Create Party -->
             <div class="party-section">
                 <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Create Party</h3>
                 <button class="btn" onclick="executePartyCommand('create')" style="width:100%">Create New Party</button>
             </div>
 
-            <!-- Join Party -->
             <div class="party-section">
                 <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Join Party</h3>
                 <div style="display:flex; gap:10px;">
@@ -710,7 +697,6 @@
                 </div>
             </div>
 
-            <!-- Manage Party -->
             <div class="party-section">
                 <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Current Party Controls</h3>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
@@ -724,7 +710,6 @@
                 </div>
             </div>
 
-            <!-- Game Controls -->
             <div class="party-section" style="border-top: 1px solid #333; padding-top: 20px; margin-top: 10px;">
                  <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Game Controls</h3>
                  <button class="btn danger" onclick="executeMapCommand('leave')" style="width:100%">Leave Current Map</button>
@@ -732,7 +717,6 @@
         </div>
     </div>
 
-    <!-- FRIENDS TAB -->
     <div id="tab-friends" style="display:none;">
         <p style="margin-bottom: 24px;">Manage your friends list.</p>
         <div style="display:flex; flex-direction:column; gap:20px;">
@@ -773,7 +757,6 @@
     
     <div style="display:flex; flex-direction:column; gap:20px;">
         
-        <!-- Gamemode Selector -->
         <div class="party-section">
             <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Gamemode</h3>
             <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
@@ -796,7 +779,6 @@
             </div>
         </div>
 
-        <!-- Teleport & Tools -->
         <div class="party-section">
             <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Tools & Teleport</h3>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
@@ -810,20 +792,17 @@
                 </button>
             </div>
             
-            <!-- Invsee -->
             <div style="display:flex; gap:10px; margin-bottom:10px;">
                 <input type="text" id="admin-invsee-player" placeholder="Player Name" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
                 <button class="btn secondary" onclick="executeAdminCommand('invsee')">Invsee</button>
             </div>
 
-            <!-- Custom Command -->
              <div style="display:flex; gap:10px;">
                 <input type="text" id="admin-custom-cmd" placeholder="Custom Command (without /)" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
                 <button class="btn secondary" onclick="executeAdminCommand('custom')">Run</button>
             </div>
         </div>
 
-        <!-- Utility Commands -->
          <div class="party-section">
             <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Quick Actions</h3>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
@@ -842,7 +821,6 @@
 </div>
 
 <script>
-// Fetch JSON from URL
 const MAPS_URL = "https://fragmc.github.io/icedspear.json";
 let mapData = {};
 const grid = document.getElementById('grid');
@@ -903,7 +881,6 @@ function render() {
 function generateBadges(map) {
   let badges = '<div class="badges">';
   
-  // Check if verified exists in the map object
   if ('verified' in map) {
     badges += `
       <span class="badge verified">
@@ -913,7 +890,6 @@ function generateBadges(map) {
     `;
   }
   
-  // Check if verified-no-cp exists in the map object
   if ('verified-no-cp' in map) {
     badges += `
       <span class="badge verified-no-cp">
@@ -923,8 +899,6 @@ function generateBadges(map) {
     `;
   }
   
-  // Check if difficulty exists
-  // Check if difficulty exists (including 0)
   if (map.difficulty !== undefined && map.difficulty !== null) {
     const diffLabels = {
       0: 'None',
@@ -975,7 +949,6 @@ function openModal(id) {
     carousel.appendChild(img);
   });
 
-  // Setup indicators
   const indicators = document.getElementById('indicators');
   indicators.innerHTML = '';
   currentImages.forEach((_, idx) => {
@@ -997,16 +970,13 @@ function updateCarousel() {
   const offset = -currentImageIndex * 100;
   carousel.style.transform = `translateX(${offset}%)`;
 
-  // Update buttons
   document.getElementById('prevBtn').disabled = currentImageIndex === 0;
   document.getElementById('nextBtn').disabled = currentImageIndex === currentImages.length - 1;
 
-  // Update indicators
   document.querySelectorAll('.indicator').forEach((dot, idx) => {
     dot.classList.toggle('active', idx === currentImageIndex);
   });
 
-  // Hide arrows if only one image
   if (currentImages.length <= 1) {
     document.getElementById('prevBtn').style.display = 'none';
     document.getElementById('nextBtn').style.display = 'none';
@@ -1071,15 +1041,11 @@ function closePartyModalOnBackdrop(event) {
 }
 
 function checkLoginState() {
-  // Check for ACCID via helper (cookie or localStorage)
   let accid = getAccid();
   let isLoggedIn = !!accid;
   
-  // Fallback: Check if AuthMark has injected the logout button (DOM check)
-  // This is necessary if the cookie is HttpOnly or not accessible
   if (!isLoggedIn) {
     const logoutContainer = document.getElementById('authmark-ctrl_logout');
-    // If AuthMark has injected a button/link into the hidden logout container, we are logged in
     if (logoutContainer && logoutContainer.children.length > 0) {
       isLoggedIn = true;
     }
@@ -1094,7 +1060,6 @@ function checkLoginState() {
     logoutBtn.disabled = false;
     logoutBtn.title = "";
     
-    // Enable Party Manager button
     const partyBtn = document.getElementById('btn-party-manager');
     if (partyBtn) {
         partyBtn.style.display = 'flex';
@@ -1105,7 +1070,6 @@ function checkLoginState() {
     logoutBtn.disabled = true;
     logoutBtn.title = "You are not logged in";
     
-    // Disable/Hide Party Manager button
     const partyBtn = document.getElementById('btn-party-manager');
     if (partyBtn) {
         partyBtn.style.display = 'none';
@@ -1114,7 +1078,7 @@ function checkLoginState() {
 }
 
 function openLoginModal() {
-  document.getElementById('account-dropdown').classList.remove('open'); // Close menu
+  document.getElementById('account-dropdown').classList.remove('open');
   document.getElementById('login-modal').classList.add('open');
 }
 
@@ -1144,21 +1108,16 @@ function closeLogoutModalOnBackdrop(event) {
 }
 
 function confirmLogout() {
-  // Trigger the actual Authmark logout button
   const authmarkLogoutContainer = document.getElementById('authmark-ctrl_logout');
-  // Look for any clickable element inside the container
   let logoutBtn = authmarkLogoutContainer.querySelector('button, a, div[onclick], input[type="button"]');
   
-  // Fallback: try the first element if specific selector fails
   if (!logoutBtn && authmarkLogoutContainer.firstElementChild) {
     logoutBtn = authmarkLogoutContainer.firstElementChild;
   }
   
   if (logoutBtn) {
     logoutBtn.click();
-    // Close modal immediately
     closeLogoutModal();
-    // Refresh page after logout to update UI
     setTimeout(() => {
         location.reload();
     }, 1000);
@@ -1169,7 +1128,6 @@ function confirmLogout() {
   }
 }
 
-// Close dropdown when clicking outside
 window.addEventListener('click', (e) => {
   const dropdown = document.getElementById('account-dropdown');
   const btn = document.querySelector('.account-btn');
@@ -1188,24 +1146,17 @@ if (search) {
 render();
 
 // --- WebLink API Integration ---
-const WEBLINK_API_URL = "http://joinfragmc.duckdns.org:25531/webhook"; // REPLACE with your server IP
-// WARNING: Storing secrets on the client-side is insecure. 
-// This secret allows signing requests as an admin. Anyone who views the source code can find it.
-// Only use this for local testing or if you understand the risks.
+const WEBLINK_API_URL = "http://joinfragmc.duckdns.org:25531/webhook";
 const HMAC_SECRET = "weblink_fa6b02f1e7a7e28a63cdd54c332894442765859f5bc21bb387b3d431e8432106"; 
 
-// Helper: Get Cookie (Robust)
 function getCookie(name) {
-  // Split cookie string and find the named cookie
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(';').shift();
   return null;
 }
 
-// Helper: Get ACCID (Cookie -> LocalStorage)
 function getAccid() {
-  // Try lowercase 'accid' first (as seen in logs), then uppercase 'ACCID'
   let id = getCookie('accid') || getCookie('ACCID');
   
   if (!id) {
@@ -1219,7 +1170,7 @@ function openAdminModal() {
   const modal = document.getElementById('admin-modal');
   if (modal) {
       modal.classList.add('open');
-      checkPlayerOnline(); // Refresh online status when opening admin menu
+      checkPlayerOnline();
   }
 }
 
@@ -1251,13 +1202,12 @@ async function executeAdminCommand(cmdType) {
 
     let command = "";
     
-    // Determine command based on type
     if (cmdType.startsWith('gamemode')) {
         command = cmdType;
     } else if (cmdType.startsWith('mvtp')) {
         command = cmdType;
     } else if (cmdType === 'heal') {
-        command = 'heal'; // Staff++ or Essentials
+        command = 'heal';
     } else if (cmdType === 'invsee') {
         const player = document.getElementById('admin-invsee-player').value;
         if (!player) { alert("Please enter a player name."); return; }
@@ -1288,7 +1238,6 @@ async function executeAdminCommand(cmdType) {
     try {
         const hashedAccid = await sha256(accid);
         
-        // Step 1: Get Command Token (Standard)
         const tokenRes = await fetch(`${WEBLINK_API_URL}/get-command-token`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1299,7 +1248,6 @@ async function executeAdminCommand(cmdType) {
         const tokenData = await tokenRes.json();
         if (!tokenData.success || !tokenData.token) throw new Error(tokenData.message || "Failed to get token");
         
-        // Step 2: Execute Command (Signed for Admin)
         const nonce = crypto.randomUUID();
         const payload = { 
             uuid: webLinkState.uuid, 
@@ -1309,7 +1257,6 @@ async function executeAdminCommand(cmdType) {
         };
         const body = JSON.stringify(payload);
         
-        // Sign the execution request
         const signatureHash = await hmacSha256(HMAC_SECRET, body);
         const signature = "sha256=" + signatureHash;
 
@@ -1336,7 +1283,6 @@ async function executeAdminCommand(cmdType) {
     }
 }
 
-// Helper: SHA-256 Hash
 async function sha256(message) {
   const msgBuffer = new TextEncoder().encode(message);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -1344,7 +1290,6 @@ async function sha256(message) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Helper: HMAC SHA-256
 async function hmacSha256(key, message) {
   const enc = new TextEncoder();
   const keyData = enc.encode(key);
@@ -1366,14 +1311,11 @@ let webLinkState = {
   accounts: []
 };
 
-// Functions
 function updateAccountUI() {
   const btn = document.querySelector('.account-btn');
   const dropdownMenu = document.getElementById('account-main-menu');
   
-  // Update Button
   if (webLinkState.linked && webLinkState.username) {
-      // Find current account object to get online status
       const currentAcc = webLinkState.accounts ? webLinkState.accounts.find(a => a.uuid === webLinkState.uuid) : null;
       const isOnline = currentAcc ? currentAcc.online : webLinkState.online;
 
@@ -1391,7 +1333,6 @@ function updateAccountUI() {
       `;
   }
 
-  // Update Dropdown Switcher
   let switcher = document.getElementById('account-switcher');
   if (!switcher) {
       switcher = document.createElement('div');
@@ -1406,18 +1347,14 @@ function updateAccountUI() {
       }
   }
 
-  // Clear existing content to avoid duplicates if called multiple times
   switcher.innerHTML = '';
   
-  // Admin Check Logic (Updated to use static button)
   const adminBtn = document.getElementById('btn-admin-menu');
   if (adminBtn) {
-       // Pre-check Admin Access on render (silent)
        (async () => {
-           const isAdmin = await checkAdminAccess(true); // Silent check
+           const isAdmin = await checkAdminAccess(true);
            if (isAdmin) {
                adminBtn.style.display = 'flex';
-               // Add separator style to match other buttons if needed
                adminBtn.style.borderTop = '1px solid #333';
                adminBtn.style.paddingTop = '12px';
                adminBtn.style.marginTop = '4px';
@@ -1464,7 +1401,6 @@ function updateAccountUI() {
           switcher.appendChild(item);
       });
       
-      // Add "Link Another Account" button
       const linkBtn = document.createElement('div');
       linkBtn.className = 'authmark-btn';
       linkBtn.style.justifyContent = 'flex-start';
@@ -1482,14 +1418,12 @@ function updateAccountUI() {
       
       linkBtn.onclick = (e) => {
           e.stopPropagation();
-          // Close the dropdown first
           document.getElementById('account-main-menu').classList.remove('open');
           openLinkModal();
       };
       
       switcher.appendChild(linkBtn);
       
-      // Debug log
       console.log(`[AccountSwitcher] Updated with ${webLinkState.accounts.length} accounts.`);
   } else {
       switcher.style.display = 'none';
@@ -1512,7 +1446,6 @@ async function checkAdminAccess(silent = false) {
         };
         const body = JSON.stringify(payload);
         
-        // Generate HMAC signature
         const signatureHash = await hmacSha256(HMAC_SECRET, body);
         const signature = "sha256=" + signatureHash;
 
@@ -1552,6 +1485,9 @@ async function checkAdminAccess(silent = false) {
     }
  }
 
+// FIX 1: check-online now only checks the current active account, not all accounts.
+// The server returns 403 for accounts not owned by the requesting accid.
+// Online status for non-active accounts is set to false (unknown) rather than crashing.
 async function updateAllAccountsOnlineStatus() {
   if (!webLinkState.linked || !webLinkState.accounts || webLinkState.accounts.length === 0) return;
   
@@ -1561,34 +1497,41 @@ async function updateAllAccountsOnlineStatus() {
   try {
       const hashedAccid = await sha256(accid);
       
-      // Check each account
-      await Promise.all(webLinkState.accounts.map(async (acc) => {
+      // Only check the currently active account to avoid 403 on others
+      const currentAcc = webLinkState.accounts.find(a => a.uuid === webLinkState.uuid);
+      if (currentAcc) {
           try {
               const response = await fetch(`${WEBLINK_API_URL}/check-online`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ uuid: acc.uuid, accid: hashedAccid })
+                  body: JSON.stringify({ uuid: currentAcc.uuid, accid: hashedAccid })
               });
               
               if (response.ok) {
                   const data = await response.json();
-                  if (data.success && data.online) {
-                      acc.online = true;
-                  } else {
-                      acc.online = false;
-                  }
-                  
-                  // Sync main state if this is the current account
-                  if (acc.uuid === webLinkState.uuid) {
-                      webLinkState.online = acc.online;
-                  }
+                  currentAcc.online = !!(data.success && data.online);
+              } else {
+                  // 403 or other error — don't crash, just mark as unknown (offline)
+                  console.warn(`[OnlineCheck] check-online returned ${response.status} for ${currentAcc.uuid} — treating as offline.`);
+                  currentAcc.online = false;
               }
+              
+              webLinkState.online = currentAcc.online;
           } catch (e) {
-              console.warn(`Failed to check online status for ${acc.username}`, e);
+              console.warn(`[OnlineCheck] Network error checking ${currentAcc.uuid}:`, e);
+              currentAcc.online = false;
+              webLinkState.online = false;
           }
-      }));
+      }
       
-      // Re-render UI to show dots
+      // Mark all other accounts as unknown (no dot change — leave as-is or false)
+      webLinkState.accounts.forEach(acc => {
+          if (acc.uuid !== webLinkState.uuid) {
+              // Don't overwrite if already set; just don't attempt a request that will 403
+              if (acc.online === undefined) acc.online = false;
+          }
+      });
+      
       updateAccountUI();
       
   } catch (err) {
@@ -1603,7 +1546,9 @@ function switchAccount(uuid) {
       webLinkState.username = account.username;
       updateAccountUI();
       
-      // Re-check online status for the new account if modal is open
+      // Re-check online status for the newly selected account
+      updateAllAccountsOnlineStatus();
+      
       if (document.getElementById('modal').classList.contains('open')) {
           checkPlayerOnline();
       }
@@ -1613,38 +1558,30 @@ function switchAccount(uuid) {
 // --- Account Info Resolution (Floodgate & Public APIs) ---
 
 function isFloodgateId(uuid) {
-    // Floodgate UUIDs start with 00000000-0000-0000- (first 64 bits are zero)
     return uuid.startsWith('00000000-0000-0000-');
 }
 
 async function resolveAccountInfo(uuid, currentUsername) {
-    // If it's a Floodgate UUID
     if (isFloodgateId(uuid)) {
         try {
-            // Extract XUID from the last 64 bits (last 16 hex chars)
             const clean = uuid.replace(/-/g, '');
             const xuidHex = clean.substring(16);
-            // Convert hex to decimal string for the API
             const xuid = BigInt('0x' + xuidHex).toString();
             
-            // Fetch Gamertag from Geyser API
             const res = await fetch(`https://api.geysermc.org/v2/xbox/gamertag/${xuid}`);
             if (res.ok) {
                 const data = await res.json();
-                // Check if already has dot, if not add it
                 let name = data.gamertag;
                 if (!name.startsWith('.')) name = '.' + name;
                 return { username: name, isFloodgate: true };
             }
         } catch (e) {
             console.warn('[Resolve] Failed to fetch Floodgate info:', e);
-            // Even if fetch fails, ensure it has a dot if we know it's Floodgate
             if (currentUsername && !currentUsername.startsWith('.')) {
                 return { username: '.' + currentUsername, isFloodgate: true };
             }
         }
     } else {
-        // Java Account - Fetch from Ashcon (Mojang wrapper)
         try {
             const res = await fetch(`https://api.ashcon.app/mojang/v2/user/${uuid}`);
             if (res.ok) {
@@ -1656,7 +1593,6 @@ async function resolveAccountInfo(uuid, currentUsername) {
         }
     }
     
-    // Return null if no update needed or failed
     return null;
 }
 
@@ -1702,7 +1638,7 @@ async function submitLinkCode() {
     const response = await fetch(`${WEBLINK_API_URL}/verify-code`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: code, accid: accid }) // Send RAW accid
+      body: JSON.stringify({ code: code, accid: accid })
     });
     
     if (!response.ok) {
@@ -1717,7 +1653,7 @@ async function submitLinkCode() {
       msgEl.textContent = "Account linked successfully!";
       setTimeout(() => {
         closeLinkModal();
-        checkWebLinkStatus(); // Refresh status
+        checkWebLinkStatus();
       }, 1500);
     } else {
       throw new Error(data.message || "Invalid code");
@@ -1728,6 +1664,10 @@ async function submitLinkCode() {
   }
 }
 
+// FIX 2: resolveAccountInfo is now awaited BEFORE updateAccountUI() is called,
+// so the resolved username is guaranteed to be in state when the UI renders.
+// Previously the resolve promises could finish after the UI had already painted
+// the raw UUID as the display name.
 async function checkWebLinkStatus() {
   const accid = getAccid();
   const linkBtn = document.getElementById('btn-link-account');
@@ -1737,7 +1677,6 @@ async function checkWebLinkStatus() {
   if (!accid) {
     if (linkBtn) linkBtn.style.display = 'none';
     
-    // Instead of hiding, show disabled with message
     if (serverActions && document.getElementById('modal').classList.contains('open')) {
         serverActions.style.display = 'block';
         statusMsg.innerHTML = `<span style="color:#ed4245">●</span> Not logged in. <a href="#" onclick="closeModal(); openLoginModal(); return false;" style="color:var(--accent)">Log in</a> to play.`;
@@ -1772,7 +1711,6 @@ async function checkWebLinkStatus() {
       webLinkState.uuid = data.uuid;
       webLinkState.username = data.username;
       
-      // Helper: Manage Local Storage for Accounts (Client-side aggregation)
       const storageKey = `weblink_accounts_${accid}`;
       let localAccounts = [];
       try {
@@ -1780,53 +1718,46 @@ async function checkWebLinkStatus() {
           if (!Array.isArray(localAccounts)) localAccounts = [];
       } catch(e) { localAccounts = []; }
 
-      // Handle accounts list logic
       if (data.accounts && Array.isArray(data.accounts)) {
-          // Server provided list - authoritative
           webLinkState.accounts = data.accounts;
       } else {
           console.warn('[WebLink] Server did not return accounts list, merging with local storage.');
-          // Merge current account into local list
           const existingIdx = localAccounts.findIndex(a => a.uuid === data.uuid);
           if (existingIdx > -1) {
-              localAccounts[existingIdx].username = data.username; // Update username
+              localAccounts[existingIdx].username = data.username;
           } else {
               localAccounts.push({ uuid: data.uuid, username: data.username });
           }
           webLinkState.accounts = localAccounts;
       }
       
-      // Sync back to storage (always keep storage up to date with known accounts)
-      // We merge the authoritative list (or our constructed one) into storage
-      // to ensure we don't lose accounts if the server list is partial in future
       const finalMap = new Map();
-      localAccounts.forEach(a => finalMap.set(a.uuid, a)); // Old local
-      webLinkState.accounts.forEach(a => finalMap.set(a.uuid, a)); // New authoritative/current
+      localAccounts.forEach(a => finalMap.set(a.uuid, a));
+      webLinkState.accounts.forEach(a => finalMap.set(a.uuid, a));
       
       const uniqueAccounts = Array.from(finalMap.values());
       localStorage.setItem(storageKey, JSON.stringify(uniqueAccounts.map(a => ({uuid: a.uuid, username: a.username}))));
       webLinkState.accounts = uniqueAccounts;
 
-      // Resolve usernames (API fetch & Floodgate support)
+      // AWAIT all resolves before touching the UI — this ensures names are ready
       await Promise.all(webLinkState.accounts.map(async (acc) => {
           const resolved = await resolveAccountInfo(acc.uuid, acc.username);
           if (resolved) {
               acc.username = resolved.username;
-              // We could also update the main state if this is the current user
               if (acc.uuid === webLinkState.uuid) {
                   webLinkState.username = resolved.username;
               }
           }
       }));
       
+      // Now render — all usernames are resolved
       updateAccountUI();
       
-      // Update online status for all accounts
+      // Update online status (only for current account now)
       updateAllAccountsOnlineStatus();
       
       if (linkBtn) linkBtn.style.display = 'none';
       
-      // Check Online Status if modal is open
       if (document.getElementById('modal').classList.contains('open')) {
           checkPlayerOnline();
       }
@@ -1835,7 +1766,6 @@ async function checkWebLinkStatus() {
       updateAccountUI();
       if (linkBtn) linkBtn.style.display = 'flex';
       
-      // Update server actions to show Link prompt if inside modal
       if (serverActions && document.getElementById('modal').classList.contains('open')) {
           serverActions.style.display = 'block';
           statusMsg.innerHTML = `<span style="color:#ed4245">●</span> Account not linked. <a href="#" onclick="openLinkModal(); return false;" style="color:var(--accent)">Link Account</a>`;
@@ -2159,7 +2089,6 @@ async function executePartyCommand(type) {
         btn.textContent = originalText;
         btn.disabled = false;
         
-        // Clear inputs on success
         if (type === 'join') document.getElementById('party-join-code').value = '';
         if (type === 'kick') document.getElementById('party-kick-player').value = '';
       }, 1500);
@@ -2175,9 +2104,8 @@ async function executePartyCommand(type) {
 }
 </script>
 <script>
-  // AuthMark Script Initialization
   window.addEventListener('DOMContentLoaded', () => {
-    AuthMark.init(); // auto-detects divs and handles ACCID cookie
+    AuthMark.init();
     checkWebLinkStatus();
   });
 </script>
