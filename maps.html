@@ -1544,9 +1544,14 @@ function switchAccount(uuid) {
   if (account) {
       webLinkState.uuid = account.uuid;
       webLinkState.username = account.username;
-      updateAccountUI();
       
-      // Re-check online status for the newly selected account
+      // Persist the active account selection
+      const accid = getAccid();
+      if (accid) {
+          localStorage.setItem(`weblink_active_${accid}`, uuid);
+      }
+      
+      updateAccountUI();
       updateAllAccountsOnlineStatus();
       
       if (document.getElementById('modal').classList.contains('open')) {
@@ -1719,7 +1724,22 @@ async function checkWebLinkStatus() {
       } catch(e) { localAccounts = []; }
 
       if (data.accounts && Array.isArray(data.accounts)) {
-          webLinkState.accounts = data.accounts;
+        webLinkState.accounts = data.accounts;
+        
+        // Clean localStorage - remove accounts not returned by server
+        const serverUuids = new Set(data.accounts.map(a => a.uuid));
+        let cleanedLocalAccounts = localAccounts.filter(a => serverUuids.has(a.uuid));
+        
+        // Add any accounts from server that aren't in local storage yet
+        data.accounts.forEach(serverAcc => {
+            if (!cleanedLocalAccounts.find(a => a.uuid === serverAcc.uuid)) {
+                cleanedLocalAccounts.push({ uuid: serverAcc.uuid, username: serverAcc.username });
+            }
+        });
+        
+        localStorage.setItem(storageKey, JSON.stringify(cleanedLocalAccounts));
+        localAccounts = cleanedLocalAccounts;
+        
       } else {
           console.warn('[WebLink] Server did not return accounts list, merging with local storage.');
           const existingIdx = localAccounts.findIndex(a => a.uuid === data.uuid);
@@ -1749,7 +1769,17 @@ async function checkWebLinkStatus() {
               }
           }
       }));
-      
+
+      // Restore the previously selected account (if valid)
+      const activeUuid = localStorage.getItem(`weblink_active_${accid}`);
+      if (activeUuid && webLinkState.accounts.find(a => a.uuid === activeUuid)) {
+          webLinkState.uuid = activeUuid;
+          const activeAcc = webLinkState.accounts.find(a => a.uuid === activeUuid);
+          if (activeAcc) {
+              webLinkState.username = activeAcc.username;
+          }
+      }
+
       // Now render — all usernames are resolved
       updateAccountUI();
       
