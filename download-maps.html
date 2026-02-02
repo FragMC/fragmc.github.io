@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FragMC Maps Browser Downloader</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  select, button { margin: 10px 0; padding: 5px; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<h1>FragMC Maps Browser Downloader</h1>
+
+<label for="commitSelect">Choose a commit:</label>
+<select id="commitSelect">
+  <option value="">Loading commits...</option>
+</select>
+
+<button id="downloadBtn">Download maps.html</button>
+
+<script>
+const owner = "FragMC"; // replace with repo owner
+const repo = "fragmc.github.io"; // replace with repo name
+const filePath = "maps.html"; // file to download
+
+const commitSelect = document.getElementById('commitSelect');
+const downloadBtn = document.getElementById('downloadBtn');
+
+// Fetch the last 50 commits
+fetch(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=50`)
+  .then(res => res.json())
+  .then(data => {
+    commitSelect.innerHTML = '';
+    data.forEach(commit => {
+      const option = document.createElement('option');
+      option.value = commit.sha;
+      option.textContent = `${commit.sha.substring(0, 7)} - ${commit.commit.message}`;
+      commitSelect.appendChild(option);
+    });
+  })
+  .catch(err => {
+    commitSelect.innerHTML = '<option value="">Failed to load commits</option>';
+    console.error(err);
+  });
+
+downloadBtn.addEventListener('click', async () => {
+  const commitSha = commitSelect.value;
+  if (!commitSha) return alert("Please select a commit.");
+
+  try {
+    const url = `https://raw.githubusercontent.com/${owner}/${repo}/${commitSha}/${filePath}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch file");
+
+    const text = await response.text();
+    const blob = new Blob([text], { type: "text/html" });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `fragmc-mapsbrowser-${commitSha}.html`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  } catch (err) {
+    alert("Error downloading file: " + err.message);
+  }
+});
+</script>
+
+</body>
+</html>
