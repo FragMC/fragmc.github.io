@@ -676,6 +676,11 @@
   <div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()">
     <button class="close" onclick="closePartyModal()">×</button>
     
+    <div id="current-map-status" style="margin-bottom:15px; padding:10px; background:rgba(67, 181, 129, 0.1); border:1px solid rgba(67, 181, 129, 0.3); border-radius:6px; display:none; align-items:center; gap:10px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#43b581" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span style="color:#43b581; font-weight:bold; font-size:0.95rem;">Playing on: <span id="current-map-name" style="color:white;">Unknown</span></span>
+    </div>
+
     <div style="display:flex; gap:15px; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
         <button id="tab-btn-party" onclick="switchSocialTab('party')" style="background:none; border:none; color:white; font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid var(--accent);">Party</button>
         <button id="tab-btn-friends" onclick="switchSocialTab('friends')" style="background:none; border:none; color:var(--muted); font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid transparent;">Friends</button>
@@ -708,6 +713,11 @@
                     <input type="text" id="party-kick-player" placeholder="Player to Kick" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
                     <button class="btn secondary" onclick="executePartyCommand('kick')">Kick</button>
                 </div>
+                
+                <div id="party-list" style="margin-top:15px; padding-top:15px; border-top:1px solid #333; display:none;">
+                    <h4 style="margin:0 0 10px; color:var(--muted); font-size:0.9rem;">MEMBERS</h4>
+                    <div id="party-list-content" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
             </div>
 
             <div class="party-section" style="border-top: 1px solid #333; padding-top: 20px; margin-top: 10px;">
@@ -736,6 +746,11 @@
                 <div style="display:flex; gap:10px;">
                     <input type="text" id="friend-remove-name" placeholder="Player to Remove" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
                     <button class="btn danger" onclick="executeFriendCommand('remove')">Remove</button>
+                </div>
+                
+                <div id="friends-list" style="margin-top:15px; padding-top:15px; border-top:1px solid #333; display:none;">
+                     <h4 style="margin:0 0 10px; color:var(--muted); font-size:0.9rem;">FRIENDS</h4>
+                     <div id="friends-list-content" style="display:flex; flex-direction:column; gap:8px;"></div>
                 </div>
             </div>
              
@@ -1028,6 +1043,15 @@ function toggleAccountDropdown() {
 function openPartyModal() {
   document.getElementById('account-dropdown').classList.remove('open');
   document.getElementById('party-modal').classList.add('open');
+  
+  // Refresh data based on active tab
+  refreshCurrentMap();
+  const partyTab = document.getElementById('tab-party');
+  if (partyTab.style.display !== 'none') {
+      refreshPartyList();
+  } else {
+      refreshFriendsList();
+  }
 }
 
 function closePartyModal() {
@@ -1956,6 +1980,7 @@ function switchSocialTab(tab) {
     partyBtn.style.borderBottomColor = 'var(--accent)';
     friendsBtn.style.color = 'var(--muted)';
     friendsBtn.style.borderBottomColor = 'transparent';
+    refreshPartyList();
   } else {
     partyTab.style.display = 'none';
     friendsTab.style.display = 'block';
@@ -1963,7 +1988,118 @@ function switchSocialTab(tab) {
     partyBtn.style.borderBottomColor = 'transparent';
     friendsBtn.style.color = 'white';
     friendsBtn.style.borderBottomColor = 'var(--accent)';
+    refreshFriendsList();
   }
+}
+
+async function refreshFriendsList() {
+    const listContainer = document.getElementById('friends-list');
+    const content = document.getElementById('friends-list-content');
+    
+    // Show container immediately to avoid layout shift, but with loading state if needed
+    listContainer.style.display = 'block';
+    content.innerHTML = '<div style="color:#888; font-style:italic;">Loading friends...</div>';
+    
+    const friends = await fetchPlayerFriends();
+    content.innerHTML = '';
+    
+    if (!friends || friends.length === 0) {
+        content.innerHTML = '<div style="color:#888; font-style:italic;">No friends found.</div>';
+        return;
+    }
+    
+    friends.forEach(friend => {
+        // Assume friend has { name: string, status: string, uuid: string }
+        // Adjust properties based on actual API response
+        let name = "Unknown";
+        let isOnline = false;
+        let uuid = null;
+
+        if (typeof friend === 'string') {
+            name = friend;
+            // Cannot determine online status or uuid easily if just string
+        } else {
+            name = friend.name || friend.username || "Unknown";
+            isOnline = friend.online || friend.status === 'online';
+            uuid = friend.uuid;
+        }
+        
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'space-between';
+        div.style.padding = '8px';
+        div.style.background = '#1a1a1a';
+        div.style.borderRadius = '4px';
+        
+        div.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img src="https://api.mineatar.io/face/${uuid || 'steve'}" style="width:24px; height:24px; border-radius:4px;">
+                <span style="color:white;">${name}</span>
+            </div>
+            <span style="font-size:0.8rem; color:${isOnline ? '#43b581' : '#747f8d'};">
+                ${isOnline ? '● Online' : '○ Offline'}
+            </span>
+        `;
+        content.appendChild(div);
+    });
+}
+
+async function refreshPartyList() {
+    const listContainer = document.getElementById('party-list');
+    const content = document.getElementById('party-list-content');
+    
+    listContainer.style.display = 'block';
+    content.innerHTML = '<div style="color:#888; font-style:italic;">Loading party info...</div>';
+    
+    const party = await fetchPlayerParty();
+    content.innerHTML = '';
+    
+    if (!party || !party.members || party.members.length === 0) {
+        content.innerHTML = '<div style="color:#888; font-style:italic;">You are not in a party.</div>';
+        return;
+    }
+    
+    // Process members (assuming party.members is array of names or objects)
+    // If just strings, we might not have UUIDs for avatars, but we'll try our best
+    
+    const members = party.members; // Expecting array
+    
+    members.forEach(member => {
+        // member might be string or object
+        const name = typeof member === 'string' ? member : (member.name || member.username);
+        const isLeader = (name === party.leader);
+        
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'space-between';
+        div.style.padding = '8px';
+        div.style.background = '#1a1a1a';
+        div.style.borderRadius = '4px';
+        
+        div.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="color:white;">${name}</span>
+                ${isLeader ? '<span style="font-size:0.7rem; background:var(--accent); color:white; padding:2px 4px; border-radius:3px;">LEADER</span>' : ''}
+            </div>
+        `;
+        content.appendChild(div);
+    });
+}
+
+async function refreshCurrentMap() {
+    const statusDiv = document.getElementById('current-map-status');
+    const nameSpan = document.getElementById('current-map-name');
+    
+    const mapInfo = await fetchPlayerCurrentMap();
+    
+    if (mapInfo && mapInfo.inMap) {
+        statusDiv.style.display = 'flex';
+        nameSpan.textContent = mapInfo.mapName || "Unknown Map";
+    } else {
+        statusDiv.style.display = 'none';
+    }
 }
 
 async function executeFriendCommand(type) {
@@ -2131,6 +2267,114 @@ async function executePartyCommand(type) {
     btn.textContent = originalText;
     btn.disabled = false;
   }
+}
+
+async function fetchPlayerFriends() {
+    if (!webLinkState.linked || !webLinkState.uuid) return null;
+    
+    const accid = getAccid();
+    if (!accid) return null;
+    
+    try {
+        const hashedAccid = await sha256(accid);
+        const response = await fetch(`${WEBLINK_API_URL}/get-friends`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                uuid: webLinkState.uuid, 
+                accid: hashedAccid 
+            })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data.friends; // Array of friend objects
+        }
+    } catch (err) {
+        console.error("Failed to fetch friends:", err);
+    }
+    return null;
+}
+
+async function fetchPlayerParty() {
+    if (!webLinkState.linked || !webLinkState.uuid) return null;
+    
+    const accid = getAccid();
+    if (!accid) return null;
+    
+    try {
+        const hashedAccid = await sha256(accid);
+        const response = await fetch(`${WEBLINK_API_URL}/get-party`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                uuid: webLinkState.uuid, 
+                accid: hashedAccid 
+            })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data; // Party info object
+        }
+    } catch (err) {
+        console.error("Failed to fetch party:", err);
+    }
+    return null;
+}
+
+async function fetchPlayerCurrentMap() {
+    if (!webLinkState.linked || !webLinkState.uuid) return null;
+    
+    const accid = getAccid();
+    if (!accid) return null;
+    
+    try {
+        const hashedAccid = await sha256(accid);
+        const response = await fetch(`${WEBLINK_API_URL}/get-map`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                uuid: webLinkState.uuid, 
+                accid: hashedAccid 
+            })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data.inMap ? data : null;
+        }
+    } catch (err) {
+        console.error("Failed to fetch current map:", err);
+    }
+    return null;
+}
+
+async function fetchAvailableMaps() {
+    if (!webLinkState.linked || !webLinkState.uuid) return null;
+    
+    const accid = getAccid();
+    if (!accid) return null;
+    
+    try {
+        const hashedAccid = await sha256(accid);
+        const response = await fetch(`${WEBLINK_API_URL}/get-available-maps`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                uuid: webLinkState.uuid, 
+                accid: hashedAccid 
+            })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data.maps; // Array of map objects
+        }
+    } catch (err) {
+        console.error("Failed to fetch available maps:", err);
+    }
+    return null;
 }
 </script>
 <script>
