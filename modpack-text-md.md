@@ -1,5 +1,14 @@
 FragMC News
 
+## Website revamp
+- NEW: FragMC Controller - Control your game from your phone (website) - ANNOUNCING SOON
+- Fix website styling issues
+- Add accounts
+- Create IcedSpear addon
+- Use IcedSpear addon to link game with website
+- Create phone app
+- Implement [AuthMark](https://authmark.github.io)
+
 ## Map browser update
 - Re-worked ranks
   - 0: None
