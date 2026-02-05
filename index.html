@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FragMC</title>
   <link rel="stylesheet" href="assets/css/main.css">
+  <script src="assets/js/fmc-utils.js"></script>
   <style>
     :root {
       --bg: #0e0e11;
@@ -296,6 +297,10 @@
           Logout
         </button>
       </div>
+      <button id="custom-login-btn" class="authmark-btn" onclick="goToPage('maps')">
+          <svg width="18" height="18" fill="#ffffff" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" /></svg>
+          Player control
+      </button>
 
       <!-- Hidden logout control for programmatic access -->
       <div id="authmark-ctrl_logout" style="display:none;"></div>
@@ -516,7 +521,7 @@
         <ul>
           <li>Test your map thoroughly one more time</li>
           <li>Take screenshots of what you want displayed on your map's page and optionally record a video to send with your map submission</li>
-          <li>Submit your <code>.schem</code> file along with the following info to <code>#map-submissions</code> on the discord: </li>
+          <li>Submit your <code>.schem</code> file along with the following info to <code>#submit-or-report-a-map</code> on the discord: </li>
           <ul>
             <li>The name you would like as the author of the map</li>
             <li>The name of the map</li>

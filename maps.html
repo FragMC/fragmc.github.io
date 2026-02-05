@@ -975,7 +975,7 @@ function openModal(id) {
   });
 
   updateCarousel();
-  document.getElementById('command').textContent = `/map ${id}`;
+  document.getElementById('command').textContent = `/map public/private ${id}`;
   document.getElementById('modal').classList.add('open');
   checkWebLinkStatus();
 }
