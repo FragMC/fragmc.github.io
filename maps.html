@@ -861,12 +861,13 @@
                 <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Player Management</h3>
                 <div style="display:flex; gap:10px; margin-bottom:10px;">
                     <input type="text" id="mod-player-name" placeholder="Player Name" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <input type="text" id="mod-reason" placeholder="Reason (for kick/warn)" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                      <button class="btn secondary" onclick="executeAdminCommand('freeze')">Freeze/Unfreeze</button>
-                     <button class="btn secondary" onclick="executeAdminCommand('examine')">Examine Inventory</button>
-                     <button class="btn secondary" onclick="executeAdminCommand('warn')">Warn</button>
-                     <button class="btn secondary" onclick="executeAdminCommand('kick')">Kick</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('essentials:invsee')">Examine Inventory</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('staffplusplus:warn')">Warn</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('minecraft:kick')">Kick</button>
                      <button class="btn secondary" onclick="executeAdminCommand('follow')">Follow</button>
                      <button class="btn secondary" onclick="executeAdminCommand('cps')">Check CPS</button>
                      <button class="btn secondary" onclick="executeAdminCommand('infractions')">View Infractions</button>
@@ -1311,7 +1312,7 @@ if (search) {
 render();
 
 // --- WebLink API Integration ---
-const WEBLINK_API_URL = " https://weblinkapi-cloudservice-8849.fragmc.qzz.io/webhook";
+const WEBLINK_API_URL = "https://weblinkapi-cloudservice-8849.fragmc.qzz.io/webhook";
 const HMAC_SECRET = "weblink_fa6b02f1e7a7e28a63cdd54c332894442765859f5bc21bb387b3d431e8432106"; 
 
 function getCookie(name) {
@@ -1392,24 +1393,19 @@ async function sendWebLinkCommand(command) {
         const tokenData = await tokenRes.json();
         if (!tokenData.success || !tokenData.token) throw new Error(tokenData.message || "Failed to get token");
         
-        const nonce = crypto.randomUUID();
         const payload = { 
             uuid: webLinkState.uuid, 
             accid: hashedAccid,
-            command: command,
-            nonce: nonce
+            command: command
         };
         const body = JSON.stringify(payload);
         
-        const signatureHash = await hmacSha256(HMAC_SECRET, body);
-        const signature = "sha256=" + signatureHash;
-
+        // Match executeMapCommand pattern - no signature for execute-command
         const execRes = await fetch(`${WEBLINK_API_URL}/execute-command`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
-                'X-Command-Token': tokenData.token,
-                'X-Signature': signature
+                'X-Command-Token': tokenData.token
             },
             body: body
         });
@@ -1462,29 +1458,30 @@ async function executeAdminCommand(cmdType) {
     } else if (cmdType === 'custom') {
         const custom = document.getElementById('admin-custom-cmd').value;
         if (!custom) { alert("Please enter a command."); return; }
-        command = custom;
+        command = custom.startsWith('/') ? custom.substring(1) : custom;
     } else if (cmdType === 'custom-mod') {
         const custom = document.getElementById('mod-custom-cmd').value;
         if (!custom) { alert("Please enter a command."); return; }
-        command = custom;
+        command = custom.startsWith('/') ? custom.substring(1) : custom;
     } else if (cmdType === 'freeze') {
         const player = document.getElementById('mod-player-name').value;
         if (!player) { alert("Please enter a player name."); return; }
         command = `staff freeze ${player}`;
-    } else if (cmdType === 'examine') {
+    } else if (cmdType === 'essentials:invsee') {
         const player = document.getElementById('mod-player-name').value;
         if (!player) { alert("Please enter a player name."); return; }
-        command = `staff examine ${player}`;
+        command = `essentials:invsee ${player}`;
     } else if (cmdType === 'warn') {
         const player = document.getElementById('mod-player-name').value;
         if (!player) { alert("Please enter a player name."); return; }
         command = `staff warn ${player}`;
+    } else if (cmdType === 'minecraft:kick') {
+        const player = document.getElementById('mod-player-name').value;
+        const reason = document.getElementById('mod-reason').value || "Kicked by staff";
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `minecraft:kick ${player} ${reason}`;
     } else if (cmdType === 'kick') {
-        // Check if called from mod menu or party menu.
-        // If mod menu, it expects a player name from the input.
-        // However, cmdType 'kick' is generic. 
-        // Let's assume 'kick' here is for Admin/Mod kick. 
-        // Party kick uses executePartyCommand('kick').
+        // Fallback or Admin kick
         const player = document.getElementById('mod-player-name').value;
         if (!player) { alert("Please enter a player name."); return; }
         command = `kick ${player}`;
@@ -1511,7 +1508,29 @@ async function executeAdminCommand(cmdType) {
     } else if (cmdType === 'custom-we') {
         const custom = document.getElementById('we-custom-cmd').value;
         if (!custom) { alert("Please enter a command."); return; }
-        command = custom;
+        // WE commands might start with // or /
+        // The placeholder says "without //" but let's be safe.
+        // If it starts with //, remove one slash? No, WE commands often need // if sent as player command.
+        // But sendWebLinkCommand prepends / in log, implying it sends as a command.
+        // If I send "set 0", backend runs "/set 0". That's wrong for WE. Should be "/slash slash set 0"?
+        // Wait, //set is a command "/set" won't work? No, "//set" IS the command.
+        // So I need to send "//set".
+        // If user types "set 0", I should send "//set 0" IF they mean WE.
+        // But custom WE command box placeholder says "WE Command (without //)".
+        // If they type "set stone", I should probably send "//set stone".
+        // But if they type "/brush", I should send "/brush".
+        // Let's assume user input is RAW command content.
+        // If they type "set stone", send "//set stone".
+        // If they type "//set stone", send "//set stone".
+        
+        let cmd = custom;
+        if (!cmd.startsWith('/')) {
+             cmd = '//' + cmd;
+        }
+        // If it starts with /, check if it needs another.
+        // Actually, if they type "/brush", it's fine.
+        // If they type "set", it becomes "//set".
+        command = cmd;
     } else if (cmdType === 'copy') {
         command = '/copy';
     } else if (cmdType === 'paste') {
