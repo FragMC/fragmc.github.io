@@ -1,5 +1,11 @@
 FragMC News
 
+## Items Update
+- Added Frost plugin to server
+- Plugin for item management
+- Custom model data now works
+- Auto-Geyser updates
+
 ## Website revamp
 - NEW: FragMC Controller - Control your game from your phone (website) - ANNOUNCING SOON
 - Fix website styling issues
