@@ -1,10 +1,22 @@
 FragMC News
 
+NOTE: Dates are in the format DD/MM/YYYY
+
+| Java Version | Bedrock Version | Date of last version update |
+| ----------- | ----------- | ------------ |
+| 1.21.11 | Latest | 15/02/2026 |
+
+## Bedrock Version Update
+- Automatic Geyser Updates (cross platform updates)
+- Fix Friend Bot
+- Fix Joining the server via Geyser address
+    DATE: 15/02/2026
+
 ## Items Update
 - Added Frost plugin to server
 - Plugin for item management
 - Custom model data now works
-- Auto-Geyser updates
+    DATE: 15/02/2026
 
 ## Website revamp
 - NEW: FragMC Controller - Control your game from your phone (website) - ANNOUNCING SOON
