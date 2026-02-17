@@ -1,0 +1,79 @@
+name: PR Preview Deploy
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+    branches:
+      - main
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout code
+      - uses: actions/checkout@v4
+
+      # 2. Only continue if the PR has the label 'PR Preview'
+      - name: Check PR Label
+        id: check_label
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labels = context.payload.pull_request.labels.map(l => l.name);
+            if (!labels.includes('PR Preview')) {
+              core.info('PR Preview label not found, skipping deployment.');
+              return;
+            }
+            core.setOutput('deploy', 'true');
+
+      # 3. Deploy to GitHub Pages if label exists
+      - name: Deploy Preview
+        if: steps.check_label.outputs.deploy == 'true'
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./                # your HTML folder
+          destination_dir: pr-${{ github.event.pull_request.number }}
+          user_name: 'github-actions'
+          user_email: 'github-actions@github.com'
+          keep_files: true               # keep other PR previews
+
+      # 4. Comment or update preview URL on the PR
+      - name: Comment Preview URL
+        if: steps.check_label.outputs.deploy == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const repoOwner = context.repo.owner;
+            const repoName = context.repo.repo;
+            const previewUrl = `https://${repoOwner}.github.io/${repoName}/pr-${prNumber}/`;
+
+            // Check if the comment already exists
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: repoOwner,
+              repo: repoName,
+              issue_number: prNumber
+            });
+
+            const botComment = comments.find(c => c.body.includes('🚀 Preview site available here'));
+
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: repoOwner,
+                repo: repoName,
+                comment_id: botComment.id,
+                body: `🚀 Preview site updated: [${previewUrl}](${previewUrl})`
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: repoOwner,
+                repo: repoName,
+                issue_number: prNumber,
+                body: `🚀 Preview site available here: [${previewUrl}](${previewUrl})`
+              });
+            }
