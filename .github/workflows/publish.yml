@@ -34,7 +34,7 @@ jobs:
       # Deploy main branch to root
       - name: Deploy Main to Root
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v6
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./             # your HTML root folder
@@ -46,7 +46,7 @@ jobs:
       # Deploy PR preview to /pr-<PR_NUMBER>/
       - name: Deploy PR Preview
         if: steps.check_label.outputs.deploy_preview == 'true'
-        uses: peaceiris/actions-gh-pages@v6
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./             # your HTML root folder
