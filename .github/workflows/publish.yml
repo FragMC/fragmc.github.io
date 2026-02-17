@@ -1,47 +1,63 @@
-name: PR Preview Deploy
+name: GitHub Pages Deploy
 
 on:
+  push:
+    branches:
+      - main   # deploy main branch to root
   pull_request:
     types: [opened, reopened, synchronize, labeled, unlabeled]
     branches:
-      - main
+      - main   # preview PRs targeting main
 
 jobs:
-  preview:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. Checkout code
       - uses: actions/checkout@v4
 
-      # 2. Only continue if the PR has the label 'PR Preview'
+      # Determine if this is a PR with the label "PR Preview"
       - name: Check PR Label
         id: check_label
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const labels = context.payload.pull_request.labels.map(l => l.name);
-            if (!labels.includes('PR Preview')) {
-              core.info('PR Preview label not found, skipping deployment.');
-              return;
+            let deployPreview = false;
+            if (context.eventName === 'pull_request') {
+              const labels = context.payload.pull_request.labels.map(l => l.name);
+              if (labels.includes('PR Preview')) {
+                deployPreview = true;
+              }
             }
-            core.setOutput('deploy', 'true');
+            core.setOutput('deploy_preview', deployPreview);
 
-      # 3. Deploy to GitHub Pages if label exists
-      - name: Deploy Preview
-        if: steps.check_label.outputs.deploy == 'true'
-        uses: peaceiris/actions-gh-pages@v4
+      # Deploy main branch to root
+      - name: Deploy Main to Root
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./                # your HTML folder
+          publish_dir: ./             # your HTML root folder
+          destination_dir: ''         # root
+          user_name: 'github-actions'
+          user_email: 'github-actions@github.com'
+          keep_files: true
+
+      # Deploy PR preview to /pr-<PR_NUMBER>/
+      - name: Deploy PR Preview
+        if: steps.check_label.outputs.deploy_preview == 'true'
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./             # your HTML root folder
           destination_dir: pr-${{ github.event.pull_request.number }}
           user_name: 'github-actions'
           user_email: 'github-actions@github.com'
-          keep_files: true               # keep other PR previews
+          keep_files: true
 
-      # 4. Comment or update preview URL on the PR
-      - name: Comment Preview URL
-        if: steps.check_label.outputs.deploy == 'true'
+      # Comment PR preview URL
+      - name: Comment PR Preview URL
+        if: steps.check_label.outputs.deploy_preview == 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -51,7 +67,6 @@ jobs:
             const repoName = context.repo.repo;
             const previewUrl = `https://${repoOwner}.github.io/${repoName}/pr-${prNumber}/`;
 
-            // Check if the comment already exists
             const { data: comments } = await github.rest.issues.listComments({
               owner: repoOwner,
               repo: repoName,
@@ -61,7 +76,6 @@ jobs:
             const botComment = comments.find(c => c.body.includes('🚀 Preview site available here'));
 
             if (botComment) {
-              // Update existing comment
               await github.rest.issues.updateComment({
                 owner: repoOwner,
                 repo: repoName,
@@ -69,7 +83,6 @@ jobs:
                 body: `🚀 Preview site updated: [${previewUrl}](${previewUrl})`
               });
             } else {
-              // Create new comment
               await github.rest.issues.createComment({
                 owner: repoOwner,
                 repo: repoName,
