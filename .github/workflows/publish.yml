@@ -30,7 +30,7 @@ jobs:
       # 3. Deploy to GitHub Pages if label exists
       - name: Deploy Preview
         if: steps.check_label.outputs.deploy == 'true'
-        uses: peaceiris/actions-gh-pages@v6
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./                # your HTML folder
