@@ -1,0 +1,3026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop | FragMC</title>
+  <script src="https://authmark.github.io/Handler/latest.js" defer></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <style>
+    footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      padding: 8px 12px;
+
+      background: linear-gradient(180deg, rgb(22, 22, 24), rgb(18, 18, 20));
+      color: #cfcfcf;
+
+      text-align: center;
+      font-size: 11px;
+      font-family: Arial, Helvetica, sans-serif;
+      letter-spacing: 0.3px;
+
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    footer strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    footer span {
+      display: block;
+      margin-top: 2px;
+      font-size: 10px;
+      color: #9a9a9a;
+    }
+  </style>
+  <style>
+    :root {
+      --bg: #0e0e11;
+      --card: #17171c;
+      --muted: #9aa0a6;
+      --text: #e8eaed;
+      --accent: #5865f2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #222;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    input[type="search"] {
+      background: var(--card);
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text);
+      width: 260px;
+    }
+
+    .grid {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .thumb {
+      aspect-ratio: 1 / 1;
+      background: #000;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 12px;
+    }
+
+    .card-body h3 {
+      margin: 8px 0 4px;
+      font-size: 1rem;
+    }
+
+    .author {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .author svg {
+      width: 14px;
+      height: 14px;
+      fill: #777;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(88, 101, 242, 0.15);
+      color: #7289da;
+      border: 1px solid rgba(88, 101, 242, 0.3);
+    }
+
+    .badge.verified {
+      background: rgba(67, 181, 129, 0.15);
+      color: #43b581;
+      border: 1px solid rgba(67, 181, 129, 0.3);
+    }
+
+    .badge.verified-no-cp {
+      background: rgba(250, 166, 26, 0.15);
+      color: #faa61a;
+      border: 1px solid rgba(250, 166, 26, 0.3);
+    }
+
+    .badge.difficulty {
+      background: rgba(153, 170, 181, 0.15);
+      color: #99aab5;
+      border: 1px solid rgba(153, 170, 181, 0.3);
+    }
+
+    .badge.diff-1 { background: rgba(67, 181, 129, 0.15); color: #43b581; border-color: rgba(67, 181, 129, 0.3); }
+    .badge.diff-2 { background: rgba(88, 101, 242, 0.15); color: #7289da; border-color: rgba(88, 101, 242, 0.3); }
+    .badge.diff-3 { background: rgba(250, 166, 26, 0.15); color: #faa61a; border-color: rgba(250, 166, 26, 0.3); }
+    .badge.diff-4 { background: rgba(237, 66, 69, 0.15); color: #ed4245; border-color: rgba(237, 66, 69, 0.3); }
+    .badge.diff-5 { background: rgba(239, 66, 245, 0.15); color: #a78bfa; border-color: rgba(239, 66, 245, 0.3); }
+    .badge.diff-6 { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border-color: rgba(139, 92, 246, 0.3); }
+
+    .badge svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-content {
+      background: var(--card);
+      border-radius: 18px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px;
+      position: relative;
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      background: #000;
+    }
+
+    .carousel {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+
+    .carousel img {
+      width: 100%;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+      z-index: 10;
+    }
+
+    .carousel-btn:hover {
+      background: rgba(0,0,0,0.8);
+    }
+
+    .carousel-btn.prev {
+      left: 10px;
+    }
+
+    .carousel-btn.next {
+      right: 10px;
+    }
+
+    .carousel-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .carousel-indicators {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #444;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .indicator.active {
+      background: var(--accent);
+    }
+
+    .modal h2 { margin-top: 16px; }
+
+    .modal p { color: var(--muted); }
+
+    pre {
+      background: #0b0b0e;
+      border-radius: 12px;
+      padding: 14px;
+      overflow-x: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    button.copy {
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      font-size: 1.5rem;
+      color: white;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+      z-index: 20;
+    }
+
+    .close:hover {
+      background: rgba(0,0,0,0.8);
+    }
+  </style>
+  <style>
+    /* Account Menu */
+    .account-menu {
+      position: relative;
+    }
+
+    .account-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .account-btn:hover {
+      background: #2a2a30;
+    }
+
+    .logout-btn.cancel {
+      gap: 8px;
+      background:#17171b;
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .logout-btn.cancel:hover {
+      background: #2a2a30;
+    }
+
+    .account-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: var(--card);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 8px;
+      width: 220px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .account-dropdown.open {
+      display: flex;
+    }
+
+    /* Authmark Buttons Styling */
+    .authmark-btn,
+    [id^="authmark-ctrl_"] > button,
+    [id^="authmark-ctrl_"] > a,
+    [id^="authmark-ctrl_"] > div {
+      display: flex !important;
+      align-items: center;
+      justify-content: flex-start !important;
+      width: 100% !important;
+      padding: 10px 12px !important;
+      border-radius: 6px !important;
+      cursor: pointer;
+      border: none !important;
+      font-weight: 500 !important;
+      font-size: 0.95rem !important;
+      transition: all 0.2s ease;
+      color: var(--text) !important;
+      background: transparent !important;
+      text-decoration: none !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      font-family: inherit !important;
+    }
+    
+    .authmark-btn:hover,
+    [id^="authmark-ctrl_"] > button:hover,
+    [id^="authmark-ctrl_"] > a:hover,
+    [id^="authmark-ctrl_"] > div:hover { 
+      background: rgba(255, 255, 255, 0.08) !important;
+      opacity: 1 !important;
+    }
+
+    .authmark-btn:disabled,
+    [id^="authmark-ctrl_"] > button:disabled,
+    [id^="authmark-ctrl_"] > a:disabled,
+    [id^="authmark-ctrl_"] > div:disabled {
+      opacity: 0.3 !important;
+      cursor: not-allowed !important;
+      background: transparent !important;
+      pointer-events: none;
+    }
+
+    .login-modal-content {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 32px;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .login-modal-content h2 {
+      margin: 0 0 8px;
+      font-size: 1.5rem;
+    }
+
+    .login-modal-content p {
+      color: var(--muted);
+      margin: 0 0 24px;
+      font-size: 0.95rem;
+    }
+
+    .login-modal-content [id^="authmark-ctrl_"] > button,
+    .login-modal-content [id^="authmark-ctrl_"] > a,
+    .login-modal-content [id^="authmark-ctrl_"] > div {
+      background: #2a2a30 !important;
+      justify-content: center !important;
+      padding: 12px 20px !important;
+      font-size: 1rem !important;
+      border: 1px solid rgba(255,255,255,0.05) !important;
+      position: relative;
+      transition: transform 0.2s, background 0.2s !important;
+    }
+
+    .login-modal-content [id^="authmark-ctrl_"] > *:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .login-modal-content [id^="authmark-ctrl_"] > *::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 24px;
+      margin-right: 12px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .login-modal-content #authmark-ctrl_login_google > * { 
+      background: #4285F4 !important; 
+      color: white !important;
+    }
+    .login-modal-content #authmark-ctrl_login_google > *::before {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="%23FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="%23FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="%234CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="%231976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>');
+      background-color: white;
+      border-radius: 50%;
+    }
+
+    .login-modal-content #authmark-ctrl_login_github > * { 
+      background: #24292e !important; 
+    }
+    .login-modal-content #authmark-ctrl_login_github > *::before {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>');
+    }
+
+    .login-modal-content #authmark-ctrl_login_microsoft > * { 
+      background: #0078D4 !important; 
+    }
+    .login-modal-content #authmark-ctrl_login_microsoft > *::before {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23"><path fill="white" d="M0 0h11v11H0zM12 0h11v11H12zM0 12h11v11H0zM12 12h11v11H12z"/></svg>');
+    }
+
+    .login-modal-content #authmark-ctrl_login_discord > * { 
+      background: #5865F2 !important; 
+    }
+    .login-modal-content #authmark-ctrl_login_discord > *::before {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"><path fill="white" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.42,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.28,105.28,0,0,0,126.6,80.22c2.91-27.61-9.9-52.15-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>');
+    }
+
+    .logout-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    
+    .logout-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: opacity 0.2s;
+      font-family: inherit;
+    }
+    
+    .logout-btn.confirm {
+      background: #ed4245;
+      color: white;
+    }
+    .logout-btn:hover {
+      opacity: 0.9;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid #2f2f2f;
+      background: #222;
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s, opacity 0.2s;
+      text-decoration: none;
+      user-select: none;
+      box-shadow: none !important;
+    }
+    .btn:hover { background: #2a2a2a; }
+    .btn:active { transform: none; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn.secondary {
+      background: transparent;
+      border-color: #3a3a3a;
+      color: var(--text);
+    }
+    .btn.secondary:hover { background: rgba(255,255,255,0.06); }
+    .frost-card {
+      flex: 1;
+      min-width: 320px;
+      background: var(--card);
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .frost-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .frost-input {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      color: white;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+    .frost-store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 18px;
+      align-items: stretch;
+    }
+    .frost-item {
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 160px;
+      cursor: pointer;
+    }
+    .frost-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .frost-item-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .frost-item-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border: 1px solid #333;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .chip-cat-particle-effects {
+      border-color: #55FFFF;
+      color: #55FFFF;
+      background: rgba(85, 255, 255, 0.06);
+    }
+    .chip-cat-armor-cosmetics {
+      border-color: #FFAA00;
+      color: #FFAA00;
+      background: rgba(255, 170, 0, 0.06);
+    }
+    .chip-cat-weapon-skins {
+      border-color: #FF5555;
+      color: #FF5555;
+      background: rgba(255, 85, 85, 0.06);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="/" style="color:var(--text);cursor:pointer;text-decoration:none;"><strong style="font-size:1.3rem;">← FragMC</strong></a>
+  </div>
+  <nav style="display:flex;gap:18px;font-size:0.95rem;">
+    <a id="nav-shop" href="#" style="color:var(--text);cursor:pointer;text-decoration:none;font-weight:600;" onclick="switchShopTab('store'); return false;">Shop</a>
+    <a id="nav-inventory" href="#" style="color:var(--muted);cursor:pointer;text-decoration:none;" onclick="switchShopTab('inv'); return false;">Inventory</a>
+    <a href="#" style="color:var(--muted);cursor:pointer;text-decoration:none;" onclick="openRedeemModal(); return false;">Redeem</a>
+  </nav>
+  <div class="account-menu">
+    <button class="account-btn" onclick="toggleAccountDropdown()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+      Account
+    </button>
+    <div class="account-dropdown" id="account-dropdown">
+      <div id="account-main-menu" style="display: flex; flex-direction: column; gap: 4px;">
+        <button id="custom-login-btn" class="authmark-btn" onclick="openLoginModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+          Login
+        </button>
+        <button id="custom-logout-btn" class="authmark-btn" onclick="handleLogout()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Logout
+        </button>
+        <button id="btn-party-manager" class="authmark-btn" onclick="openPartyModal()" style="display:none; border-top: 1px solid #333 !important; padding-top: 12px !important; margin-top: 4px !important;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Social Menu
+        </button>
+        <button id="btn-admin-menu" class="authmark-btn" onclick="openAdminModal('admin')" style="display:none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          Admin Menu
+        </button>
+        <button id="btn-mod-menu" class="authmark-btn" onclick="openAdminModal('mod')" style="display:none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21l2-2"/><path d="M9.5 17.5L21 6V3h-3L6.5 17.5"/><path d="M11 19l-6-6"/><path d="M8 16l-4 4"/><path d="M5 21l-2-2"/></svg>
+          Moderator Menu
+        </button>
+        <button id="btn-we-menu" class="authmark-btn" onclick="openAdminModal('we')" style="display:none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg>
+          WorldEdit Menu
+        </button>
+        <!-- <button id="btn-exploit-menu" class="authmark-btn" onclick="openAdminModal('exploit')" style="display:none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          Exploit Fixer
+        </button> -->
+        <button id="btn-link-account" class="authmark-btn" onclick="openLinkModal()" style="display:none; border-top: 1px solid #333 !important; padding-top: 12px !important; margin-top: 4px !important;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px; opacity: 0.7;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Link Minecraft
+        </button>
+      </div>
+
+      <div id="authmark-ctrl_logout" style="display:none;"></div>
+    </div>
+  </div>
+</header>
+
+<div style="padding: 24px;">
+  <h2>Shop</h2>
+  <div id="frost-shop" style="display:flex; gap:24px; flex-wrap:wrap;">
+    <div class="frost-card" style="width:100%;">
+      <div id="frost-store-tab">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:8px; flex-wrap:wrap;">
+          <h3 style="margin:0;">Store</h3>
+          <select id="frost-category" class="frost-input" style="max-width:220px; padding:6px 8px; font-size:0.85rem;">
+            <option value="">All</option>
+            <option value="particle-effects">Particle Effects</option>
+            <option value="armor-cosmetics">Armor Cosmetics</option>
+            <option value="weapon-skins">Weapon Skins</option>
+          </select>
+          <button id="frost-store-load-btn" class="btn secondary" style="white-space:nowrap;" onclick="loadFrostStore()">Load Store</button>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+          <input id="frost-store-search" class="frost-input" placeholder="Search cosmetics..." style="max-width:280px;">
+          <label style="display:flex; align-items:center; gap:6px; font-size:0.9rem; color:var(--muted);">
+            <input type="checkbox" id="frost-hide-owned">
+            Hide owned
+          </label>
+          <select id="frost-sort" class="frost-input" style="max-width:200px; padding:6px 8px; font-size:0.85rem;">
+            <option value="name">Sort by Name</option>
+            <option value="price">Sort by Price</option>
+          </select>
+        </div>
+        <div id="frost-store-status" style="font-size:0.9rem; color:var(--muted); margin-bottom:8px;"></div>
+        <div id="frost-store" class="frost-store-grid"></div>
+      </div>
+      <div id="frost-inv-tab" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3 style="margin:0;">Inventory</h3>
+          <button id="frost-load-btn" class="btn" onclick="loadFrost()">Load Inventory</button>
+        </div>
+        <div id="frost-status" style="font-size:0.9rem; color:var(--muted); margin-bottom:10px;"></div>
+        <div>
+          <h4 style="margin:10px 0 6px;">Equipped</h4>
+          <div id="frost-equipped" style="display:flex; flex-direction:column; gap:6px;"></div>
+        </div>
+        <div>
+          <h4 style="margin:12px 0 6px;">Owned</h4>
+          <div id="frost-owned" style="display:flex; flex-direction:column; gap:6px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="link-modal" onclick="closeLinkModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeLinkModal()">×</button>
+    <h2>Link Account</h2>
+    <p>Enter the code from the Minecraft server to link your account.</p>
+    <input type="text" id="link-code" placeholder="Enter code (e.g. 123456)" style="width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: white; border-radius: 6px; margin-bottom: 16px; font-size: 1rem; text-align: center;">
+    <button class="btn" style="width: 100%; justify-content: center;" onclick="submitLinkCode()">Link Account</button>
+    <p id="link-msg" style="margin-top: 12px; font-size: 0.9rem; color: var(--accent); display: none;"></p>
+  </div>
+</div>
+
+<!-- Frost Item Inspect Modal -->
+<div class="modal" id="frost-item-modal" onclick="closeFrostItemModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeFrostItemModal()">×</button>
+    <h2 id="frost-item-title" style="margin-top:0;">Item</h2>
+    <div id="frost-item-meta" style="display:flex; gap:8px; align-items:center; margin:8px 0 12px;">
+      <span id="frost-item-category" class="chip"></span>
+      <span id="frost-item-price" class="chip"></span>
+    </div>
+    <div id="frost-item-desc" style="font-size:0.95rem; color:var(--muted); margin-bottom:14px;"></div>
+    <button id="frost-item-buy" class="btn" style="width:100%; justify-content:center;">Buy</button>
+    <p id="frost-item-msg" style="margin-top:10px; font-size:0.9rem; color:var(--muted);"></p>
+  </div>
+  </div>
+<!-- End Frost Item Inspect Modal -->
+
+<div class="modal" id="login-modal" onclick="closeLoginModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeLoginModal()">×</button>
+    <h2>Sign In</h2>
+    <p>Select a provider to continue</p>
+    
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div id="authmark-ctrl_login_microsoft"></div>
+      <div id="authmark-ctrl_login_discord"></div>
+      <div id="authmark-ctrl_login_google"></div>
+      <div id="authmark-ctrl_login_github"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="redeem-modal" onclick="closeRedeemModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeRedeemModal()">×</button>
+    <h2>Redeem Code</h2>
+    <p>Enter your code (e.g. XXXX-XXXX-XXXX-XXXX)</p>
+    <input type="text" id="redeem-code" placeholder="XXXX-XXXX-XXXX-XXXX" class="frost-input" style="text-transform:uppercase; text-align:center;" maxlength="19" oninput="formatRedeemCode(this)">
+    <button id="redeem-submit" class="btn" style="width:100%; justify-content:center; margin-top:10px;" onclick="submitRedeemCode()">Redeem</button>
+    <div id="redeem-msg" style="margin-top:10px; font-size:0.9rem; color:var(--muted);"></div>
+  </div>
+  </div>
+
+<div class="modal" id="logout-modal" onclick="closeLogoutModalOnBackdrop(event)">
+  <div class="login-modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeLogoutModal()">×</button>
+    <h2>Log Out</h2>
+    <p>Are you sure you want to log out?</p>
+    
+    <div class="logout-actions">
+      <button class="logout-btn cancel" onclick="closeLogoutModal()">Cancel</button>
+      <button class="logout-btn confirm" onclick="confirmLogout()">Yes</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="party-modal" onclick="closePartyModalOnBackdrop(event)">
+  <div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()">
+    <button class="close" onclick="closePartyModal()">×</button>
+    <div style="display:flex; gap:15px; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
+        <button id="tab-btn-party" onclick="switchSocialTab('party')" style="background:none; border:none; color:white; font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid var(--accent);">Party</button>
+        <button id="tab-btn-friends" onclick="switchSocialTab('friends')" style="background:none; border:none; color:var(--muted); font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid transparent;">Friends</button>
+    </div>
+
+    <div id="tab-party">
+        <p style="margin-bottom: 24px;">Manage your party or join one.</p>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Create Party</h3>
+                <button class="btn" onclick="executePartyCommand('create')" style="width:100%">Create New Party</button>
+            </div>
+
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Join Party</h3>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="party-join-code" placeholder="Code" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn" onclick="executePartyCommand('join')">Join</button>
+                </div>
+            </div>
+
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Current Party Controls</h3>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <button class="btn secondary" onclick="executePartyCommand('list')">List Members</button>
+                    <button class="btn danger" onclick="executePartyCommand('leave')">Leave Party</button>
+                </div>
+                
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <input type="text" id="party-kick-player" placeholder="Player to Kick" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn secondary" onclick="executePartyCommand('kick')">Kick</button>
+                </div>
+                
+                <div id="party-list" style="margin-top:15px; padding-top:15px; border-top:1px solid #333; display:none;">
+                    <h4 style="margin:0 0 10px; color:var(--muted); font-size:0.9rem;">MEMBERS</h4>
+                    <div id="party-list-content" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-friends" style="display:none;">
+        <p style="margin-bottom: 24px;">Manage your friends list.</p>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Add Friend</h3>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="friend-add-name" placeholder="Player Name" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn" onclick="executeFriendCommand('add')">Add</button>
+                </div>
+            </div>
+
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Manage Friends</h3>
+                <button class="btn secondary" onclick="executeFriendCommand('list')" style="width:100%; margin-bottom:10px;">List Friends (in Chat)</button>
+                
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="friend-remove-name" placeholder="Player to Remove" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn danger" onclick="executeFriendCommand('remove')">Remove</button>
+                </div>
+                
+                <div id="friends-list" style="margin-top:15px; padding-top:15px; border-top:1px solid #333; display:none;">
+                     <h4 style="margin:0 0 10px; color:var(--muted); font-size:0.9rem;">FRIENDS</h4>
+                     <div id="friends-list-content" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+            </div>
+             
+             <div class="party-section" style="border-top: 1px solid #333; padding-top: 20px; margin-top: 10px;">
+                 <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Requests</h3>
+                 <button class="btn secondary" onclick="executeFriendCommand('requests')" style="width:100%">List Incoming Requests</button>
+            </div>
+
+        </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal" id="admin-modal" onclick="closeAdminModalOnBackdrop(event)">
+  <div class="modal-content" style="max-width: 600px;" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeAdminModal()">×</button>
+    
+    <div style="display:flex; gap:15px; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
+        <button id="tab-btn-admin" onclick="switchAdminTab('admin')" style="background:none; border:none; color:white; font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid var(--accent);">Admin</button>
+        <button id="tab-btn-mod" onclick="switchAdminTab('mod')" style="background:none; border:none; color:var(--muted); font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid transparent;">Moderator</button>
+        <button id="tab-btn-we" onclick="switchAdminTab('we')" style="background:none; border:none; color:var(--muted); font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid transparent;">WorldEdit</button>
+        <!-- <button id="tab-btn-exploit" onclick="switchAdminTab('exploit')" style="background:none; border:none; color:var(--muted); font-size:1.1rem; font-weight:bold; cursor:pointer; padding-bottom:5px; border-bottom:2px solid transparent;">Exploit Fixer</button> -->
+    </div>
+    
+    <div id="tab-admin">
+        <h2 style="border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px;">Admin Menu</h2>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Gamemode</h3>
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
+                    <button class="btn secondary" onclick="executeAdminCommand('gamemode creative')" title="Creative Mode" style="display:flex; flex-direction:column; align-items:center; padding:10px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:5px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        <span style="font-size:0.8rem;">Creative</span>
+                    </button>
+                    <button class="btn secondary" onclick="executeAdminCommand('gamemode survival')" title="Survival Mode" style="display:flex; flex-direction:column; align-items:center; padding:10px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:5px;"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21l2-2"/></svg>
+                        <span style="font-size:0.8rem;">Survival</span>
+                    </button>
+                    <button class="btn secondary" onclick="executeAdminCommand('gamemode adventure')" title="Adventure Mode" style="display:flex; flex-direction:column; align-items:center; padding:10px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:5px;"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                        <span style="font-size:0.8rem;">Adventure</span>
+                    </button>
+                    <button class="btn secondary" onclick="executeAdminCommand('gamemode spectator')" title="Spectator Mode" style="display:flex; flex-direction:column; align-items:center; padding:10px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:5px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <span style="font-size:0.8rem;">Spectator</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Tools & Teleport</h3>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+                    <button class="btn" onclick="executeAdminCommand('mvtp Building/Testing')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:text-bottom;"><path d="M3 21h18M5 21V7l8-4 8 4v14M8 21v-2a2 2 0 0 1 4 0v2"/></svg>
+                        Go to Building World
+                    </button>
+                     <button class="btn secondary" onclick="executeAdminCommand('heal')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:text-bottom;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        Heal / Feed
+                    </button>
+                </div>
+                
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <input type="text" id="admin-invsee-player" placeholder="Player Name" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn secondary" onclick="executeAdminCommand('invsee')">Invsee</button>
+                </div>
+
+                 <div style="display:flex; gap:10px;">
+                    <input type="text" id="admin-custom-cmd" placeholder="Custom Command (without /)" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn secondary" onclick="executeAdminCommand('custom')">Run</button>
+                </div>
+            </div>
+
+             <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Quick Actions</h3>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('day')">Day</button>
+                    <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('night')">Night</button>
+                    <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('sun')">Clear Weather</button>
+                    <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('fly')">Toggle Fly</button>
+                    <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('god')">God Mode</button>
+                     <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('workbench')">Workbench</button>
+                     <button class="btn secondary" style="font-size:0.8rem; padding:6px 12px;" onclick="executeAdminCommand('enderchest')">Ender Chest</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-mod" style="display:none;">
+        <h2 style="border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px;">Moderator Menu (Staff++)</h2>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+             <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Player Management</h3>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <input type="text" id="mod-player-name" placeholder="Player Name" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <input type="text" id="mod-reason" placeholder="Reason (for kick/warn)" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                     <button class="btn secondary" onclick="executeAdminCommand('freeze')">Freeze/Unfreeze</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('essentials:invsee')">Examine Inventory</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('staffplusplus:warn')">Warn</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('minecraft:kick')">Kick</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('follow')">Follow</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('cps')">Check CPS</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('infractions')">View Infractions</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('revive')">Revive</button>
+                </div>
+            </div>
+             <div class="party-section">
+                 <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Staff Mode</h3>
+                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <button class="btn" onclick="executeAdminCommand('staff')">Toggle Staff Mode</button>
+                    <button class="btn secondary" onclick="executeAdminCommand('vanish')">Toggle Vanish</button>
+                 </div>
+             </div>
+             <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Custom Command</h3>
+                 <div style="display:flex; gap:10px;">
+                    <input type="text" id="mod-custom-cmd" placeholder="Staff Command (without /)" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn secondary" onclick="executeAdminCommand('custom-mod')">Run</button>
+                </div>
+             </div>
+        </div>
+    </div>
+
+    <div id="tab-we" style="display:none;">
+        <h2 style="border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px;">WorldEdit Menu (FAWE)</h2>
+         <div style="display:flex; flex-direction:column; gap:20px;">
+             <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Clipboard</h3>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                     <button class="btn secondary" onclick="executeAdminCommand('copy')">//copy</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('paste')">//paste</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('cut')">//cut</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('rotate 90')">//rotate 90</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('flip')">//flip</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('undo')">//undo</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('redo')">//redo</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('clearclipboard')">//clearclipboard</button>
+                </div>
+            </div>
+             <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Tools & Brushes</h3>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <button class="btn" onclick="executeAdminCommand('wand')">Get Wand (//wand)</button>
+                    
+                    <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:6px; margin-top:10px;">
+                        <label style="font-size:0.8rem; color:#ccc; display:block; margin-bottom:5px;">Set / Pattern</label>
+                        <div style="display:flex; gap:10px; margin-bottom:10px;">
+                            <input type="text" id="we-pattern" placeholder="Pattern (e.g. stone,dirt)" style="flex:1; background:#111; border:1px solid #333; color:white; padding:8px; border-radius:6px; font-size:0.9rem;">
+                            <button class="btn secondary" onclick="executeAdminCommand('set')">//set</button>
+                        </div>
+                        
+                        <label style="font-size:0.8rem; color:#ccc; display:block; margin-bottom:5px;">Brushes</label>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <select id="we-brush-type" style="background:#111; border:1px solid #333; color:white; padding:8px; border-radius:6px; font-size:0.9rem;">
+                                <option value="sphere">Sphere</option>
+                                <option value="cylinder">Cylinder</option>
+                                <option value="smooth">Smooth</option>
+                                <option value="clipboard">Clipboard</option>
+                            </select>
+                            <input type="number" id="we-brush-radius" placeholder="Radius" style="background:#111; border:1px solid #333; color:white; padding:8px; border-radius:6px; font-size:0.9rem;">
+                        </div>
+                        <button class="btn secondary" style="width:100%;" onclick="executeAdminCommand('brush')">Equip Brush</button>
+                    </div>
+                    
+                    <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:6px; margin-top:10px;">
+                         <label style="font-size:0.8rem; color:#ccc; display:block; margin-bottom:5px;">Save Schematic</label>
+                         <div style="display:flex; gap:10px;">
+                             <input type="text" id="we-schem-name" placeholder="Schematic Name" style="flex:1; background:#111; border:1px solid #333; color:white; padding:8px; border-radius:6px; font-size:0.9rem;">
+                             <button class="btn secondary" onclick="executeAdminCommand('schem-save')">Save</button>
+                         </div>
+                         <p style="font-size:0.75rem; color:#aaa; margin-top:5px;">Executes: //copy -e, then //schem save [name]</p>
+                    </div>
+                </div>
+            </div>
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Custom Command</h3>
+                 <div style="display:flex; gap:10px;">
+                    <input type="text" id="we-custom-cmd" placeholder="WE Command (without //)" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn secondary" onclick="executeAdminCommand('custom-we')">Run</button>
+                </div>
+             </div>
+         </div>
+    </div>
+    <!--
+    <div id="tab-exploit" style="display:none;">
+        <h2 style="border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px;">Exploit Fixer</h2>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+             <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Protection Controls</h3>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                     <button class="btn secondary" onclick="executeAdminCommand('exploit-anticrasher')">Toggle Anti-Crasher</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('exploit-packetlimiter')">Toggle Packet Limiter</button>
+                     <button class="btn secondary" onclick="executeAdminCommand('exploit-vpnblocker')">Toggle VPN/Proxy Blocker</button>
+                </div>
+            </div>
+            <div class="party-section">
+                <h3 style="margin:0 0 10px; font-size:1rem; color:#fff;">Custom Command</h3>
+                 <div style="display:flex; gap:10px;">
+                    <input type="text" id="exploit-custom-cmd" placeholder="Exploit Command (without /)" style="flex:1; background:#111; border:1px solid #333; color:white; padding:10px; border-radius:6px;">
+                    <button class="btn secondary" onclick="executeAdminCommand('custom-exploit')">Run</button>
+                </div>
+             </div>
+        </div>
+    </div>
+    -->
+    
+  </div>
+</div>
+
+<script>
+
+function toggleAccountDropdown() {
+  const dropdown = document.getElementById('account-dropdown');
+  const isOpen = dropdown.classList.toggle('open');
+  
+  if (isOpen) {
+    checkLoginState();
+    checkWebLinkStatus();
+  }
+}
+
+function openPartyModal() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('party-modal').classList.add('open');
+  
+  const partyTab = document.getElementById('tab-party');
+  if (partyTab.style.display !== 'none') {
+      refreshPartyList();
+  } else {
+      refreshFriendsList();
+  }
+}
+
+function closePartyModal() {
+  document.getElementById('party-modal').classList.remove('open');
+}
+
+function closePartyModalOnBackdrop(event) {
+  if (event.target.id === 'party-modal') {
+    closePartyModal();
+  }
+}
+
+function checkLoginState() {
+  let accid = getAccid();
+  let isLoggedIn = !!accid;
+  
+  if (!isLoggedIn) {
+    const logoutContainer = document.getElementById('authmark-ctrl_logout');
+    if (logoutContainer && logoutContainer.children.length > 0) {
+      isLoggedIn = true;
+    }
+  }
+  
+  const loginBtn = document.getElementById('custom-login-btn');
+  const logoutBtn = document.getElementById('custom-logout-btn');
+  
+  if (isLoggedIn) {
+    loginBtn.disabled = true;
+    loginBtn.title = "You are already logged in";
+    logoutBtn.disabled = false;
+    logoutBtn.title = "";
+    
+    const partyBtn = document.getElementById('btn-party-manager');
+    if (partyBtn) {
+        partyBtn.style.display = 'flex';
+    }
+  } else {
+    loginBtn.disabled = false;
+    loginBtn.title = "";
+    logoutBtn.disabled = true;
+    logoutBtn.title = "You are not logged in";
+    
+    const partyBtn = document.getElementById('btn-party-manager');
+    if (partyBtn) {
+        partyBtn.style.display = 'none';
+    }
+  }
+}
+
+function openLoginModal() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('login-modal').classList.add('open');
+}
+
+function closeLoginModal() {
+  document.getElementById('login-modal').classList.remove('open');
+}
+
+function closeLoginModalOnBackdrop(event) {
+  if (event.target.id === 'login-modal') {
+    closeLoginModal();
+  }
+}
+
+function handleLogout() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('logout-modal').classList.add('open');
+}
+
+function closeLogoutModal() {
+  document.getElementById('logout-modal').classList.remove('open');
+}
+
+function closeLogoutModalOnBackdrop(event) {
+  if (event.target.id === 'logout-modal') {
+    closeLogoutModal();
+  }
+}
+
+function confirmLogout() {
+  const authmarkLogoutContainer = document.getElementById('authmark-ctrl_logout');
+  let logoutBtn = authmarkLogoutContainer.querySelector('button, a, div[onclick], input[type="button"]');
+  
+  if (!logoutBtn && authmarkLogoutContainer.firstElementChild) {
+    logoutBtn = authmarkLogoutContainer.firstElementChild;
+  }
+  
+  if (logoutBtn) {
+    logoutBtn.click();
+    closeLogoutModal();
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+  } else {
+    console.error("Authmark logout button not found");
+    alert("Could not trigger logout. Please try again.");
+    closeLogoutModal();
+  }
+}
+
+window.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('account-dropdown');
+  const btn = document.querySelector('.account-btn');
+  if (dropdown && dropdown.classList.contains('open') && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+    dropdown.classList.remove('open');
+  }
+});
+
+function openRedeemModal() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('redeem-modal').classList.add('open');
+  const input = document.getElementById('redeem-code');
+  const msg = document.getElementById('redeem-msg');
+  if (msg) msg.textContent = '';
+  if (input) {
+    input.value = '';
+    setTimeout(() => input.focus(), 10);
+  }
+}
+
+function closeRedeemModal() {
+  document.getElementById('redeem-modal').classList.remove('open');
+}
+
+function closeRedeemModalOnBackdrop(event) {
+  if (event.target.id === 'redeem-modal') {
+    closeRedeemModal();
+  }
+}
+
+function formatRedeemCode(el) {
+  if (!el) return;
+  let v = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  v = v.slice(0, 16);
+  const parts = [];
+  for (let i = 0; i < v.length; i += 4) {
+    parts.push(v.slice(i, i + 4));
+  }
+  el.value = parts.join('-');
+}
+
+async function submitRedeemCode() {
+  const input = document.getElementById('redeem-code');
+  const btn = document.getElementById('redeem-submit');
+  const msg = document.getElementById('redeem-msg');
+  if (!input || !btn || !msg) return;
+  const raw = (input.value || '').toUpperCase();
+  const normalized = raw.replace(/[^A-Z0-9]/g, '');
+  if (normalized.length !== 16) {
+    msg.textContent = 'Enter a valid 16-character code.';
+    return;
+  }
+  if (!webLinkState.linked || !webLinkState.uuid) {
+    msg.textContent = 'Link your Minecraft account first.';
+    return;
+  }
+  if (!webLinkState.online) {
+    msg.textContent = 'Join the server to redeem.';
+    return;
+  }
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  try {
+    const pretty = [normalized.slice(0,4), normalized.slice(4,8), normalized.slice(8,12), normalized.slice(12,16)].join('-');
+    const ok = await sendWebLinkCommand(`redeem ${pretty}`);
+    if (ok) {
+      Toastify({ text: 'Code sent to server', gravity: 'top', position: 'right', duration: 3000 }).showToast();
+      closeRedeemModal();
+    } else {
+      msg.textContent = 'Redeem failed. Check you are online and try again.';
+    }
+  } catch (e) {
+    msg.textContent = 'Redeem error.';
+  } finally {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+}
+
+// --- WebLink API Integration ---
+const WEBLINK_API_URL = "https://weblinkapi-cloudservice-8849.fragmc.qzz.io/webhook";
+const HMAC_SECRET = "weblink_fa6b02f1e7a7e28a63cdd54c332894442765859f5bc21bb387b3d431e8432106"; 
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
+
+function getAccid() {
+  let id = getCookie('accid') || getCookie('ACCID');
+  
+  if (!id) {
+    id = localStorage.getItem('accid') || localStorage.getItem('ACCID');
+  }
+  
+  return id;
+}
+
+function openAdminModal(tab = 'admin') {
+  const modal = document.getElementById('admin-modal');
+  if (modal) {
+      modal.classList.add('open');
+      checkPlayerOnline();
+      if (typeof switchAdminTab === 'function') {
+          switchAdminTab(tab);
+      }
+  }
+}
+
+function switchAdminTab(tab) {
+  const tabs = ['admin', 'mod', 'we', 'exploit'];
+  
+  tabs.forEach(t => {
+      const content = document.getElementById(`tab-${t}`);
+      const btn = document.getElementById(`tab-btn-${t}`);
+      
+      if (content && btn) {
+          if (t === tab) {
+              content.style.display = 'block';
+              btn.style.color = 'white';
+              btn.style.borderBottomColor = 'var(--accent)';
+          } else {
+              content.style.display = 'none';
+              btn.style.color = 'var(--muted)';
+              btn.style.borderBottomColor = 'transparent';
+          }
+      }
+  });
+}
+
+function closeAdminModal() {
+  const modal = document.getElementById('admin-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function closeAdminModalOnBackdrop(e) {
+  if (e.target.id === 'admin-modal') closeAdminModal();
+}
+
+async function sendWebLinkCommand(command) {
+    const accid = getAccid();
+    if (!accid) {
+        alert("Authentication error. Please relogin.");
+        return false;
+    }
+
+    try {
+        const hashedAccid = await sha256(accid);
+        
+        const tokenRes = await fetch(`${WEBLINK_API_URL}/get-command-token`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ uuid: webLinkState.uuid })
+        });
+        
+        if (!tokenRes.ok) throw new Error("Failed to get command token");
+        const tokenData = await tokenRes.json();
+        if (!tokenData.success || !tokenData.token) throw new Error(tokenData.message || "Failed to get token");
+        
+        const payload = { 
+            uuid: webLinkState.uuid, 
+            accid: hashedAccid,
+            command: command
+        };
+        const body = JSON.stringify(payload);
+        
+        // Match executeMapCommand pattern - no signature for execute-command
+        const execRes = await fetch(`${WEBLINK_API_URL}/execute-command`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-Command-Token': tokenData.token
+            },
+            body: body
+        });
+        
+        const execData = await execRes.json();
+        if (execData.success) {
+            console.log(`Command executed: /${command}`);
+            return true;
+        } else {
+            alert(`Error: ${execData.message}`);
+            return false;
+        }
+        
+    } catch (err) {
+        console.error("Command execution failed:", err);
+        alert("Failed to execute command. Check console for details.");
+        return false;
+    }
+}
+
+async function executeAdminCommand(cmdType) {
+    if (!webLinkState.linked || !webLinkState.uuid) {
+        alert("Please link your Minecraft account first.");
+        return;
+    }
+
+    if (!webLinkState.online) {
+        alert("You must be online on the server to use this.");
+        return;
+    }
+
+    const accid = getAccid();
+    if (!accid) {
+        alert("Authentication error. Please relogin.");
+        return;
+    }
+
+    let command = "";
+    
+    if (cmdType.startsWith('gamemode')) {
+        command = cmdType;
+    } else if (cmdType.startsWith('mvtp')) {
+        command = cmdType;
+    } else if (cmdType === 'heal') {
+        command = 'heal';
+    } else if (cmdType === 'invsee') {
+        const player = document.getElementById('admin-invsee-player').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `invsee ${player}`;
+    } else if (cmdType === 'custom') {
+        const custom = document.getElementById('admin-custom-cmd').value;
+        if (!custom) { alert("Please enter a command."); return; }
+        command = custom.startsWith('/') ? custom.substring(1) : custom;
+    } else if (cmdType === 'custom-mod') {
+        const custom = document.getElementById('mod-custom-cmd').value;
+        if (!custom) { alert("Please enter a command."); return; }
+        command = custom.startsWith('/') ? custom.substring(1) : custom;
+    } else if (cmdType === 'freeze') {
+        const player = document.getElementById('mod-player-name').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `staff freeze ${player}`;
+    } else if (cmdType === 'essentials:invsee') {
+        const player = document.getElementById('mod-player-name').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `essentials:invsee ${player}`;
+    } else if (cmdType === 'warn') {
+        const player = document.getElementById('mod-player-name').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `staff warn ${player}`;
+    } else if (cmdType === 'minecraft:kick') {
+        const player = document.getElementById('mod-player-name').value;
+        const reason = document.getElementById('mod-reason').value || "Kicked by staff";
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `minecraft:kick ${player} ${reason}`;
+    } else if (cmdType === 'kick') {
+        // Fallback or Admin kick
+        const player = document.getElementById('mod-player-name').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `kick ${player}`;
+    } else if (cmdType === 'staff') {
+        command = 'staff';
+    } else if (cmdType === 'vanish') {
+        command = 'staff vanish';
+    } else if (cmdType === 'follow') {
+        const player = document.getElementById('mod-player-name').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `staff follow ${player}`;
+    } else if (cmdType === 'cps') {
+        const player = document.getElementById('mod-player-name').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `staff cps ${player}`;
+    } else if (cmdType === 'infractions') {
+        const player = document.getElementById('mod-player-name').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `staff infractions ${player}`;
+    } else if (cmdType === 'revive') {
+        const player = document.getElementById('mod-player-name').value;
+        if (!player) { alert("Please enter a player name."); return; }
+        command = `staff revive ${player}`;
+    } else if (cmdType === 'custom-we') {
+        const custom = document.getElementById('we-custom-cmd').value;
+        if (!custom) { alert("Please enter a command."); return; }
+        // WE commands might start with // or /
+        // The placeholder says "without //" but let's be safe.
+        // If it starts with //, remove one slash? No, WE commands often need // if sent as player command.
+        // But sendWebLinkCommand prepends / in log, implying it sends as a command.
+        // If I send "set 0", backend runs "/set 0". That's wrong for WE. Should be "/slash slash set 0"?
+        // Wait, //set is a command "/set" won't work? No, "//set" IS the command.
+        // So I need to send "//set".
+        // If user types "set 0", I should send "//set 0" IF they mean WE.
+        // But custom WE command box placeholder says "WE Command (without //)".
+        // If they type "set stone", I should probably send "//set stone".
+        // But if they type "/brush", I should send "/brush".
+        // Let's assume user input is RAW command content.
+        // If they type "set stone", send "//set stone".
+        // If they type "//set stone", send "//set stone".
+        
+        let cmd = custom;
+        if (!cmd.startsWith('/')) {
+             cmd = '//' + cmd;
+        }
+        // If it starts with /, check if it needs another.
+        // Actually, if they type "/brush", it's fine.
+        // If they type "set", it becomes "//set".
+        command = cmd;
+    } else if (cmdType === 'copy') {
+        command = '/copy';
+    } else if (cmdType === 'paste') {
+        command = '/paste';
+    } else if (cmdType === 'cut') {
+        command = '/cut';
+    } else if (cmdType === 'rotate 90') {
+        command = '/rotate 90';
+    } else if (cmdType === 'flip') {
+        command = '/flip';
+    } else if (cmdType === 'undo') {
+        command = '/undo';
+    } else if (cmdType === 'redo') {
+        command = '/redo';
+    } else if (cmdType === 'clearclipboard') {
+        command = '/clearclipboard';
+    } else if (cmdType === 'wand') {
+        command = '/wand';
+    } else if (cmdType === 'set') {
+        const pattern = document.getElementById('we-pattern').value;
+        if (!pattern) { alert("Please enter a pattern."); return; }
+        command = `//set ${pattern}`;
+    } else if (cmdType === 'brush') {
+        const type = document.getElementById('we-brush-type').value;
+        const radius = document.getElementById('we-brush-radius').value;
+        
+        if (type === 'clipboard') {
+             command = `//brush clipboard`;
+        } else if (type === 'smooth') {
+             if (!radius) { alert("Please enter a radius."); return; }
+             command = `//brush smooth ${radius}`;
+        } else {
+             if (!radius) { alert("Please enter a radius."); return; }
+             const pattern = document.getElementById('we-pattern').value;
+             if (!pattern) { alert("Please enter a pattern for this brush."); return; }
+             command = `//brush ${type} ${pattern} ${radius}`;
+        }
+    } else if (cmdType === 'day') {
+        command = 'time set day';
+    } else if (cmdType === 'night') {
+        command = 'time set night';
+    } else if (cmdType === 'sun') {
+        command = 'weather clear';
+    } else if (cmdType === 'fly') {
+        command = 'fly';
+    } else if (cmdType === 'god') {
+        command = 'god';
+    } else if (cmdType === 'workbench') {
+        command = 'workbench';
+    } else if (cmdType === 'enderchest') {
+        command = 'enderchest';
+    /*
+    } else if (cmdType === 'exploit-anticrasher') {
+        command = 'exploit anticrasher';
+    } else if (cmdType === 'exploit-packetlimiter') {
+        command = 'exploit packetlimiter';
+    } else if (cmdType === 'exploit-vpnblocker') {
+        command = 'exploit vpnblocker';
+    } else if (cmdType === 'custom-exploit') {
+        const custom = document.getElementById('exploit-custom-cmd').value;
+        if (!custom) { alert("Please enter a command."); return; }
+        command = custom;
+    */
+    } else if (cmdType === 'schem-save') {
+        const name = document.getElementById('we-schem-name').value;
+        if (!name) { alert("Please enter a schematic name."); return; }
+        
+        const success1 = await sendWebLinkCommand('//copy -e');
+        if (success1) {
+             await sendWebLinkCommand(`//schem save -f ${name}`);
+             alert(`Schematic '${name}' saved!`);
+        }
+        return;
+    } else {
+        console.error("Unknown admin command:", cmdType);
+        return;
+    }
+
+    if (command) {
+        await sendWebLinkCommand(command);
+    }
+}
+
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function hmacSha256(key, message) {
+  const enc = new TextEncoder();
+  const keyData = enc.encode(key);
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw", keyData, { name: "HMAC", hash: "SHA-256" },
+    false, ["sign"]
+  );
+  const signature = await crypto.subtle.sign("HMAC", cryptoKey, enc.encode(message));
+  const hashArray = Array.from(new Uint8Array(signature));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// State
+let webLinkState = {
+  linked: false,
+  online: false,
+  uuid: null,
+  username: null,
+  accounts: []
+};
+
+function updateAccountUI() {
+  const btn = document.querySelector('.account-btn');
+  const dropdownMenu = document.getElementById('account-main-menu');
+  
+  if (webLinkState.linked && webLinkState.username) {
+      const currentAcc = webLinkState.accounts ? webLinkState.accounts.find(a => a.uuid === webLinkState.uuid) : null;
+      const isOnline = currentAcc ? currentAcc.online : webLinkState.online;
+
+      btn.innerHTML = `
+          <div style="position: relative; width: 20px; height: 20px;">
+              <img src="https://mc-heads.net/avatar/${webLinkState.uuid}/20" style="border-radius: 50%; width: 100%; height: 100%;">
+              <div style="position: absolute; bottom: -2px; right: -2px; width: 8px; height: 8px; background: ${isOnline ? '#43b581' : '#747f8d'}; border-radius: 50%; border: 2px solid var(--card);" title="${isOnline ? 'Online' : 'Offline'}"></div>
+          </div>
+          ${webLinkState.username}
+      `;
+  } else {
+      btn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+          Account
+      `;
+  }
+
+  let switcher = document.getElementById('account-switcher');
+  if (!switcher) {
+      switcher = document.createElement('div');
+      switcher.id = 'account-switcher';
+      switcher.style.borderBottom = '1px solid #333';
+      switcher.style.paddingBottom = '8px';
+      switcher.style.marginBottom = '8px';
+      switcher.style.display = 'none';
+      
+      if (dropdownMenu && dropdownMenu.parentNode) {
+          dropdownMenu.parentNode.insertBefore(switcher, dropdownMenu);
+      }
+  }
+
+  switcher.innerHTML = '';
+  
+  const adminBtn = document.getElementById('btn-admin-menu');
+  const modBtn = document.getElementById('btn-mod-menu');
+  const weBtn = document.getElementById('btn-we-menu');
+  const exploitBtn = document.getElementById('btn-exploit-menu');
+  if (adminBtn) {
+       (async () => {
+           const isAdmin = await checkAdminAccess(true);
+           if (isAdmin) {
+               adminBtn.style.display = 'flex';
+               adminBtn.style.borderTop = '1px solid #333';
+               adminBtn.style.paddingTop = '12px';
+               adminBtn.style.marginTop = '4px';
+               
+               if (modBtn) modBtn.style.display = 'flex';
+               if (weBtn) weBtn.style.display = 'flex';
+               if (exploitBtn) exploitBtn.style.display = 'flex';
+           } else {
+               adminBtn.style.display = 'none';
+               if (modBtn) modBtn.style.display = 'none';
+               if (weBtn) weBtn.style.display = 'none';
+               if (exploitBtn) exploitBtn.style.display = 'none';
+           }
+       })();
+  }
+  
+   if (webLinkState.linked && webLinkState.accounts && webLinkState.accounts.length > 0) {
+      switcher.style.display = 'flex';
+      switcher.style.flexDirection = 'column';
+      switcher.style.gap = '4px';
+      switcher.innerHTML = '<div style="font-size:0.75rem; color:var(--muted); padding:0 4px 4px;">Switch Account</div>';
+      
+      webLinkState.accounts.forEach(acc => {
+          const isCurrent = acc.uuid === webLinkState.uuid;
+          const item = document.createElement('div');
+          item.className = 'authmark-btn';
+          item.style.justifyContent = 'flex-start';
+          item.style.padding = '6px 8px';
+          item.style.fontSize = '0.9rem';
+          
+          if (isCurrent) {
+              item.style.background = 'rgba(255, 255, 255, 0.1)';
+              item.style.cursor = 'default';
+              item.style.pointerEvents = 'none';
+          } else {
+              item.style.cursor = 'pointer';
+              item.onclick = (e) => {
+                  e.stopPropagation();
+                  switchAccount(acc.uuid);
+              };
+          }
+          
+          item.innerHTML = `
+              <div style="position: relative; margin-right: 8px; width: 16px; height: 16px;">
+                  <img src="https://mc-heads.net/avatar/${acc.uuid}/16" style="border-radius: 50%; width: 100%; height: 100%;">
+                  <div style="position: absolute; bottom: -2px; right: -2px; width: 8px; height: 8px; background: ${acc.online ? '#43b581' : '#747f8d'}; border-radius: 50%; border: 2px solid var(--card);" title="${acc.online ? 'Online' : 'Offline'}"></div>
+              </div>
+              ${acc.username}
+              ${isCurrent ? '<span style="margin-left:auto; font-size:0.8rem; color:#43b581;">●</span>' : ''}
+          `;
+          switcher.appendChild(item);
+      });
+      
+      const linkBtn = document.createElement('div');
+      linkBtn.className = 'authmark-btn';
+      linkBtn.style.justifyContent = 'flex-start';
+      linkBtn.style.padding = '6px 8px';
+      linkBtn.style.fontSize = '0.9rem';
+      linkBtn.style.color = 'var(--muted)';
+      linkBtn.style.marginTop = '4px';
+      linkBtn.style.borderTop = '1px solid #333';
+      linkBtn.style.cursor = 'pointer';
+      
+      linkBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M12 5v14M5 12h14"/></svg>
+        Link Another Account
+      `;
+      
+      linkBtn.onclick = (e) => {
+          e.stopPropagation();
+          document.getElementById('account-main-menu').classList.remove('open');
+          openLinkModal();
+      };
+      
+      switcher.appendChild(linkBtn);
+      
+      console.log(`[AccountSwitcher] Updated with ${webLinkState.accounts.length} accounts.`);
+  } else {
+      switcher.style.display = 'none';
+  }
+}
+
+async function checkAdminAccess(silent = false) {
+   if (!webLinkState.linked || !webLinkState.uuid) return false;
+   
+   const accid = getAccid();
+   if (!accid) return false;
+   
+   try {
+        const nonce = crypto.randomUUID();
+        const hashedAccid = await sha256(accid);
+        const payload = {
+            uuid: webLinkState.uuid,
+            accid: hashedAccid,
+            nonce: nonce
+        };
+        const body = JSON.stringify(payload);
+        
+        const signatureHash = await hmacSha256(HMAC_SECRET, body);
+        const signature = "sha256=" + signatureHash;
+
+        const response = await fetch(`${WEBLINK_API_URL}/check-admin`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-Signature': signature
+            },
+            body: body
+        });
+       
+       if (response.ok) {
+           const data = await response.json();
+           if (data.success && data.admin) {
+               if (!silent) alert(`Admin Access Granted!\nWelcome, ${data.username || webLinkState.username}`);
+               return true;
+           } else {
+               if (!silent) alert("Access Denied: You do not have permission to access the Admin Menu.");
+               return false;
+           }
+       } else {
+           if (!silent) {
+                const errData = await response.json();
+                alert(`Error: ${errData.message || 'Failed to check permissions'}`);
+           }
+           return false;
+       }
+   } catch (err) {
+        if (!silent) {
+            console.error("Admin check failed:", err);
+            alert("Failed to connect to server for admin check.");
+        } else {
+            console.warn("Admin check failed (silent):", err);
+        }
+        return false;
+    }
+ }
+
+// FIX 1: check-online now only checks the current active account, not all accounts.
+// The server returns 403 for accounts not owned by the requesting accid.
+// Online status for non-active accounts is set to false (unknown) rather than crashing.
+async function updateAllAccountsOnlineStatus() {
+  if (!webLinkState.linked || !webLinkState.accounts || webLinkState.accounts.length === 0) return;
+  
+  const accid = getAccid();
+  if (!accid) return;
+  
+  try {
+      const hashedAccid = await sha256(accid);
+      
+      // Only check the currently active account to avoid 403 on others
+      const currentAcc = webLinkState.accounts.find(a => a.uuid === webLinkState.uuid);
+      if (currentAcc) {
+          try {
+              const response = await fetch(`${WEBLINK_API_URL}/check-online`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ uuid: currentAcc.uuid, accid: hashedAccid })
+              });
+              
+              if (response.ok) {
+                  const data = await response.json();
+                  currentAcc.online = !!(data.success && data.online);
+              } else {
+                  // 403 or other error — don't crash, just mark as unknown (offline)
+                  console.warn(`[OnlineCheck] check-online returned ${response.status} for ${currentAcc.uuid} — treating as offline.`);
+                  currentAcc.online = false;
+              }
+              
+              webLinkState.online = currentAcc.online;
+          } catch (e) {
+              console.warn(`[OnlineCheck] Network error checking ${currentAcc.uuid}:`, e);
+              currentAcc.online = false;
+              webLinkState.online = false;
+          }
+      }
+      
+      // Mark all other accounts as unknown (no dot change — leave as-is or false)
+      webLinkState.accounts.forEach(acc => {
+          if (acc.uuid !== webLinkState.uuid) {
+              // Don't overwrite if already set; just don't attempt a request that will 403
+              if (acc.online === undefined) acc.online = false;
+          }
+      });
+      
+      updateAccountUI();
+      try { autoLoadStoreIfEligible(); } catch (e) {}
+      try { autoLoadInventoryIfEligible(); } catch (e) {}
+      
+  } catch (err) {
+      console.error("Error updating account statuses:", err);
+  }
+}
+
+function switchAccount(uuid) {
+  const account = webLinkState.accounts.find(a => a.uuid === uuid);
+  if (account) {
+      webLinkState.uuid = account.uuid;
+      webLinkState.username = account.username;
+      
+      // Persist the active account selection
+      const accid = getAccid();
+      if (accid) {
+          localStorage.setItem(`weblink_active_${accid}`, uuid);
+      }
+      
+      updateAccountUI();
+      updateAllAccountsOnlineStatus();
+      
+      if (document.getElementById('modal').classList.contains('open')) {
+          checkPlayerOnline();
+      }
+  }
+}
+
+// --- Account Info Resolution (Floodgate & Public APIs) ---
+
+function isFloodgateId(uuid) {
+    return uuid.startsWith('00000000-0000-0000-');
+}
+
+async function resolveAccountInfo(uuid, currentUsername) {
+    if (isFloodgateId(uuid)) {
+        try {
+            const clean = uuid.replace(/-/g, '');
+            const xuidHex = clean.substring(16);
+            const xuid = BigInt('0x' + xuidHex).toString();
+            
+            const res = await fetch(`https://api.geysermc.org/v2/xbox/gamertag/${xuid}`);
+            if (res.ok) {
+                const data = await res.json();
+                let name = data.gamertag;
+                if (!name.startsWith('.')) name = '.' + name;
+                return { username: name, isFloodgate: true };
+            }
+        } catch (e) {
+            console.warn('[Resolve] Failed to fetch Floodgate info:', e);
+            if (currentUsername && !currentUsername.startsWith('.')) {
+                return { username: '.' + currentUsername, isFloodgate: true };
+            }
+        }
+    } else {
+        try {
+            const res = await fetch(`https://api.ashcon.app/mojang/v2/user/${uuid}`);
+            if (res.ok) {
+                const data = await res.json();
+                return { username: data.username, isFloodgate: false };
+            }
+        } catch (e) {
+            console.warn('[Resolve] Failed to fetch Java info:', e);
+        }
+    }
+    
+    return null;
+}
+
+function openLinkModal() {
+  document.getElementById('account-dropdown').classList.remove('open');
+  document.getElementById('link-modal').classList.add('open');
+  document.getElementById('link-msg').style.display = 'none';
+  document.getElementById('link-code').value = '';
+}
+
+function closeLinkModal() {
+  document.getElementById('link-modal').classList.remove('open');
+}
+
+function closeLinkModalOnBackdrop(event) {
+  if (event.target.id === 'link-modal') {
+    closeLinkModal();
+  }
+}
+
+async function submitLinkCode() {
+  const code = document.getElementById('link-code').value.trim();
+  const accid = getAccid();
+  const msgEl = document.getElementById('link-msg');
+
+  if (!code) {
+    msgEl.textContent = "Please enter a code.";
+    msgEl.style.display = 'block';
+    return;
+  }
+  if (!accid) {
+    msgEl.textContent = "Error: Could not retrieve Account ID. Check console for details. Please try logging out and back in.";
+    msgEl.style.display = 'block';
+    console.error("Link Account Failed: Missing ACCID. Cookies:", document.cookie);
+    return;
+  }
+
+  msgEl.textContent = "Verifying...";
+  msgEl.style.display = 'block';
+  msgEl.style.color = 'var(--accent)';
+
+  try {
+    const response = await fetch(`${WEBLINK_API_URL}/verify-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code, accid: accid })
+    });
+    
+    if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.message || "Invalid or expired code");
+    }
+
+    const data = await response.json();
+
+    if (data.success) {
+      msgEl.style.color = '#43b581';
+      msgEl.textContent = "Account linked successfully!";
+      setTimeout(() => {
+        closeLinkModal();
+        checkWebLinkStatus();
+      }, 1500);
+    } else {
+      throw new Error(data.message || "Invalid code");
+    }
+  } catch (err) {
+    msgEl.style.color = '#ed4245';
+    msgEl.textContent = err.message || "Failed to link account.";
+  }
+}
+
+// FIX 2: resolveAccountInfo is now awaited BEFORE updateAccountUI() is called,
+// so the resolved username is guaranteed to be in state when the UI renders.
+// Previously the resolve promises could finish after the UI had already painted
+// the raw UUID as the display name.
+async function checkWebLinkStatus() {
+  const accid = getAccid();
+  const linkBtn = document.getElementById('btn-link-account');
+  
+  if (!accid) {
+    if (linkBtn) linkBtn.style.display = 'none';
+    webLinkState.linked = false;
+    return;
+  }
+
+  try {
+    const hashedAccid = await sha256(accid);
+    const requestBody = JSON.stringify({ accid: hashedAccid });
+    console.log("[WebLink] check-link request:", requestBody);
+
+    const response = await fetch(`${WEBLINK_API_URL}/check-link`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: requestBody
+    });
+    
+    if (!response.ok) throw new Error("API Error");
+    
+    const data = await response.json();
+    console.log("[WebLink] check-link response:", data);
+    
+    if (data.success && data.linked) {
+      webLinkState.linked = true;
+      webLinkState.uuid = data.uuid;
+      webLinkState.username = data.username;
+      
+      const storageKey = `weblink_accounts_${accid}`;
+      let localAccounts = [];
+      try {
+          localAccounts = JSON.parse(localStorage.getItem(storageKey) || '[]');
+          if (!Array.isArray(localAccounts)) localAccounts = [];
+      } catch(e) { localAccounts = []; }
+
+      if (data.accounts && Array.isArray(data.accounts)) {
+        webLinkState.accounts = data.accounts;
+        
+        // Clean localStorage - remove accounts not returned by server
+        const serverUuids = new Set(data.accounts.map(a => a.uuid));
+        let cleanedLocalAccounts = localAccounts.filter(a => serverUuids.has(a.uuid));
+        
+        // Add any accounts from server that aren't in local storage yet
+        data.accounts.forEach(serverAcc => {
+            if (!cleanedLocalAccounts.find(a => a.uuid === serverAcc.uuid)) {
+                cleanedLocalAccounts.push({ uuid: serverAcc.uuid, username: serverAcc.username });
+            }
+        });
+        
+        localStorage.setItem(storageKey, JSON.stringify(cleanedLocalAccounts));
+        localAccounts = cleanedLocalAccounts;
+        
+      } else {
+          console.warn('[WebLink] Server did not return accounts list, merging with local storage.');
+          const existingIdx = localAccounts.findIndex(a => a.uuid === data.uuid);
+          if (existingIdx > -1) {
+              localAccounts[existingIdx].username = data.username;
+          } else {
+              localAccounts.push({ uuid: data.uuid, username: data.username });
+          }
+          webLinkState.accounts = localAccounts;
+      }
+      
+      const finalMap = new Map();
+      localAccounts.forEach(a => finalMap.set(a.uuid, a));
+      webLinkState.accounts.forEach(a => finalMap.set(a.uuid, a));
+      
+      const uniqueAccounts = Array.from(finalMap.values());
+      localStorage.setItem(storageKey, JSON.stringify(uniqueAccounts.map(a => ({uuid: a.uuid, username: a.username}))));
+      webLinkState.accounts = uniqueAccounts;
+
+      // AWAIT all resolves before touching the UI — this ensures names are ready
+      await Promise.all(webLinkState.accounts.map(async (acc) => {
+          const resolved = await resolveAccountInfo(acc.uuid, acc.username);
+          if (resolved) {
+              acc.username = resolved.username;
+              if (acc.uuid === webLinkState.uuid) {
+                  webLinkState.username = resolved.username;
+              }
+          }
+      }));
+
+      // Restore the previously selected account (if valid)
+      const activeUuid = localStorage.getItem(`weblink_active_${accid}`);
+      if (activeUuid && webLinkState.accounts.find(a => a.uuid === activeUuid)) {
+          webLinkState.uuid = activeUuid;
+          const activeAcc = webLinkState.accounts.find(a => a.uuid === activeUuid);
+          if (activeAcc) {
+              webLinkState.username = activeAcc.username;
+          }
+      }
+
+      // Now render — all usernames are resolved
+      updateAccountUI();
+      
+      // Update online status (only for current account now)
+      updateAllAccountsOnlineStatus();
+      
+      if (linkBtn) linkBtn.style.display = 'none';
+    } else {
+      webLinkState.linked = false;
+      updateAccountUI();
+      if (linkBtn) linkBtn.style.display = 'flex';
+    }
+  } catch (err) {
+    console.log("WebLink API check failed:", err);
+    webLinkState.linked = false;
+    updateAccountUI();
+    if (linkBtn) linkBtn.style.display = 'flex';
+  }
+}
+
+async function checkPlayerOnline() {
+  if (!webLinkState.linked || !webLinkState.uuid) return;
+  
+  const accid = getAccid();
+  if (!accid) return;
+
+  try {
+    const hashedAccid = await sha256(accid);
+    const response = await fetch(`${WEBLINK_API_URL}/check-online`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid, accid: hashedAccid })
+    });
+    
+    if (!response.ok) throw new Error("API Error");
+
+    const data = await response.json();
+    
+    webLinkState.online = !!(data.success && data.online);
+  } catch (err) {
+    console.error(err);
+    webLinkState.online = false;
+  }
+}
+
+function switchSocialTab(tab) {
+  const partyTab = document.getElementById('tab-party');
+  const friendsTab = document.getElementById('tab-friends');
+  const partyBtn = document.getElementById('tab-btn-party');
+  const friendsBtn = document.getElementById('tab-btn-friends');
+  
+  if (tab === 'party') {
+    partyTab.style.display = 'block';
+    friendsTab.style.display = 'none';
+    partyBtn.style.color = 'white';
+    partyBtn.style.borderBottomColor = 'var(--accent)';
+    friendsBtn.style.color = 'var(--muted)';
+    friendsBtn.style.borderBottomColor = 'transparent';
+    refreshPartyList();
+  } else {
+    partyTab.style.display = 'none';
+    friendsTab.style.display = 'block';
+    partyBtn.style.color = 'var(--muted)';
+    partyBtn.style.borderBottomColor = 'transparent';
+    friendsBtn.style.color = 'white';
+    friendsBtn.style.borderBottomColor = 'var(--accent)';
+    refreshFriendsList();
+  }
+}
+
+async function refreshFriendsList() {
+    const listContainer = document.getElementById('friends-list');
+    const content = document.getElementById('friends-list-content');
+    
+    // Show container immediately to avoid layout shift, but with loading state if needed
+    listContainer.style.display = 'block';
+    content.innerHTML = '<div style="color:#888; font-style:italic;">Loading friends...</div>';
+    
+    const friends = await fetchPlayerFriends();
+    content.innerHTML = '';
+    
+    if (!friends || friends.length === 0) {
+        content.innerHTML = '<div style="color:#888; font-style:italic;">No friends found.</div>';
+        return;
+    }
+    
+    friends.forEach(friend => {
+        // Assume friend has { name: string, status: string, uuid: string }
+        // Adjust properties based on actual API response
+        let name = "Unknown";
+        let isOnline = false;
+        let uuid = null;
+
+        if (typeof friend === 'string') {
+            name = friend;
+            // Cannot determine online status or uuid easily if just string
+        } else {
+            name = friend.name || friend.username || "Unknown";
+            isOnline = friend.online || friend.status === 'online';
+            uuid = friend.uuid;
+        }
+        
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'space-between';
+        div.style.padding = '8px';
+        div.style.background = '#1a1a1a';
+        div.style.borderRadius = '4px';
+        
+        div.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img src="https://api.mineatar.io/face/${uuid || 'steve'}" style="width:24px; height:24px; border-radius:4px;">
+                <span style="color:white;">${name}</span>
+            </div>
+            <span style="font-size:0.8rem; color:${isOnline ? '#43b581' : '#747f8d'};">
+                ${isOnline ? '● Online' : '○ Offline'}
+            </span>
+        `;
+        content.appendChild(div);
+    });
+}
+
+async function refreshPartyList() {
+    const listContainer = document.getElementById('party-list');
+    const content = document.getElementById('party-list-content');
+    
+    listContainer.style.display = 'block';
+    content.innerHTML = '<div style="color:#888; font-style:italic;">Loading party info...</div>';
+    
+    const party = await fetchPlayerParty();
+    content.innerHTML = '';
+    
+    if (!party || !party.members || party.members.length === 0) {
+        content.innerHTML = '<div style="color:#888; font-style:italic;">You are not in a party.</div>';
+        return;
+    }
+    
+    // Process members (assuming party.members is array of names or objects)
+    // If just strings, we might not have UUIDs for avatars, but we'll try our best
+    
+    const members = party.members; // Expecting array
+    
+    members.forEach(member => {
+        // member might be string or object
+        const name = typeof member === 'string' ? member : (member.name || member.username);
+        const isLeader = (name === party.leader);
+        
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'space-between';
+        div.style.padding = '8px';
+        div.style.background = '#1a1a1a';
+        div.style.borderRadius = '4px';
+        
+        div.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="color:white;">${name}</span>
+                ${isLeader ? '<span style="font-size:0.7rem; background:var(--accent); color:white; padding:2px 4px; border-radius:3px;">LEADER</span>' : ''}
+            </div>
+        `;
+        content.appendChild(div);
+    });
+}
+
+async function executeFriendCommand(type) {
+  if (!webLinkState.online) {
+    alert("You must be online on the server to use this.");
+    return;
+  }
+  
+  const accid = getAccid();
+  if (!accid) return;
+  
+  let cmd = "";
+  let btn = null;
+  
+  if (type === 'add') {
+      const player = document.getElementById('friend-add-name').value.trim();
+      if (!player) { alert("Please enter a player name"); return; }
+      cmd = `friend add ${player}`;
+      btn = document.querySelector('button[onclick="executeFriendCommand(\'add\')"]');
+  } else if (type === 'remove') {
+      const player = document.getElementById('friend-remove-name').value.trim();
+      if (!player) { alert("Please enter a player name"); return; }
+      cmd = `friend remove ${player}`;
+      btn = document.querySelector('button[onclick="executeFriendCommand(\'remove\')"]');
+  } else if (type === 'list') {
+      cmd = "friend list";
+      btn = document.querySelector('button[onclick="executeFriendCommand(\'list\')"]');
+  } else if (type === 'requests') {
+      cmd = "friend requests";
+      btn = document.querySelector('button[onclick="executeFriendCommand(\'requests\')"]');
+  }
+  
+  if (!cmd || !btn) return;
+  
+  const originalText = btn.textContent;
+  btn.textContent = "...";
+  btn.disabled = true;
+
+  try {
+    const tokenRes = await fetch(`${WEBLINK_API_URL}/get-command-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid })
+    });
+    const tokenData = await tokenRes.json();
+    
+    if (!tokenData.success || !tokenData.token) {
+      throw new Error("Failed to get command token");
+    }
+    
+    const hashedAccid = await sha256(accid);
+    const execRes = await fetch(`${WEBLINK_API_URL}/execute-command`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-Command-Token': tokenData.token
+      },
+      body: JSON.stringify({ 
+        uuid: webLinkState.uuid, 
+        accid: hashedAccid,
+        command: cmd
+      })
+    });
+    
+    if (execRes.ok) {
+      btn.textContent = "✓";
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        if (type === 'add') document.getElementById('friend-add-name').value = '';
+        if (type === 'remove') document.getElementById('friend-remove-name').value = '';
+      }, 1500);
+    } else {
+      const errData = await execRes.json();
+      throw new Error(errData.message || "Command failed");
+    }
+  } catch (err) {
+    alert(`Error: ${err.message}`);
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+async function executePartyCommand(type) {
+  if (!webLinkState.online) {
+    alert("You must be online on the server to use this.");
+    return;
+  }
+  
+  const accid = getAccid();
+  if (!accid) return;
+  
+  let cmd = "";
+  let btn = null;
+  
+  if (type === 'create') {
+      cmd = "party create";
+      btn = document.querySelector('button[onclick="executePartyCommand(\'create\')"]');
+  } else if (type === 'join') {
+      const code = document.getElementById('party-join-code').value.trim();
+      if (!code) { alert("Please enter a code"); return; }
+      cmd = `party join ${code}`;
+      btn = document.querySelector('button[onclick="executePartyCommand(\'join\')"]');
+  } else if (type === 'leave') {
+      cmd = "party leave";
+      btn = document.querySelector('button[onclick="executePartyCommand(\'leave\')"]');
+  } else if (type === 'list') {
+      cmd = "party list";
+      btn = document.querySelector('button[onclick="executePartyCommand(\'list\')"]');
+  } else if (type === 'kick') {
+      const player = document.getElementById('party-kick-player').value.trim();
+      if (!player) { alert("Please enter a player name"); return; }
+      cmd = `party kick ${player}`;
+      btn = document.querySelector('button[onclick="executePartyCommand(\'kick\')"]');
+  }
+  
+  if (!cmd || !btn) return;
+  
+  const originalText = btn.textContent;
+  btn.textContent = "...";
+  btn.disabled = true;
+
+  try {
+    const tokenRes = await fetch(`${WEBLINK_API_URL}/get-command-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid })
+    });
+    const tokenData = await tokenRes.json();
+    
+    if (!tokenData.success || !tokenData.token) {
+      throw new Error("Failed to get command token");
+    }
+    
+    const hashedAccid = await sha256(accid);
+    const execRes = await fetch(`${WEBLINK_API_URL}/execute-command`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-Command-Token': tokenData.token
+      },
+      body: JSON.stringify({ 
+        uuid: webLinkState.uuid, 
+        accid: hashedAccid,
+        command: cmd
+      })
+    });
+    
+    if (execRes.ok) {
+      btn.textContent = "✓";
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        if (type === 'join') document.getElementById('party-join-code').value = '';
+        if (type === 'kick') document.getElementById('party-kick-player').value = '';
+      }, 1500);
+    } else {
+      const errData = await execRes.json();
+      throw new Error(errData.message || "Command failed");
+    }
+  } catch (err) {
+    alert(`Error: ${err.message}`);
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+async function fetchPlayerFriends() {
+    if (!webLinkState.linked || !webLinkState.uuid) return null;
+    
+    const accid = getAccid();
+    if (!accid) return null;
+    
+    try {
+        const hashedAccid = await sha256(accid);
+        const response = await fetch(`${WEBLINK_API_URL}/get-friends`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                uuid: webLinkState.uuid, 
+                accid: hashedAccid 
+            })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data.friends; // Array of friend objects
+        }
+    } catch (err) {
+        console.error("Failed to fetch friends:", err);
+    }
+    return null;
+}
+
+async function fetchPlayerParty() {
+    if (!webLinkState.linked || !webLinkState.uuid) return null;
+    
+    const accid = getAccid();
+    if (!accid) return null;
+    
+    try {
+        const hashedAccid = await sha256(accid);
+        const response = await fetch(`${WEBLINK_API_URL}/get-party`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                uuid: webLinkState.uuid, 
+                accid: hashedAccid 
+            })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data; // Party info object
+        }
+    } catch (err) {
+        console.error("Failed to fetch party:", err);
+    }
+    return null;
+}
+
+// GitHub Deployment Detection
+let lastCommitSha = null;
+
+async function checkForUpdates() {
+    try {
+        const res = await fetch('https://api.github.com/repos/FragMC/fragmc.github.io/commits/main');
+        if (!res.ok) return;
+        const data = await res.json();
+        const currentSha = data.sha;
+
+        if (lastCommitSha && lastCommitSha !== currentSha) {
+            Toastify({
+                text: "🚀 New update deployed! Click to refresh.",
+                duration: -1, // Persistent
+                gravity: "top", 
+                position: "right", 
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
+                },
+                onClick: function(){
+                    window.location.reload();
+                }
+            }).showToast();
+        }
+        lastCommitSha = currentSha;
+    } catch (e) {
+        console.error("Failed to check for updates:", e);
+    }
+}
+
+// Initial check
+checkForUpdates();
+// Poll every 60 seconds
+setInterval(checkForUpdates, 60000);
+
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    AuthMark.init();
+    checkWebLinkStatus();
+    updateStoreLoadButton();
+    switchShopTab('store');
+  });
+</script>
+<script>
+function prettyName(s) {
+  if (!s) return '';
+  const t = String(s).replace(/[_-]+/g, ' ').trim();
+  return t.split(' ').filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+
+const COLOR_TAGS = {
+  black: '#000000',
+  dark_blue: '#0000AA',
+  dark_green: '#00AA00',
+  dark_aqua: '#00AAAA',
+  dark_red: '#AA0000',
+  dark_purple: '#AA00AA',
+  gold: '#FFAA00',
+  gray: '#AAAAAA',
+  dark_gray: '#555555',
+  blue: '#5555FF',
+  green: '#55FF55',
+  aqua: '#55FFFF',
+  red: '#FF5555',
+  light_purple: '#FF55FF',
+  yellow: '#FFFF55',
+  white: '#FFFFFF'
+};
+let frostStoreCache = new Map();
+let frostOwnedIds = new Set();
+
+function formatWithColorTags(raw) {
+  if (!raw) return '';
+  let s = String(raw);
+  // Protect allowed color tags with placeholders
+  Object.keys(COLOR_TAGS).forEach(tag => {
+    const openRe = new RegExp(`<${tag}>`, 'gi');
+    const closeRe = new RegExp(`</${tag}>`, 'gi');
+    s = s.replace(openRe, `[[TAG:${tag}]]`).replace(closeRe, `[[/TAG:${tag}]]`);
+  });
+  // Protect hex color tags like <#FFAA00> ... </#FFAA00>
+  s = s.replace(/<\#([0-9A-Fa-f]{6})>/g, '[[HEX:$1]]');
+  s = s.replace(/<\/\#([0-9A-Fa-f]{6})>/g, '[[/HEX:$1]]');
+  // Replace underscores/hyphens with spaces (outside of placeholders)
+  s = s.replace(/[_-]+/g, ' ');
+  // Title case words
+  s = s.replace(/\s+/g, ' ').trim().split(' ').map(w => w ? w.charAt(0).toUpperCase() + w.slice(1) : '').join(' ');
+  // Escape HTML
+  s = s.replace(/&/g, '&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Restore placeholders as spans
+  Object.entries(COLOR_TAGS).forEach(([tag, color]) => {
+    const open = new RegExp(`\\[\\[TAG:${tag}\\]\\]`, 'g');
+    const close = new RegExp(`\\[\\[\\/TAG:${tag}\\]\\]`, 'g');
+    s = s.replace(open, `<span style="color:${color}">`).replace(close, `</span>`);
+  });
+  // Restore hex placeholders
+  s = s.replace(/\[\[HEX:([0-9A-Fa-f]{6})\]\]/g, (_m, hex) => `<span style="color:#${hex.toUpperCase()}">`);
+  s = s.replace(/\[\[\/HEX:([0-9A-Fa-f]{6})\]\]/g, '</span>');
+  // Finally remove stray square brackets that are part of item ids like [foo]
+  s = s.replace(/[\[\]]/g, '');
+  return s;
+}
+
+async function loadFrost() {
+  const status = document.getElementById('frost-status');
+  const ownedEl = document.getElementById('frost-owned');
+  const equippedEl = document.getElementById('frost-equipped');
+  ownedEl.innerHTML = '';
+  equippedEl.innerHTML = '';
+  if (!webLinkState.linked || !webLinkState.uuid) {
+    status.textContent = 'Link your Minecraft account to view cosmetics.';
+    return;
+  }
+  const accid = getAccid();
+  if (!accid) {
+    status.textContent = 'Login required.';
+    return;
+  }
+  status.textContent = 'Loading...';
+  try {
+    const hashedAccid = await sha256(accid);
+    const ownedReq = fetch(`${WEBLINK_API_URL}/frost/get-owned`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid, accid: hashedAccid })
+    });
+    const equippedReq = fetch(`${WEBLINK_API_URL}/frost/get-equipped`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid, accid: hashedAccid })
+    });
+    const [ownedRes, equippedRes] = await Promise.all([ownedReq, equippedReq]);
+    const ownedData = ownedRes.ok ? await ownedRes.json() : { success:false };
+    const equippedData = equippedRes.ok ? await equippedRes.json() : { success:false };
+    const owned = ownedData.success && Array.isArray(ownedData.owned) ? ownedData.owned : [];
+    const equipped = equippedData.success && equippedData.equipped ? equippedData.equipped : {};
+    if (owned.length === 0) {
+      const d = document.createElement('div');
+      d.style.color = 'var(--muted)';
+      d.textContent = 'None';
+      ownedEl.appendChild(d);
+    } else {
+      owned.forEach(id => {
+        const row = document.createElement('div');
+        row.className = 'frost-row';
+        const name = document.createElement('div');
+        name.innerHTML = formatWithColorTags(id);
+        const buyBtn = document.createElement('button');
+        buyBtn.className = 'btn secondary';
+        buyBtn.style.padding = '6px 10px';
+        buyBtn.style.fontSize = '0.85rem';
+        buyBtn.disabled = true;
+        buyBtn.textContent = 'Owned';
+        row.appendChild(name);
+        row.appendChild(buyBtn);
+        ownedEl.appendChild(row);
+      });
+    }
+    const keys = Object.keys(equipped);
+    if (keys.length === 0) {
+      const d2 = document.createElement('div');
+      d2.style.color = 'var(--muted)';
+      d2.textContent = 'None';
+      equippedEl.appendChild(d2);
+    } else {
+      keys.forEach(slot => {
+        const row = document.createElement('div');
+        row.className = 'frost-row';
+        const keyEl = document.createElement('div');
+        keyEl.style.color = 'var(--muted)';
+        const parts = String(slot).split(':').map(prettyName);
+        keyEl.textContent = parts.join(' – ');
+        const valEl = document.createElement('div');
+        valEl.innerHTML = formatWithColorTags(equipped[slot]);
+        row.appendChild(keyEl);
+        row.appendChild(valEl);
+        equippedEl.appendChild(row);
+      });
+    }
+    status.textContent = 'Loaded.';
+  } catch (e) {
+    status.textContent = 'Failed to load.';
+  }
+}
+
+async function purchaseFrostFromStore(id, btn) {
+  const msg = document.getElementById('frost-store-status');
+  await doFrostPurchase(id, btn, msg, false);
+}
+
+async function doFrostPurchase(id, btn, msgEl, clearInputOnSuccess) {
+  if (msgEl) msgEl.textContent = '';
+  if (!webLinkState.linked || !webLinkState.uuid) {
+    if (msgEl) msgEl.textContent = 'Link your Minecraft account first.';
+    return;
+  }
+  const cosmeticId = (id || '').trim();
+  if (!cosmeticId) {
+    if (msgEl) msgEl.textContent = 'Enter a cosmeticId.';
+    return;
+  }
+  const accid = getAccid();
+  if (!accid) {
+    if (msgEl) msgEl.textContent = 'Login required.';
+    return;
+  }
+  if (btn) {
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+  }
+  try {
+    const hashedAccid = await sha256(accid);
+    const res = await fetch(`${WEBLINK_API_URL}/frost/purchase-cosmetic`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uuid: webLinkState.uuid, accid: hashedAccid, cosmeticId })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data && data.success) {
+      Toastify({ text: 'Purchase successful', gravity: 'top', position: 'right', duration: 3000 }).showToast();
+      await loadFrost();
+      const storeStatus = document.getElementById('frost-store-status');
+      if (storeStatus && document.getElementById('frost-store')?.children.length) {
+        await loadFrostStore();
+      }
+    } else {
+      if (msgEl) msgEl.textContent = (data && data.message) ? data.message : 'Purchase failed.';
+    }
+  } catch (e) {
+    if (msgEl) msgEl.textContent = 'Purchase error.';
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  }
+}
+
+async function loadFrostStore() {
+  const status = document.getElementById('frost-store-status');
+  const listEl = document.getElementById('frost-store');
+  const loadBtn = document.getElementById('frost-store-load-btn');
+  if (!status || !listEl) return;
+  listEl.innerHTML = '';
+  status.textContent = '';
+  if (loadBtn) {
+    loadBtn.disabled = true;
+    updateStoreLoadButton(true);
+  }
+  if (!webLinkState.linked || !webLinkState.uuid) {
+    status.textContent = 'Link your Minecraft account to view the store.';
+    if (loadBtn) {
+      loadBtn.disabled = false;
+      updateStoreLoadButton();
+    }
+    return;
+  }
+  const accid = getAccid();
+  if (!accid) {
+    status.textContent = 'Login required.';
+    if (loadBtn) {
+      loadBtn.disabled = false;
+      updateStoreLoadButton();
+    }
+    return;
+  }
+  const categorySelect = document.getElementById('frost-category');
+  const categoryId = categorySelect ? categorySelect.value : '';
+  const searchInput = document.getElementById('frost-store-search');
+  const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+  const hideOwned = !!(document.getElementById('frost-hide-owned') && document.getElementById('frost-hide-owned').checked);
+  const sortMode = document.getElementById('frost-sort') ? document.getElementById('frost-sort').value : 'name';
+  status.textContent = 'Loading store...';
+  try {
+    const hashedAccid = await sha256(accid);
+    const body = { uuid: webLinkState.uuid, accid: hashedAccid };
+    if (categoryId) body.categoryId = categoryId;
+    const res = await fetch(`${WEBLINK_API_URL}/frost/get-store`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data || !data.success) {
+      status.textContent = (data && data.message) ? data.message : 'Failed to load store.';
+      return;
+    }
+    let items = Array.isArray(data.store) ? data.store : [];
+    if (items.length === 0) {
+      status.textContent = 'No cosmetics available.';
+      if (loadBtn) {
+        loadBtn.disabled = false;
+        updateStoreLoadButton();
+      }
+      return;
+    }
+    let ownedIds = new Set();
+    try {
+      const ownedRes = await fetch(`${WEBLINK_API_URL}/frost/get-owned`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uuid: webLinkState.uuid, accid: hashedAccid })
+      });
+      const ownedData = ownedRes.ok ? await ownedRes.json() : { success:false };
+      const owned = ownedData.success && Array.isArray(ownedData.owned) ? ownedData.owned : [];
+      ownedIds = new Set(owned);
+      frostOwnedIds = new Set(owned);
+    } catch (e) {}
+    if (hideOwned) {
+      items = items.filter(it => !(it.id && ownedIds.has(it.id)));
+    }
+    if (searchTerm) {
+      items = items.filter(it => {
+        const name = prettyName(it.displayName || it.id || '');
+        const desc = String(it.description || '');
+        return name.toLowerCase().includes(searchTerm) || desc.toLowerCase().includes(searchTerm);
+      });
+    }
+    if (sortMode === 'price') {
+      items.sort((a, b) => {
+        const pa = typeof a.price === 'number' ? a.price : Number.MAX_SAFE_INTEGER;
+        const pb = typeof b.price === 'number' ? b.price : Number.MAX_SAFE_INTEGER;
+        return pa - pb;
+      });
+    } else {
+      items.sort((a, b) => prettyName(a.displayName || a.id || '').localeCompare(prettyName(b.displayName || b.id || '')));
+    }
+    status.textContent = '';
+    items.forEach(item => {
+      frostStoreCache.set(item.id, item);
+      const card = document.createElement('div');
+      card.className = 'frost-item';
+      card.dataset.id = item.id || '';
+      const header = document.createElement('div');
+      header.className = 'frost-item-header';
+      const title = document.createElement('div');
+      title.className = 'frost-item-title';
+      title.innerHTML = formatWithColorTags(item.displayName || item.id || 'Unknown cosmetic');
+      const meta = document.createElement('div');
+      meta.className = 'frost-item-meta';
+    if (item.categoryId) {
+      const cat = document.createElement('span');
+      const key = String(item.categoryId).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      cat.className = `chip chip-cat-${key}`;
+      cat.textContent = prettyName(item.categoryId);
+      meta.appendChild(cat);
+    }
+      if (typeof item.price === 'number') {
+        const price = document.createElement('span');
+        price.className = 'chip';
+        price.textContent = `◆ ${item.price}`;
+        meta.appendChild(price);
+      }
+      const btn = document.createElement('button');
+      const isOwned = item.id && ownedIds.has(item.id);
+      btn.className = 'btn';
+      btn.style.padding = '6px 10px';
+      btn.style.fontSize = '0.85rem';
+      if (isOwned) {
+        btn.textContent = 'Owned';
+        btn.disabled = true;
+      } else {
+        btn.textContent = 'Buy';
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          purchaseFrostFromStore(item.id, btn);
+        });
+      }
+      meta.appendChild(btn);
+      header.appendChild(title);
+      header.appendChild(meta);
+      card.appendChild(header);
+      if (item.description) {
+        const desc = document.createElement('div');
+        desc.style.fontSize = '0.85rem';
+        desc.style.color = 'var(--muted)';
+        desc.innerHTML = formatWithColorTags(item.description);
+        card.appendChild(desc);
+      }
+      card.addEventListener('click', () => openFrostItemModal(item.id));
+      listEl.appendChild(card);
+    });
+    updateStoreLoadButton();
+  } catch (e) {
+    status.textContent = 'Failed to load store.';
+  } finally {
+    if (loadBtn) {
+      loadBtn.disabled = false;
+      updateStoreLoadButton();
+    }
+  }
+}
+
+document.addEventListener('input', (e) => {
+  if (e.target && (e.target.id === 'frost-store-search')) {
+    if (document.getElementById('frost-store')?.children.length) {
+      loadFrostStore();
+    }
+  }
+});
+document.addEventListener('change', (e) => {
+  if (!e.target) return;
+  if (e.target.id === 'frost-category' || e.target.id === 'frost-hide-owned' || e.target.id === 'frost-sort') {
+    if (document.getElementById('frost-store')?.children.length) {
+      loadFrostStore();
+    }
+  }
+});
+
+function isStoreLoaded() {
+  const listEl = document.getElementById('frost-store');
+  return !!(listEl && listEl.children && listEl.children.length > 0);
+}
+
+function updateStoreLoadButton(isLoading = false) {
+  const btn = document.getElementById('frost-store-load-btn');
+  if (!btn) return;
+  if (isLoading) {
+    btn.textContent = 'Loading...';
+    return;
+  }
+  btn.textContent = isStoreLoaded() ? 'Reload Store' : 'Load Store';
+}
+
+function autoLoadStoreIfEligible() {
+  const storeTab = document.getElementById('frost-store-tab');
+  const isStoreVisible = storeTab && storeTab.style.display !== 'none';
+  if (isStoreVisible && !isStoreLoaded() && webLinkState && webLinkState.linked && webLinkState.online) {
+    loadFrostStore();
+  }
+}
+
+function autoLoadInventoryIfEligible() {
+  const invTab = document.getElementById('frost-inv-tab');
+  const isInvVisible = invTab && invTab.style.display !== 'none';
+  if (isInvVisible && webLinkState && webLinkState.linked && webLinkState.online) {
+    const hasContent = (document.getElementById('frost-owned')?.children.length || 0) + (document.getElementById('frost-equipped')?.children.length || 0) > 0;
+    if (!hasContent) loadFrost();
+  }
+}
+
+function switchShopTab(tab) {
+  const storeContent = document.getElementById('frost-store-tab');
+  const invContent = document.getElementById('frost-inv-tab');
+  if (storeContent && invContent) {
+    const showStore = tab === 'store';
+    storeContent.style.display = showStore ? 'block' : 'none';
+    invContent.style.display = showStore ? 'none' : 'block';
+  }
+  const navShop = document.getElementById('nav-shop');
+  const navInv = document.getElementById('nav-inventory');
+  if (navShop && navInv) {
+    const activeStyles = (el, active) => {
+      el.style.color = active ? 'var(--text)' : 'var(--muted)';
+      el.style.fontWeight = active ? '600' : '500';
+    };
+    activeStyles(navShop, tab === 'store');
+    activeStyles(navInv, tab === 'inv');
+  }
+  if (tab === 'store') {
+    updateStoreLoadButton();
+    autoLoadStoreIfEligible();
+  } else {
+    autoLoadInventoryIfEligible();
+  }
+}
+
+function openFrostItemModal(id) {
+  const modal = document.getElementById('frost-item-modal');
+  const titleEl = document.getElementById('frost-item-title');
+  const catEl = document.getElementById('frost-item-category');
+  const priceEl = document.getElementById('frost-item-price');
+  const descEl = document.getElementById('frost-item-desc');
+  const buyBtn = document.getElementById('frost-item-buy');
+  const msgEl = document.getElementById('frost-item-msg');
+  const item = frostStoreCache.get(id);
+  msgEl.textContent = '';
+  if (!item) return;
+  titleEl.innerHTML = formatWithColorTags(item.displayName || item.id || 'Item');
+  if (item.categoryId) {
+    catEl.style.display = 'inline-flex';
+    catEl.textContent = prettyName(item.categoryId);
+  } else {
+    catEl.style.display = 'none';
+  }
+  if (typeof item.price === 'number') {
+    priceEl.style.display = 'inline-flex';
+    priceEl.textContent = `◆ ${item.price}`;
+  } else {
+    priceEl.style.display = 'none';
+  }
+  descEl.innerHTML = item.description ? formatWithColorTags(item.description) : '';
+  const owned = item.id && frostOwnedIds.has(item.id);
+  buyBtn.disabled = owned;
+  buyBtn.textContent = owned ? 'Owned' : 'Buy';
+  buyBtn.onclick = async () => {
+    buyBtn.disabled = true;
+    try {
+      await purchaseFrostFromStore(item.id, buyBtn);
+      msgEl.textContent = 'Purchase complete.';
+      frostOwnedIds.add(item.id);
+      buyBtn.textContent = 'Owned';
+    } catch (e) {
+      msgEl.textContent = 'Purchase failed.';
+      buyBtn.disabled = false;
+      buyBtn.textContent = 'Buy';
+    }
+  };
+  modal.classList.add('open');
+}
+function closeFrostItemModal() {
+  document.getElementById('frost-item-modal')?.classList.remove('open');
+}
+function closeFrostItemModalOnBackdrop(e) {
+  if (e.target && e.target.id === 'frost-item-modal') closeFrostItemModal();
+}
+</script>
+<footer>
+  © 2025–Present <strong>FragMC</strong>. All rights reserved.
+  <span>
+    This website contains pre-release content and spoilers.
+    Unauthorized copying, redistribution, or use of any materials to create derivative works
+    or to claim original authorship is strictly prohibited and may result in content takedowns,
+    public correction of authorship, and further action where applicable.
+  </span>
+</footer>
+
+</body>
+</html>
