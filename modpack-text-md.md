@@ -2,9 +2,9 @@ FragMC News
 
 NOTE: Dates are in the format DD/MM/YYYY
 
-| Java Version | Bedrock Version | Date of last version update |
-| ----------- | ----------- | ------------ |
-| 1.21.11 | Latest | 15/02/2026 |
+## Mace enchants fix
+- Fixed the singular letter that broke everything (e - used to be enchantements, now enchantments)
+- Armour stand jumping with wind burst now works again
 
 ## Bedrock Version Update
 - Automatic Geyser Updates (cross platform updates)
