@@ -10,8 +10,7 @@
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
         "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-        "pako": "https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.esm.mjs",
-        "nbt": "https://cdn.jsdelivr.net/npm/nbt@0.0.1/nbt.js"
+        "pako": "https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.esm.mjs"
       }
     }
   </script>
@@ -178,7 +177,7 @@
     renderer.shadowMap.enabled = true;
     
     // Controls
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.target.set(0, 0, 0);
@@ -238,18 +237,26 @@
     const status = document.getElementById('schematic-status');
     const placeholder = document.getElementById('viewer-placeholder');
     const stats = document.getElementById('viewer-stats');
+    // Fix Dropbox dl=0 to dl=1 for direct download, and handle shulkr format
+    let fetchUrl = url;
+    if (fetchUrl.includes('dropbox.com') && fetchUrl.includes('dl=0')) {
+      fetchUrl = fetchUrl.replace('dl=0', 'dl=1');
+    }
+    if (fetchUrl.includes('dropbox.com/scl/') && !fetchUrl.includes('dl=')) {
+      fetchUrl = fetchUrl + (fetchUrl.includes('?') ? '&' : '?') + 'dl=1';
+    }
     try {
-      status.textContent = `Fetching ${url}...`;
+      status.textContent = `Fetching ${fetchUrl}...`;
       placeholder.style.display = 'block';
-      placeholder.innerHTML = `<div style="font-size: 0.9rem; color: var(--muted);">Downloading schematic...<br><span style="font-size: 0.8rem;">${url.substring(0, 60)}...</span></div>`;
+      placeholder.innerHTML = `<div style="font-size: 0.9rem; color: var(--muted);">Downloading schematic...<br><span style="font-size: 0.8rem;">${fetchUrl.substring(0, 60)}...</span></div>`;
       
       let buffer = null;
       let usedProxy = null;
       
       const proxies = [
         null,
-        `https://corsproxy.io/?${encodeURIComponent(url)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        `https://corsproxy.io/?${encodeURIComponent(fetchUrl)}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(fetchUrl)}`,
       ];
       
       for (const proxyUrl of proxies) {
@@ -326,15 +333,8 @@
         dimensions.blockCount = emeraldCount + goldCount + diamondCount + glassCount;
         dimensions.hasFragmcZones = hasFragmcZones;
         
-        // Try to use a proper NBT parser if available
-        try {
-          const nbtModule = await import('nbt').catch(() => null);
-          if (nbtModule && data.length > 0) {
-            console.log('[Viewer] NBT module available, would parse properly here');
-          }
-        } catch (e) {
-          console.log('[Viewer] NBT parsing not available, using heuristic');
-        }
+        // NBT parsing would go here - using heuristic for now (no external nbt.js needed)
+        console.log('[Viewer] Using heuristic NBT parse, full pako decompressed size:', data.length);
         
       } catch (e) {
         console.warn('Heuristic parse failed:', e);
@@ -381,7 +381,7 @@
   }
   
   function renderSchematic3D(dimensions, url) {
-    if (!scene) initViewer();
+    if (!scene || !schematicGroup) initViewer();
     
     // Clear previous
     while (schematicGroup.children.length > 0) {
@@ -531,10 +531,6 @@
   window.addEventListener('DOMContentLoaded', () => {
     console.log('[Viewer] Map ID:', mapId, 'Schematic:', schematicUrl);
   });
-
-  // Expose for controls
-  window.THREE = THREE;
-  window.OrbitControls = OrbitControls;
 
   loadMapInfo();
 </script>
