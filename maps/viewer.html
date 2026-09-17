@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FragMC Map Viewer</title>
+  <style>
+    :root { --bg: #0e0e11; --card: #17171c; --muted: #9aa0a6; --text: #e8eaed; --accent: #5865f2; }
+    body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    header { padding: 18px 24px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 300px 1fr; gap: 24px; }
+    .panel { background: var(--card); border: 1px solid #222; border-radius: 12px; padding: 16px; }
+    .panel h3 { margin: 0 0 12px; font-size: 1.1rem; }
+    .viewer { background: #0b0b0e; border: 1px solid #222; border-radius: 12px; min-height: 500px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    canvas { width: 100%; height: 100%; }
+    .controls { display: flex; flex-direction: column; gap: 8px; }
+    .controls label { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+    .btn { background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+    .btn:hover { opacity: 0.9; }
+    .info { font-size: 0.9rem; color: var(--muted); }
+    .block-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.85rem; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .color-box { width: 16px; height: 16px; border-radius: 3px; }
+    @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <strong>FragMC Map Viewer</strong>
+  <a href="../maps.html" style="color: var(--muted); text-decoration: none;">← Back to Maps</a>
+</header>
+
+<div class="container">
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <div class="panel" id="map-info">
+      <h3>Map Info</h3>
+      <div class="info">Loading...</div>
+    </div>
+    
+    <div class="panel">
+      <h3>Tools</h3>
+      <div class="controls">
+        <label><input type="checkbox" id="toggle-checkpoints" checked> Show Checkpoints (Emerald)</label>
+        <label><input type="checkbox" id="toggle-elytra" checked> Show Elytra Zones</label>
+        <label><input type="checkbox" id="toggle-elytra-remove" checked> Show Remove Elytra Zones</label>
+        <label><input type="checkbox" id="toggle-return" checked> Show Checkpoint Return Zones</label>
+        <label><input type="checkbox" id="toggle-start" checked> Show Start (Gold)</label>
+        <label><input type="checkbox" id="toggle-finish" checked> Show Finish (Diamond)</label>
+        <label><input type="checkbox" id="toggle-lighting" checked> Lighting</label>
+        <label><input type="checkbox" id="toggle-light-level"> Show Light Level Heatmap</label>
+        <hr style="border-color: #333; width: 100%;">
+        <button class="btn" onclick="hideAll('zone')">Hide All Zones</button>
+        <button class="btn" onclick="showAll('zone')" style="background: #222;">Show All Zones</button>
+        <label>Hide Block Type: 
+          <select id="hide-type" onchange="hideBlockType(this.value)">
+            <option value="">Select...</option>
+            <option value="emerald">Emerald (Checkpoint)</option>
+            <option value="gold">Gold (Start)</option>
+            <option value="diamond">Diamond (Finish)</option>
+            <option value="elytra">Elytra Zone</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Legend</h3>
+      <div class="block-legend">
+        <div class="legend-item"><div class="color-box" style="background: #10b981;"></div> Checkpoint</div>
+        <div class="legend-item"><div class="color-box" style="background: #f59e0b;"></div> Start</div>
+        <div class="legend-item"><div class="color-box" style="background: #3b82f6;"></div> Finish</div>
+        <div class="legend-item"><div class="color-box" style="background: #8b5cf6;"></div> Elytra Add</div>
+        <div class="legend-item"><div class="color-box" style="background: #ef4444;"></div> Remove Elytra</div>
+        <div class="legend-item"><div class="color-box" style="background: #06b6d4;"></div> Return Zone</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Actions</h3>
+      <button class="btn" onclick="downloadSchematic()">Download .schem</button>
+      <button class="btn" style="background: #222; margin-top: 8px;" onclick="copyViewerLink()">Copy Viewer Link</button>
+    </div>
+  </div>
+
+  <div class="viewer" id="viewer">
+    <canvas id="canvas"></canvas>
+    <div id="viewer-placeholder" style="position: absolute; color: var(--muted); text-align: center; padding: 20px;">
+      <div style="font-size: 1.2rem; margin-bottom: 8px;">3D Viewer Loading...</div>
+      <div style="font-size: 0.9rem;">Will render schematic via three.js + prismarine-viewer<br>This is where the interactive 3D view will be.</div>
+      <div style="margin-top: 16px; font-size: 0.85rem; opacity: 0.7;" id="schematic-status">Fetching schematic...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const mapId = urlParams.get('id');
+  const schematicUrl = urlParams.get('schematic');
+
+  async function loadMapInfo() {
+    const infoDiv = document.querySelector('#map-info .info');
+    try {
+      const res = await fetch('../icedspear.json');
+      const data = await res.json();
+      const maps = Array.isArray(data) ? data : data.maps || [];
+      let map = null;
+      if (mapId) map = maps.find(m => m.id === mapId);
+      
+      if (map) {
+        infoDiv.innerHTML = `
+          <div style="font-weight: 600; font-size: 1.1rem; color: var(--text);">${map.name}</div>
+          <div style="margin-top: 8px;">Author: <strong>${map.author}</strong></div>
+          <div>Description: ${map.description || 'None'}</div>
+          <div>Allow Remixing: ${map.allow_remixing ? 'Yes' : 'No'}</div>
+          <div>Difficulty: ${map.difficulty || 'Not set'}</div>
+          <div>Verified: ${map.verified ? 'Yes' : 'No'} | No CP: ${map.verified_no_cp ? 'Yes' : 'No'}</div>
+          <div style="margin-top: 8px;"><a href="${map.schematic_url}" style="color: var(--accent);">Download Schematic</a></div>
+          <div>Images: ${(map.images || []).length}</div>
+          ${map.schematic_url ? `<div style="margin-top: 8px; font-size: 0.85rem; word-break: break-all;">Schematic: ${map.schematic_url}</div>` : ''}
+        `;
+        // Update schematic status
+        document.getElementById('schematic-status').textContent = `Schematic: ${map.schematic_url || 'None'}`;
+        if (map.schematic_url) loadSchematic(map.schematic_url);
+      } else if (schematicUrl) {
+        infoDiv.innerHTML = `
+          <div style="font-weight: 600;">Preview Schematic</div>
+          <div style="word-break: break-all; font-size: 0.85rem; margin-top: 8px;">${schematicUrl}</div>
+          <div style="margin-top: 8px;"><a href="${schematicUrl}" style="color: var(--accent);">Download</a></div>
+        `;
+        document.getElementById('schematic-status').textContent = `Loading: ${schematicUrl}`;
+        loadSchematic(schematicUrl);
+      } else {
+        infoDiv.innerHTML = `<div style="color: #ef4444;">No map ID or schematic URL provided. Use ?id=MAP_ID or ?schematic=URL</div><div style="margin-top: 8px;"><a href="../maps.html" style="color: var(--accent);">Browse maps</a></div>`;
+        document.getElementById('schematic-status').textContent = 'No schematic to load';
+      }
+    } catch (e) {
+      infoDiv.innerHTML = `<div style="color: #ef4444;">Failed to load icedspear.json: ${e.message}</div>`;
+    }
+  }
+
+  async function loadSchematic(url) {
+    const status = document.getElementById('schematic-status');
+    try {
+      status.textContent = `Fetching ${url}...`;
+      // For now, just show that we would load it with prismarine-viewer
+      // In production, use: const res = await fetch(url); const buffer = await res.arrayBuffer();
+      // Then parse with `minecraft-schematic` or `prismarine-schematic` and render with `three.js`
+      status.textContent = `Ready to render: ${url} (prismarine-viewer would load here)`;
+      document.getElementById('viewer-placeholder').innerHTML = `
+        <div style="font-size: 1.1rem; color: var(--accent);">Schematic Loaded: ${url.split('/').pop()}</div>
+        <div style="font-size: 0.9rem; margin-top: 8px; color: var(--muted);">3D rendering via three.js/prismarine-viewer would appear here.<br>Tools on left control visibility of checkpoints/zones.</div>
+        <div style="margin-top: 12px; font-size: 0.85rem;">Check console for FAWE metadata: zones, checkpoints</div>
+      `;
+      // Simulate FAWE metadata console log
+      console.log('[Viewer] FAWE metadata for zones would be parsed from schematic NBT here');
+    } catch (e) {
+      status.textContent = `Failed to load schematic: ${e.message}`;
+    }
+  }
+
+  function hideAll(type) {
+    console.log('Hide all', type);
+    // Would toggle three.js scene visibility
+    document.querySelectorAll('#toggle-checkpoints, #toggle-elytra, #toggle-elytra-remove, #toggle-return').forEach(cb => {
+      if (cb.id.includes(type) || type === 'zone') cb.checked = false;
+    });
+  }
+
+  function showAll(type) {
+    console.log('Show all', type);
+    document.querySelectorAll('#toggle-checkpoints, #toggle-elytra, #toggle-elytra-remove, #toggle-return').forEach(cb => cb.checked = true);
+  }
+
+  function hideBlockType(type) {
+    console.log('Hide block type', type);
+    // Would filter by material
+  }
+
+  function downloadSchematic() {
+    const url = schematicUrl || (document.getElementById('schematic-status').textContent.includes('http') ? document.getElementById('schematic-status').textContent.split(' ').pop() : null);
+    if (url && url.startsWith('http')) window.open(url, '_blank');
+    else alert('No schematic URL');
+  }
+
+  function copyViewerLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => alert('Viewer link copied!'));
+  }
+
+  loadMapInfo();
+</script>
+</body>
+</html>
