@@ -120,7 +120,35 @@
     try {
       const res = await fetch('../icedspear.json');
       const data = await res.json();
-      const maps = Array.isArray(data) ? data : data.maps || [];
+      // Handle both legacy format (top-level keys with schematic) and new format (maps array with schematic_url)
+      let maps = [];
+      if (Array.isArray(data)) {
+        maps = data;
+      } else if (data.maps && Array.isArray(data.maps)) {
+        maps = [...data.maps];
+        // Also include legacy top-level maps for backwards compat
+        for (const key of Object.keys(data)) {
+          if (key === 'maps') continue;
+          const val = data[key];
+          if (val && typeof val === 'object' && (val.schematic || val.schematic_url) && val.name) {
+            // Legacy map: convert to new format for display
+            const legacyMap = {
+              id: key,
+              name: val.name,
+              author: val.author || 'Unknown',
+              description: val.description || '',
+              schematic_url: val.schematic_url || val.schematic,
+              schematic: val.schematic,
+              images: typeof val.images === 'string' ? val.images.split(',').map(s => s.trim()).filter(Boolean) : (val.images || []),
+              difficulty: val.difficulty ?? null,
+              verified: val.verified === 1 || val.verified === true,
+              verified_no_cp: val['verified-no-cp'] === 1 || val['verified-no-cp'] === true || val.verified_no_cp === true,
+              allow_remixing: val.allow_remixing || false,
+            };
+            maps.push(legacyMap);
+          }
+        }
+      }
       let map = null;
       if (mapId) map = maps.find(m => m.id === mapId);
       

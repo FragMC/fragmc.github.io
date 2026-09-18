@@ -19,21 +19,5 @@
     "verified": 1,
     "verified-no-cp": 1
   },
-  "maps": [
-    {
-      "id": "map-0001",
-      "name": "test",
-      "author": "test",
-      "description": "test",
-      "schematic_url": "https://dl.dropbox.com/scl/fi/i988rou5wlw2vj0eerado/starter-base-house.schem?rlkey=zb7lwcfaw1936xz674qxovx5k&st=hih23oz5&dl=0",
-      "allow_remixing": false,
-      "difficulty": null,
-      "verified": false,
-      "verified_no_cp": false,
-      "images": [],
-      "submitted_by": "1390423826755747960",
-      "ticket_id": "1550218461286899712",
-      "created_at": "2026-09-17T19:07:42.832Z"
-    }
-  ]
+  "maps": []
 }
