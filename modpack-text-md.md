@@ -2,7 +2,16 @@ FragMC News
 
 NOTE: Dates are in the format DD/MM/YYYY
 
-## FragMC 2.0
+## FragMC 2.0 Update 1
+Sadly... Not yet.. Although we are working on it! Here's some things we are planning out of our extensive list:
+- Better website flow (with better auth)
+- Better gameplay (with better maps and a better lobby)
+- More story!!!!
+- Gambling? (Maybe, i dont know yet... stay tuned!)
+- In-Game Editor
+- Website Revamp
+
+## FragMC 2.0 Announcement
 Currently, we are working on bringing FragMC back, and with higher standards and better systems than before! Stay tuned for more information!
 
 ## Mace enchants fix
